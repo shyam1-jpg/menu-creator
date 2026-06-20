@@ -9,8 +9,8 @@ services:
     buildCommand: npm install && npm run build
     startCommand: node server.js
     healthCheckPath: /
-    domains:
-      - menu.kiteline.uk
     envVars:
       - key: NODE_ENV
         value: production
+    # After first deploy, add custom domain in Render UI:
+    #   menu.kiteline.uk  (CNAME menu → menu-creator.onrender.com in GoDaddy)
