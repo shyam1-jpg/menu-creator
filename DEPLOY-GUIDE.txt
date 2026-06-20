@@ -1,0 +1,160 @@
+================================================================================
+  HOW TO PUT MENU CREATOR ONLINE (so phones can install it)
+================================================================================
+
+WHY YOU NEED THIS
+-----------------
+Phones CANNOT run Menu Creator from an emailed .html or .zip file.
+They will show broken text instead of the app.
+
+You must upload the folder to a website with HTTPS, then share the LINK.
+
+
+FASTEST — OPTION B: NETLIFY DROP (about 2 minutes, free, no account needed)
+---------------------------------------------------------------------------
+Best if you want a working phone link TODAY without touching your server.
+
+  1. On your PC, find Menu-Creator-App.zip on the Desktop.
+  2. Unzip it (or use the menu-creator folder).
+  3. Open your browser and go to:  https://app.netlify.com/drop
+  4. Drag the entire menu-creator FOLDER onto the page (not the zip).
+  5. Netlify gives you an instant HTTPS link, e.g.:
+       https://random-name-123.netlify.app
+  6. Test on your phone:
+       - iPhone: open link in Safari
+       - Android: open link in Chrome
+  7. Install (see INSTALL-ON-PHONE.txt).
+  8. Share that HTTPS link with staff — NOT the zip file.
+
+Optional: create a free Netlify account to rename the link or keep it forever.
+
+
+OPTION A: YOUR WEBSITE — pureprasadkitchen.com (GoDaddy / cPanel FTP)
+---------------------------------------------------------------------
+Use this if you already manage pureprasadkitchen.com.
+
+  1. Log in to GoDaddy → Web Hosting → cPanel (or File Manager / FTP).
+  2. Open the public web folder (often called public_html).
+  3. Create a folder named:  menu
+  4. Upload ALL files from the menu-creator folder into /menu/:
+       index.html
+       install.html
+       manifest.json
+       service-worker.js
+       icons/   (entire folder with PNG and SVG icons)
+       README.txt, DEPLOY-GUIDE.txt, INSTALL-ON-PHONE.txt
+     (You do NOT need the .bat files on the server — those are for PC only.)
+  5. Your app URL will be:
+       https://pureprasadkitchen.com/menu/
+       or open install page:
+       https://pureprasadkitchen.com/menu/install.html
+  6. Open that URL on your phone in Safari or Chrome and install.
+  7. Share https://pureprasadkitchen.com/menu/ with anyone who needs the app.
+
+Subdomain alternative (if your hosting supports it):
+  menu.pureprasadkitchen.com → point to the same uploaded folder.
+
+
+OPTION C: GITHUB PAGES (free, permanent HTTPS link)
+---------------------------------------------------
+Good if you use GitHub.
+
+  1. Create a new GitHub repository (e.g. menu-creator).
+  2. Upload all menu-creator files to the repo.
+  3. Go to Settings → Pages → Source: Deploy from branch → main → / (root).
+  4. Wait 1–2 minutes. Your link will be:
+       https://YOUR-USERNAME.github.io/menu-creator/
+  5. Share that link with phones.
+
+
+OPTION D: RENDER + KITELINE (recommended — same host as kiteline.uk)
+------------------------------------------------------------------
+Best if you already use Kiteline on Render. Free HTTPS, phone install works.
+
+WHAT WAS PREPARED ON YOUR PC
+  • render.yaml       — Render blueprint (Frankfurt, same region as Kiteline)
+  • server.js         — serves the PWA with correct service-worker headers
+  • package.json      — builds PNG icons + starts the server
+  • icons/*.png       — PWA install icons (generated from SVG)
+
+ONE-TIME SETUP (about 10 minutes)
+---------------------------------
+Step 1 — GitHub repo
+  1. Open https://github.com/new
+  2. Repository name: menu-creator
+  3. Public → Create repository (empty, no README)
+  4. On your PC, open PowerShell in the menu-creator folder and run:
+       git branch -M main
+       git commit -m "Menu Creator PWA for Render deploy"
+       git remote add origin https://github.com/shyam1-jpg/menu-creator.git
+       git push -u origin main
+     (Sign in to GitHub if prompted.)
+
+Step 2 — Render service
+  1. Open https://dashboard.render.com
+  2. New → Blueprint
+  3. Connect GitHub → pick repo menu-creator
+  4. Render reads render.yaml and creates service menu-creator
+  5. Wait 2–3 minutes until Deploy live
+
+Step 3 — Your live link (before custom domain)
+       https://menu-creator.onrender.com/
+       Install page: https://menu-creator.onrender.com/install.html
+
+Step 4 — Custom domain menu.kiteline.uk (links to Kiteline ecosystem)
+  In Render → menu-creator → Settings → Custom Domains → Add:
+       menu.kiteline.uk
+  Render shows a DNS target (usually a CNAME like menu-creator.onrender.com).
+
+  In GoDaddy → kiteline.uk → DNS → Add record:
+       Type: CNAME
+       Name: menu
+       Value: menu-creator.onrender.com   (use exact value Render shows)
+       TTL: 600
+
+  Wait 5–30 minutes. Then share:
+       https://menu.kiteline.uk/
+       https://menu.kiteline.uk/install.html
+
+Optional — menu.pureprasadkitchen.com
+  Same CNAME pattern on pureprasadkitchen.com DNS:
+       menu → menu-creator.onrender.com
+  Or upload to /menu/ on your WordPress host (Option A above).
+
+AFTER RENDER DEPLOY — CHECKLIST
+--------------------------------
+  [ ] https://menu-creator.onrender.com/ opens the editor (not plain text)
+  [ ] install.html shows Add to Home Screen instructions
+  [ ] Phone: Safari (iPhone) or Chrome (Android) → Install works
+  [ ] Service worker registers (no errors in browser console)
+
+
+AFTER DEPLOYING — CHECKLIST
+---------------------------
+  [ ] URL starts with https:// (not file://)
+  [ ] index.html opens and shows the menu editor (not plain text)
+  [ ] On phone: Safari (iPhone) or Chrome (Android)
+  [ ] Add to Home Screen / Install app works
+  [ ] App opens full-screen without browser toolbar
+
+
+TROUBLESHOOTING
+---------------
+  "Shows as text / code on phone"
+    → You opened a file attachment, not a website link. Upload first.
+
+  "Install app button missing"
+    → Must use HTTPS. iPhone must use Safari. Android should use Chrome.
+
+  "Page not found" after upload to pureprasadkitchen.com
+    → Check files are inside /menu/ not nested in an extra subfolder.
+
+  "Works on PC but not phone"
+    → Share the https:// link, not the zip or index.html file.
+
+
+QUESTIONS?
+----------
+Created by Shyam Prasad. QR menus link to pureprasadkitchen.com.
+
+================================================================================

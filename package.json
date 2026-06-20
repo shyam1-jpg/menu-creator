@@ -1,0 +1,19 @@
+{
+  "name": "menu-creator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Menu Creator PWA — printable restaurant menus (Pure Prasad Kitchen / Kiteline ecosystem)",
+  "scripts": {
+    "build": "node scripts/build-icons.js",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.5"
+  }
+}

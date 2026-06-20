@@ -1,0 +1,100 @@
+================================================================================
+  INSTALL MENU CREATOR ON YOUR PHONE (iPhone & Android)
+================================================================================
+
+BEFORE YOU START
+----------------
+  ✓ The app must already be online at an HTTPS link (see DEPLOY-GUIDE.txt)
+  ✓ Do NOT open a zip or .html file from email — that shows broken text
+  ✓ You need the website link, e.g.:
+      https://pureprasadkitchen.com/menu/
+      or your Netlify link like https://something.netlify.app
+
+
+================================================================================
+  iPHONE / iPAD — Install with Safari
+================================================================================
+
+Step 1 — Open the link
+  [Screenshot: Safari address bar]
+  • Copy the HTTPS link from whoever sent it to you
+  • Open Safari (blue compass icon) — NOT Chrome, NOT Files app
+  • Paste the link in the address bar and go
+
+Step 2 — Check the app loads
+  [Screenshot: Menu Creator editor on phone]
+  • You should see "Menu Creator" with green branding
+  • If you see raw code/text, the link is wrong — ask for the website URL
+
+Step 3 — Add to Home Screen
+  [Screenshot: Safari Share menu]
+  • Tap the Share button at the bottom (square with arrow pointing up)
+  • Scroll down the share sheet
+  • Tap "Add to Home Screen"
+
+Step 4 — Confirm
+  [Screenshot: Add to Home Screen dialog]
+  • Name should say "Menu Creator"
+  • Tap "Add" (top right)
+
+Step 5 — Open like an app
+  [Screenshot: Home screen with Menu Creator icon]
+  • Find the Menu Creator icon on your home screen
+  • Tap it — opens full screen, no Safari toolbar
+  • Works offline after the first visit
+
+
+================================================================================
+  ANDROID — Install with Chrome
+================================================================================
+
+Step 1 — Open the link
+  [Screenshot: Chrome address bar]
+  • Open Chrome (not Samsung Internet unless you know Install app works there)
+  • Paste the HTTPS link and go
+
+Step 2 — Check the app loads
+  [Screenshot: Menu Creator on Android]
+  • You should see the editor — not plain HTML text
+
+Step 3 — Install the app
+  [Screenshot: Chrome menu]
+  Option A (most phones):
+    • Tap the three dots (⋮) top right
+    • Tap "Install app" or "Add to Home screen"
+    • Tap Install / Add
+
+  Option B (some phones show a banner):
+    • Look for "Add Menu Creator to Home screen" at the bottom
+    • Tap Install
+
+Step 4 — Open from home screen
+  [Screenshot: Android app drawer]
+  • Menu Creator appears like other apps
+  • Opens full screen
+  • Works offline after first load
+
+
+================================================================================
+  INSIDE THE APP — MOBILE TIPS
+================================================================================
+
+  • Use the "Edit" and "Preview" tabs at the top to switch panels
+  • Tap "Install App" in the toolbar if your browser supports it
+  • All menus save on your phone (in the browser) — not synced to PC
+  • Print / Save PDF uses your phone's share or print menu
+
+
+================================================================================
+  SHARE WITH OTHERS — DO THIS
+================================================================================
+
+  ✓ Send the HTTPS link (text message, WhatsApp, email)
+  ✓ Example: https://pureprasadkitchen.com/menu/
+
+  ✗ Do NOT email the zip file
+  ✗ Do NOT send index.html as an attachment
+  ✗ Do NOT expect "Open with" on a downloaded .html to work
+
+
+================================================================================

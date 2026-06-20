@@ -1,0 +1,16 @@
+# Menu Creator PWA — Render deploy (Kiteline ecosystem)
+# Connect GitHub repo → New Blueprint → add custom domain menu.kiteline.uk
+services:
+  - type: web
+    name: menu-creator
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install && npm run build
+    startCommand: node server.js
+    healthCheckPath: /
+    domains:
+      - menu.kiteline.uk
+    envVars:
+      - key: NODE_ENV
+        value: production
