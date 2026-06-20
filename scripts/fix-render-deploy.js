@@ -21,6 +21,7 @@ const WEB_SERVICE_DETAILS = {
   plan: 'free',
   region: 'frankfurt',
   healthCheckPath: '/',
+  renderSubdomainPolicy: 'enabled',
   envSpecificDetails: {
     buildCommand: 'npm install && npm run build',
     startCommand: 'npm start',
