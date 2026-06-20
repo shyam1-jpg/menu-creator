@@ -1,35 +1,47 @@
 @echo off
-title Menu Creator — one-click Render deploy
+title Menu Creator — deploy to Render (manual — no API key needed)
 color 0B
 echo.
 echo  ============================================================
-echo   Menu Creator — finish Render deploy (GitHub already done)
+echo   Menu Creator — get a working HTTPS link
 echo  ============================================================
 echo.
-echo  GitHub repo is live:
-echo    https://github.com/shyam1-jpg/menu-creator
+echo  FASTEST TODAY (no Render login):
+echo    Double-click NETLIFY-DROP.bat — drag folder, get link in 2 min.
 echo.
-echo  Paste your Render API key once (same account as kiteline.uk):
-echo    https://dashboard.render.com/u/settings#api-keys
-echo    Create key named "Menu Creator deploy" if you don't have one.
+echo  PERMANENT FREE LINK (GitHub Pages):
+echo    1. Push is on GitHub already.
+echo    2. Open: https://github.com/shyam1-jpg/menu-creator/settings/pages
+echo    3. Source: GitHub Actions  (not "Deploy from branch")
+echo    4. Wait 2 min, then open:
+echo       https://shyam1-jpg.github.io/menu-creator/
 echo.
-start https://dashboard.render.com/u/settings#api-keys
+echo  ----------------------------------------------------------
+echo   RENDER FIX (if you want menu-creator.onrender.com)
+echo  ----------------------------------------------------------
 echo.
-set /p RENDERKEY="Paste Render API key here: "
-if "%RENDERKEY%"=="" (
-  echo Cancelled — no API key entered.
-  pause
-  exit /b 1
-)
+echo  Your Render service (404 = subdomain off or wrong type):
+echo    https://dashboard.render.com/web/srv-d8oagn8k1i2s738d7fc0
 echo.
-echo  Deploying to Render (fixes service srv-d8oagn8k1i2s738d7fc0)...
-set RENDER_API_KEY=%RENDERKEY%
-cd /d "%~dp0"
-node scripts/fix-render-deploy.js
+start https://dashboard.render.com/web/srv-d8oagn8k1i2s738d7fc0
 echo.
-if %ERRORLEVEL% EQU 0 (
-  echo  Opening live app...
-  start https://menu-creator.onrender.com/
-  start https://menu-creator.onrender.com/manifest.json
-)
+echo  ON RENDER — do ONE of these:
+echo.
+echo  A) Fix existing service (Settings tab):
+echo     - On Render Subdomain: ENABLED  (not disabled)
+echo     - Type: Static Site OR Web Service (Node)
+echo     - Build: npm install ^&^& npm run build
+echo     - Start (Web only): npm start
+echo     - Publish dir (Static only): .  (dot = root)
+echo     Then Manual Deploy - Deploy latest commit
+echo.
+echo  B) If still 404 — delete service, then:
+echo     New - Blueprint - connect shyam1-jpg/menu-creator
+echo     (render.yaml now uses Static Site — simpler, no Node)
+echo.
+echo  Wait 2-3 minutes, then open:
+echo    https://menu-creator.onrender.com/
+echo.
+echo  Reply "live" when any link shows Menu Creator (not 404).
+echo.
 pause

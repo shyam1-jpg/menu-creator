@@ -16,6 +16,16 @@ const SERVICE_NAME = 'menu-creator';
 const REPO = 'https://github.com/shyam1-jpg/menu-creator';
 const ROOT = path.join(__dirname, '..');
 
+const STATIC_SITE_DETAILS = {
+  plan: 'free',
+  region: 'frankfurt',
+  renderSubdomainPolicy: 'enabled',
+  envSpecificDetails: {
+    buildCommand: 'npm install && npm run build',
+    publishPath: '.',
+  },
+};
+
 const WEB_SERVICE_DETAILS = {
   runtime: 'node',
   plan: 'free',
@@ -138,20 +148,22 @@ async function main() {
   log(`Current type: ${svc.type}`);
   log(`Current URL:  ${serviceUrl(svc.name)}`);
 
-  if (svc.type !== 'web_service') {
+  const isStatic = svc.type === 'static_site';
+  const isWeb = svc.type === 'web_service';
+  if (!isStatic && !isWeb) {
     throw new Error(
-      `Service type is "${svc.type}", expected "web_service". Recreate it as a Web Service in Render.`
+      `Service type is "${svc.type}". Delete it and recreate via Blueprint (render.yaml uses Static Site).`
     );
   }
 
-  log('\nApplying repo + build/start settings…');
+  log(`\nApplying repo + ${isStatic ? 'static publish' : 'build/start'} settings…`);
   svc = unwrapService(
     await renderApi('PATCH', `/v1/services/${SERVICE_ID}`, key, {
       name: SERVICE_NAME,
       repo: REPO,
       branch: 'main',
       autoDeploy: 'yes',
-      serviceDetails: WEB_SERVICE_DETAILS,
+      serviceDetails: isStatic ? STATIC_SITE_DETAILS : WEB_SERVICE_DETAILS,
     })
   );
 

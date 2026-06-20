@@ -1,18 +1,29 @@
-# Menu Creator PWA — Render deploy (Kiteline ecosystem)
-# Connect GitHub repo → New Blueprint → add custom domain menu.kiteline.uk
+# Menu Creator PWA — Render deploy
+# If menu-creator.onrender.com shows plain "Not Found", delete the old service and
+# use New → Blueprint → connect this repo (creates a Static Site — no Node server).
 services:
   - type: web
     name: menu-creator
-    runtime: node
+    runtime: static
     repo: https://github.com/shyam1-jpg/menu-creator
     branch: main
     plan: free
     region: frankfurt
     buildCommand: npm install && npm run build
-    startCommand: npm start
-    healthCheckPath: /
-    envVars:
-      - key: NODE_ENV
-        value: production
-    # After first deploy, add custom domain in Render UI:
+    staticPublishPath: .
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    headers:
+      - path: /service-worker.js
+        name: Cache-Control
+        value: no-cache, no-store, must-revalidate
+      - path: /service-worker.js
+        name: Service-Worker-Allowed
+        value: /
+      - path: /manifest.json
+        name: Cache-Control
+        value: public, max-age=3600
+    # After deploy, optional custom domain in Render UI:
     #   menu.kiteline.uk  (CNAME menu → menu-creator.onrender.com in GoDaddy)
