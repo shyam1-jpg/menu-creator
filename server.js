@@ -29,6 +29,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(root, "index.html"));
 });
 
-app.listen(port, () => {
-  console.log(`Menu Creator listening on port ${port}`);
+const host = "0.0.0.0";
+app.listen(port, host, () => {
+  console.log(`Menu Creator listening on http://${host}:${port}`);
 });

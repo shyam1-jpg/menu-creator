@@ -12,8 +12,20 @@ const path = require('path');
 const REPO = 'shyam1-jpg/menu-creator';
 const REPO_URL = `https://github.com/${REPO}.git`;
 const SERVICE_NAME = 'menu-creator';
+const SERVICE_ID = process.env.RENDER_SERVICE_ID || 'srv-d8oagn8k1i2s738d7fc0';
 const CUSTOM_DOMAIN = 'menu.kiteline.uk';
 const ROOT = path.join(__dirname, '..');
+
+const WEB_SERVICE_DETAILS = {
+  runtime: 'node',
+  plan: 'free',
+  region: 'frankfurt',
+  healthCheckPath: '/',
+  envSpecificDetails: {
+    buildCommand: 'npm install && npm run build',
+    startCommand: 'npm start',
+  },
+};
 
 function log(msg) {
   console.log(msg);
@@ -175,41 +187,68 @@ async function findRenderOwner(key) {
   return owner.id || owner.owner?.id;
 }
 
-async function findRenderService(key) {
-  const list = await renderApi('GET', '/v1/services?limit=100', key);
-  const items = Array.isArray(list) ? list.map((x) => x.service || x) : list.items || [];
-  return items.find((s) => (s.name || s.service?.name) === SERVICE_NAME);
+function unwrapService(payload) {
+  return payload?.service || payload || null;
 }
 
-async function deployRender(key) {
+function serviceUrl(name) {
+  return `https://${name}.onrender.com/`;
+}
+
+async function findRenderService(key) {
+  if (SERVICE_ID) {
+    try {
+      const byId = unwrapService(await renderApi('GET', `/v1/services/${SERVICE_ID}`, key));
+      if (byId?.id) return byId;
+    } catch (e) {
+      log(`Service ID lookup skipped: ${e.message}`);
+    }
+  }
+  const list = await renderApi('GET', '/v1/services?limit=100', key);
+  const items = Array.isArray(list) ? list.map((x) => unwrapService(x)) : (list.items || []).map(unwrapService);
+  return items.find((s) => s?.name === SERVICE_NAME) || null;
+}
+
+async function ensureRenderService(key) {
   let svc = await findRenderService(key);
+  const repo = `https://github.com/${REPO}`;
+
   if (svc) {
-    log(`Render service exists: ${svc.id}`);
+    const id = svc.id;
+    log(`Render service found: ${svc.name} (${id})`);
+    log(`Current URL: ${serviceUrl(svc.name)}`);
+    log('Updating repo/build/start settings…');
+    svc = unwrapService(
+      await renderApi('PATCH', `/v1/services/${id}`, key, {
+        name: SERVICE_NAME,
+        repo,
+        branch: 'main',
+        autoDeploy: 'yes',
+        serviceDetails: WEB_SERVICE_DETAILS,
+      })
+    );
     log('Triggering deploy…');
-    await renderApi('POST', `/v1/services/${svc.id}/deploys`, key, { clearCache: 'do_not_clear' });
+    await renderApi('POST', `/v1/services/${id}/deploys`, key, { clearCache: 'do_not_clear' });
     return svc;
   }
 
   log('Creating Render service from GitHub repo…');
   const ownerId = await findRenderOwner(key);
-  svc = await renderApi('POST', '/v1/services', key, {
-    type: 'web_service',
-    name: SERVICE_NAME,
-    ownerId,
-    repo: `https://github.com/${REPO}`,
-    branch: 'main',
-    autoDeploy: 'yes',
-    runtime: 'node',
-    plan: 'free',
-    region: 'frankfurt',
-    buildCommand: 'npm install && npm run build',
-    startCommand: 'node server.js',
-    healthCheckPath: '/',
-    envVars: [{ key: 'NODE_ENV', value: 'production' }],
-  });
-  const created = svc.service || svc;
-  log(`Created Render service: ${created.id}`);
-  return created;
+  svc = unwrapService(
+    await renderApi('POST', '/v1/services', key, {
+      type: 'web_service',
+      name: SERVICE_NAME,
+      ownerId,
+      repo,
+      branch: 'main',
+      autoDeploy: 'yes',
+      serviceDetails: WEB_SERVICE_DETAILS,
+      envVars: [{ key: 'NODE_ENV', value: 'production' }],
+    })
+  );
+  log(`Created Render service: ${svc.id}`);
+  log(`Live URL: ${serviceUrl(svc.name)}`);
+  return svc;
 }
 
 async function addCustomDomain(key, serviceId) {
@@ -228,16 +267,24 @@ async function addCustomDomain(key, serviceId) {
   }
 }
 
-async function waitForLive(maxMs = 300000) {
-  const url = `https://${SERVICE_NAME}.onrender.com/`;
+async function waitForLive(url = serviceUrl(SERVICE_NAME), maxMs = 300000) {
   const start = Date.now();
   log(`Waiting for ${url} …`);
   while (Date.now() - start < maxMs) {
     try {
       const ok = await new Promise((resolve) => {
         const req = https.get(url, { timeout: 15000 }, (res) => {
-          res.resume();
-          resolve(res.statusCode >= 200 && res.statusCode < 400);
+          let body = '';
+          res.on('data', (c) => {
+            body += c;
+          });
+          res.on('end', () => {
+            resolve(
+              res.statusCode >= 200 &&
+                res.statusCode < 400 &&
+                /Menu Creator/i.test(body)
+            );
+          });
         });
         req.on('error', () => resolve(false));
         req.on('timeout', () => {
@@ -264,7 +311,11 @@ async function main() {
   await ensureGitHubRepo(token);
   await pushToGitHub();
 
-  const renderKey = process.env.RENDER_API_KEY;
+  const renderKey =
+    process.env.RENDER_API_KEY ||
+    (fs.existsSync(path.join(ROOT, '.render-api-key'))
+      ? fs.readFileSync(path.join(ROOT, '.render-api-key'), 'utf8').trim()
+      : '');
   if (!renderKey) {
     log('\nRENDER_API_KEY not set — GitHub push done.');
     log('Set RENDER_API_KEY and re-run: node scripts/deploy-all.js');
@@ -272,15 +323,17 @@ async function main() {
     process.exit(2);
   }
 
-  const svc = await deployRender(renderKey);
-  const serviceId = svc.id || svc.service?.id;
+  const svc = await ensureRenderService(renderKey);
+  const serviceId = svc.id;
+  const liveUrl = serviceUrl(svc.name || SERVICE_NAME);
+  log(`Target URL: ${liveUrl}`);
   if (serviceId) await addCustomDomain(renderKey, serviceId);
 
-  const live = await waitForLive();
+  const live = await waitForLive(liveUrl);
   log('\n=== URLs ===');
-  log(`https://${SERVICE_NAME}.onrender.com/`);
-  log(`https://${SERVICE_NAME}.onrender.com/install.html`);
-  log(`https://${SERVICE_NAME}.onrender.com/manifest.json`);
+  log(liveUrl);
+  log(`${liveUrl}install.html`);
+  log(`${liveUrl}manifest.json`);
   log(`https://${CUSTOM_DOMAIN}/ (after DNS propagates)`);
   if (!live) log('\nDeploy triggered — may take 2–3 min to go live.');
 }

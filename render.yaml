@@ -4,10 +4,12 @@ services:
   - type: web
     name: menu-creator
     runtime: node
+    repo: https://github.com/shyam1-jpg/menu-creator
+    branch: main
     plan: free
     region: frankfurt
     buildCommand: npm install && npm run build
-    startCommand: node server.js
+    startCommand: npm start
     healthCheckPath: /
     envVars:
       - key: NODE_ENV
