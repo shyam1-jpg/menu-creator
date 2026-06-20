@@ -4,7 +4,7 @@
   "private": true,
   "description": "Menu Creator PWA — printable restaurant menus (Pure Prasad Kitchen / Kiteline ecosystem)",
   "scripts": {
-    "build": "node scripts/build-icons.js",
+    "build": "node scripts/build-icons.js && node scripts/prepare-static.js",
     "start": "node server.js"
   },
   "engines": {

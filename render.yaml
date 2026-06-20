@@ -1,6 +1,6 @@
-# Menu Creator PWA — Render deploy
-# If menu-creator.onrender.com shows plain "Not Found", delete the old service and
-# use New → Blueprint → connect this repo (creates a Static Site — no Node server).
+# Menu Creator PWA — Render Static Site (no Node server needed)
+# New service: Dashboard → New → Blueprint → connect shyam1-jpg/menu-creator
+# Existing service: enable Render Subdomain + Manual Deploy (see DEPLOY-NOW.bat)
 services:
   - type: web
     name: menu-creator
@@ -9,8 +9,9 @@ services:
     branch: main
     plan: free
     region: frankfurt
+    autoDeploy: yes
     buildCommand: npm install && npm run build
-    staticPublishPath: .
+    staticPublishPath: _site
     routes:
       - type: rewrite
         source: /*
@@ -25,5 +26,3 @@ services:
       - path: /manifest.json
         name: Cache-Control
         value: public, max-age=3600
-    # After deploy, optional custom domain in Render UI:
-    #   menu.kiteline.uk  (CNAME menu → menu-creator.onrender.com in GoDaddy)

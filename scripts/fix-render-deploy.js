@@ -22,7 +22,7 @@ const STATIC_SITE_DETAILS = {
   renderSubdomainPolicy: 'enabled',
   envSpecificDetails: {
     buildCommand: 'npm install && npm run build',
-    publishPath: '.',
+    publishPath: '_site',
   },
 };
 

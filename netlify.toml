@@ -1,6 +1,11 @@
 [build]
-  publish = "."
+  publish = "_site"
   command = "npm install && npm run build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 [[headers]]
   for = "/service-worker.js"
