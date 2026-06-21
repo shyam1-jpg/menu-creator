@@ -467,6 +467,9 @@
   }
   .meal-tab.on{background:var(--accent);color:#fff;border-color:var(--accent);}
   .archive-status{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.4;}
+  .archive-offer{font-size:12px;color:#6b5344;margin-top:8px;padding:8px 10px;background:#fff;border:1px dashed #d4b896;border-radius:8px;line-height:1.45;}
+  .archive-offer.hidden{display:none;}
+  .archive-offer .btn{margin-top:6px;}
 
   .lib-overlay{
     position:fixed;inset:0;background:rgba(31,42,36,.45);z-index:200;
@@ -736,7 +739,13 @@
         <button class="btn btn-line btn-sm" id="loadArchive">Load from library</button>
         <button class="btn btn-ghost btn-sm" id="openLibrary">Browse all</button>
       </div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn btn-ghost btn-sm" id="addCurrentToLibrary">Add current menu to library</button>
+        <button class="btn btn-ghost btn-sm" id="importToLibrary">Import JSON to library</button>
+        <input type="file" id="importLibraryFile" accept=".json,application/json" style="display:none" />
+      </div>
       <div class="archive-status" id="archiveStatus">Library: not saved yet for this date</div>
+      <div class="archive-offer hidden" id="archiveOffer"></div>
       <div class="hint">Every lunch &amp; dinner is stored on this PC, organised by day, week, month and year.</div>
     </div>
 
@@ -1012,6 +1021,15 @@ async function dbAll(){
     req.onerror=()=>no(req.error);
   });
 }
+async function dbGet(id){
+  const db=await openDB();
+  return new Promise((ok,no)=>{
+    const tx=db.transaction(STORE,"readonly");
+    const req=tx.objectStore(STORE).get(id);
+    req.onsuccess=()=>ok(req.result||null);
+    req.onerror=()=>no(req.error);
+  });
+}
 async function dbPut(rec){
   const db=await openDB();
   return new Promise((ok,no)=>{
@@ -1033,6 +1051,7 @@ async function dbDel(id){
 async function refreshArchiveIndex(){
   archiveIndex=(await dbAll()).sort((a,b)=> (a.date+a.meal).localeCompare(b.date+b.meal));
   updateArchiveStatus();
+  showArchiveOffer();
 }
 function snapshotForArchive(){
   const m=current();
@@ -1052,6 +1071,46 @@ function applyArchiveSnapshot(snap){
   m.title=snap.title||"DINNER MENU"; m.sub=snap.sub||"";
   m.dishes=JSON.parse(JSON.stringify(snap.dishes||[]));
   resetForm(); syncInputs(); render();
+  save();
+}
+function projectToSnapshot(proj){
+  const pick=(proj.menus||[]).reduce((best,m)=>{
+    const n=(m.dishes||[]).length;
+    return n>(best.dishes||[]).length?m:best;
+  }, proj.menus?.[0]||{});
+  return {
+    logoText:proj.logoText||"", logoImg:proj.logoImg||null,
+    infoText:proj.infoText||DEFAULT_INFO, infoAllergens:proj.infoAllergens||"",
+    template:proj.template||"classic",
+    title:pick.title||"DINNER MENU", sub:pick.sub||"",
+    dishes:JSON.parse(JSON.stringify(pick.dishes||[]))
+  };
+}
+function syncArchiveCtxFromUI(){
+  archiveCtx.date=$("archiveDate").value||archiveCtx.date||todayISO();
+  $("archiveDate").value=archiveCtx.date;
+}
+function hasEditorContent(){
+  const m=current();
+  if((m.dishes||[]).length) return true;
+  if((m.sub||"").trim()) return true;
+  if(data.logoImg) return true;
+  const t=(m.title||"").trim();
+  return t && t!=="DINNER MENU" && t!=="LUNCH MENU";
+}
+function showArchiveOffer(){
+  const el=$("archiveOffer");
+  if(!el) return;
+  const key=archiveKey(archiveCtx.date, archiveCtx.meal);
+  if(archiveIndex.find(r=>r.id===key) || !hasEditorContent()){
+    el.classList.add("hidden");
+    el.innerHTML="";
+    return;
+  }
+  el.classList.remove("hidden");
+  el.innerHTML='You have a menu in the editor that is not saved to the library for <b>'+archiveCtx.date+' · '+mealLabel(archiveCtx.meal)+'</b>.'
+    +'<div class="row" style="margin-top:6px"><button type="button" class="btn btn-primary btn-sm" id="offerSaveBtn">Save current menu to library</button></div>';
+  $("offerSaveBtn").onclick=()=>saveToArchive(false).catch(()=>alert("Could not save to library."));
 }
 async function saveToArchive(silent){
   const date=archiveCtx.date, meal=archiveCtx.meal;
@@ -1067,14 +1126,42 @@ async function saveToArchive(silent){
   if(!silent) $("archiveStatus").textContent="Saved to library: "+date+" · "+mealLabel(meal);
 }
 async function loadFromArchive(date, meal){
-  const rec=archiveIndex.find(r=>r.id===archiveKey(date,meal));
-  if(!rec){ alert("No menu saved for "+date+" "+mealLabel(meal)+"."); return false; }
+  const id=archiveKey(date,meal);
+  let rec=archiveIndex.find(r=>r.id===id);
+  if(!rec) rec=await dbGet(id);
+  if(!rec){ alert("No menu saved for "+date+" · "+mealLabel(meal)+". Use Save to library or Import JSON first."); return false; }
   archiveCtx={date, meal};
   $("archiveDate").value=date;
-  setMealTab(meal);
+  document.querySelectorAll(".meal-tab").forEach(t=> t.classList.toggle("on", t.dataset.meal===meal));
   applyArchiveSnapshot(rec.snap);
   updateArchiveStatus();
+  showArchiveOffer();
   return true;
+}
+async function importProjectFileToLibrary(file){
+  const text=await file.text();
+  let proj;
+  try{
+    proj=migrate(JSON.parse(text));
+    if(!proj||!proj.menus||!proj.menus.length) throw 0;
+  }catch(e){
+    alert("That file isn't a valid menu project (.json).");
+    return;
+  }
+  syncArchiveCtxFromUI();
+  const date=archiveCtx.date, meal=archiveCtx.meal;
+  const d=new Date(date+"T12:00:00");
+  const snap=projectToSnapshot(proj);
+  const rec={
+    id:archiveKey(date,meal), date, meal,
+    year:d.getFullYear(), month:d.getMonth()+1, week:isoWeek(d),
+    dayLabel:dayName(date), savedAt:new Date().toISOString(),
+    snap
+  };
+  await dbPut(rec);
+  await refreshArchiveIndex();
+  $("archiveStatus").textContent="Imported to library: "+date+" · "+mealLabel(meal);
+  showArchiveOffer();
 }
 function scheduleArchiveSave(){
   clearTimeout(archiveTimer);
@@ -1362,7 +1449,30 @@ document.querySelectorAll(".meal-tab").forEach(t=>{
   };
 });
 $("saveArchive").onclick=()=>saveToArchive(false).catch(()=>alert("Could not save to library."));
-$("loadArchive").onclick=()=>loadFromArchive(archiveCtx.date, archiveCtx.meal);
+$("loadArchive").onclick=async ()=>{
+  try{
+    syncArchiveCtxFromUI();
+    await refreshArchiveIndex();
+    await loadFromArchive(archiveCtx.date, archiveCtx.meal);
+  }catch(err){
+    alert("Could not load from library. "+(err&&err.message?err.message:"Check that this browser allows local storage."));
+  }
+};
+$("addCurrentToLibrary").onclick=()=>{
+  syncArchiveCtxFromUI();
+  saveToArchive(false).catch(()=>alert("Could not save to library."));
+};
+$("importToLibrary").onclick=()=> $("importLibraryFile").click();
+$("importLibraryFile").onchange=async e=>{
+  const f=e.target.files[0]; if(!f) return;
+  try{
+    syncArchiveCtxFromUI();
+    await importProjectFileToLibrary(f);
+  }catch(err){
+    alert("Could not import to library. "+(err&&err.message?err.message:""));
+  }
+  e.target.value="";
+};
 $("openLibrary").onclick=openLibrary;
 $("libClose").onclick=closeLibrary;
 document.querySelectorAll(".lib-tab").forEach(t=> t.onclick=()=>setLibView(t.dataset.view));
@@ -2005,10 +2115,10 @@ buildChips();
 buildTplGrid();
 syncInputs();
 render();
-refreshArchiveIndex().then(()=>{
-  const rec=archiveIndex.find(r=>r.id===archiveKey(archiveCtx.date, archiveCtx.meal));
-  if(rec) applyArchiveSnapshot(rec.snap);
-}).catch(()=>{});
+refreshArchiveIndex().catch(()=>{
+  updateArchiveStatus();
+  showArchiveOffer();
+});
 </script>
 </body>
 </html>
