@@ -1,4 +1,4 @@
-const CACHE_NAME = "menu-creator-v3";
+const CACHE_NAME = "menu-creator-v4";
 const ASSETS = [
   "./",
   "./index.html",
@@ -33,14 +33,17 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request).then((response) => {
-        if (!response || response.status !== 200 || response.type !== "basic") return response;
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
-        return response;
-      }).catch(() => caches.match("./index.html"));
-    })
+    (event.request.mode === "navigate" || event.request.destination === "document"
+      ? fetch(event.request).catch(() => caches.match("./index.html"))
+      : caches.match(event.request).then((cached) => {
+          if (cached) return cached;
+          return fetch(event.request).then((response) => {
+            if (!response || response.status !== 200 || response.type !== "basic") return response;
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
+            return response;
+          });
+        })
+    ).catch(() => caches.match("./index.html"))
   );
 });

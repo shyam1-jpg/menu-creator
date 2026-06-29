@@ -713,9 +713,10 @@
 </head>
 <body>
 <div class="file-warn" id="fileWarn">
-  <strong>⚠ This file was opened directly — it will not work as an app on your phone.</strong>
-  Upload the app to a website first, then open the HTTPS link in Safari or Chrome.
-  See <a href="DEPLOY-GUIDE.txt">DEPLOY-GUIDE.txt</a> and <a href="INSTALL-ON-PHONE.txt">INSTALL-ON-PHONE.txt</a> in the folder.
+  <strong>⚠ Opened as a file — calendar save may not work on Mac Safari.</strong>
+  Use the live link instead:
+  <a href="https://shyam1-jpg.github.io/menu-creator/" target="_blank" rel="noopener">shyam1-jpg.github.io/menu-creator</a>
+  (or run <code>npm start</code> in this folder and open <code>http://localhost:3000</code>).
 </div>
 <div class="mobile-tabs" id="mobileTabs">
   <button type="button" class="mobile-tab on" data-panel="editor">✏️ Edit</button>
@@ -746,7 +747,7 @@
       </div>
       <div class="archive-status" id="archiveStatus">Library: not saved yet for this date</div>
       <div class="archive-offer hidden" id="archiveOffer"></div>
-      <div class="hint">Every lunch &amp; dinner is stored on this PC, organised by day, week, month and year.</div>
+      <div class="hint">Menus auto-save to the calendar as you type. Open <b>Browse all</b> → tap a day with a dot to load that menu.</div>
     </div>
 
     <div class="divider"></div>
@@ -1004,54 +1005,136 @@ function dayName(dateStr){
   return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][new Date(dateStr+"T12:00:00").getDay()];
 }
 
+const ARCHIVE_LS_KEY = "menuCreatorArchive_v1";
+let archiveStorage = "idb";
+
+function lsArchiveAll(){
+  try{
+    const raw = localStorage.getItem(ARCHIVE_LS_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+function lsArchivePut(rec){
+  const all = lsArchiveAll().filter(r => r.id !== rec.id);
+  all.push(rec);
+  localStorage.setItem(ARCHIVE_LS_KEY, JSON.stringify(all));
+}
+function lsArchiveGet(id){
+  return lsArchiveAll().find(r => r.id === id) || null;
+}
+function lsArchiveDel(id){
+  localStorage.setItem(ARCHIVE_LS_KEY, JSON.stringify(lsArchiveAll().filter(r => r.id !== id)));
+}
+
 function openDB(){
   return new Promise((ok,no)=>{
-    const req=indexedDB.open(DB_NAME, DB_VER);
-    req.onupgradeneeded=()=>{ req.result.createObjectStore(STORE,{keyPath:"id"}); };
-    req.onsuccess=()=>ok(req.result);
-    req.onerror=()=>no(req.error);
+    const req = indexedDB.open(DB_NAME, DB_VER);
+    req.onupgradeneeded = () => {
+      const db = req.result;
+      if(!db.objectStoreNames.contains(STORE)) db.createObjectStore(STORE, {keyPath:"id"});
+    };
+    req.onsuccess = () => ok(req.result);
+    req.onerror = () => no(req.error);
   });
+}
+async function idbAll(db){
+  return new Promise((ok,no)=>{
+    const tx = db.transaction(STORE, "readonly");
+    const req = tx.objectStore(STORE).getAll();
+    req.onsuccess = () => ok(req.result || []);
+    req.onerror = () => no(req.error);
+  });
+}
+async function idbGet(db, id){
+  return new Promise((ok,no)=>{
+    const tx = db.transaction(STORE, "readonly");
+    const req = tx.objectStore(STORE).get(id);
+    req.onsuccess = () => ok(req.result || null);
+    req.onerror = () => no(req.error);
+  });
+}
+async function idbPut(db, rec){
+  return new Promise((ok,no)=>{
+    const tx = db.transaction(STORE, "readwrite");
+    tx.objectStore(STORE).put(rec);
+    tx.oncomplete = () => ok();
+    tx.onerror = () => no(tx.error);
+  });
+}
+async function idbDel(db, id){
+  return new Promise((ok,no)=>{
+    const tx = db.transaction(STORE, "readwrite");
+    tx.objectStore(STORE).delete(id);
+    tx.oncomplete = () => ok();
+    tx.onerror = () => no(tx.error);
+  });
+}
+async function detectArchiveStorage(){
+  if(location.protocol === "file:" || !window.indexedDB){
+    archiveStorage = "local";
+    return archiveStorage;
+  }
+  try{
+    const db = await openDB();
+    const probe = {id:"__probe__", date:todayISO(), meal:"lunch", snap:{dishes:[]}};
+    await idbPut(db, probe);
+    await idbDel(db, "__probe__");
+    archiveStorage = "idb";
+    const legacy = lsArchiveAll();
+    if(legacy.length){
+      for(const rec of legacy) await idbPut(db, rec);
+      localStorage.removeItem(ARCHIVE_LS_KEY);
+    }
+  }catch(e){
+    archiveStorage = "local";
+  }
+  return archiveStorage;
 }
 async function dbAll(){
-  const db=await openDB();
-  return new Promise((ok,no)=>{
-    const tx=db.transaction(STORE,"readonly");
-    const req=tx.objectStore(STORE).getAll();
-    req.onsuccess=()=>ok(req.result||[]);
-    req.onerror=()=>no(req.error);
-  });
+  if(archiveStorage === "local") return lsArchiveAll();
+  try{
+    const db = await openDB();
+    return await idbAll(db);
+  }catch(e){
+    archiveStorage = "local";
+    return lsArchiveAll();
+  }
 }
 async function dbGet(id){
-  const db=await openDB();
-  return new Promise((ok,no)=>{
-    const tx=db.transaction(STORE,"readonly");
-    const req=tx.objectStore(STORE).get(id);
-    req.onsuccess=()=>ok(req.result||null);
-    req.onerror=()=>no(req.error);
-  });
+  if(archiveStorage === "local") return lsArchiveGet(id);
+  try{
+    const db = await openDB();
+    return await idbGet(db, id);
+  }catch(e){
+    archiveStorage = "local";
+    return lsArchiveGet(id);
+  }
 }
 async function dbPut(rec){
-  const db=await openDB();
-  return new Promise((ok,no)=>{
-    const tx=db.transaction(STORE,"readwrite");
-    tx.objectStore(STORE).put(rec);
-    tx.oncomplete=()=>ok();
-    tx.onerror=()=>no(tx.error);
-  });
+  if(archiveStorage === "local"){ lsArchivePut(rec); return; }
+  try{
+    const db = await openDB();
+    await idbPut(db, rec);
+  }catch(e){
+    archiveStorage = "local";
+    lsArchivePut(rec);
+  }
 }
 async function dbDel(id){
-  const db=await openDB();
-  return new Promise((ok,no)=>{
-    const tx=db.transaction(STORE,"readwrite");
-    tx.objectStore(STORE).delete(id);
-    tx.oncomplete=()=>ok();
-    tx.onerror=()=>no(tx.error);
-  });
+  if(archiveStorage === "local"){ lsArchiveDel(id); return; }
+  try{
+    const db = await openDB();
+    await idbDel(db, id);
+  }catch(e){
+    archiveStorage = "local";
+    lsArchiveDel(id);
+  }
 }
 async function refreshArchiveIndex(){
   archiveIndex=(await dbAll()).sort((a,b)=> (a.date+a.meal).localeCompare(b.date+b.meal));
   updateArchiveStatus();
   showArchiveOffer();
+  if($("libOverlay")?.classList.contains("open")) renderLibView();
 }
 function snapshotForArchive(){
   const m=current();
@@ -1113,6 +1196,7 @@ function showArchiveOffer(){
   $("offerSaveBtn").onclick=()=>saveToArchive(false).catch(()=>alert("Could not save to library."));
 }
 async function saveToArchive(silent){
+  if(!hasEditorContent()) return false;
   const date=archiveCtx.date, meal=archiveCtx.meal;
   const d=new Date(date+"T12:00:00");
   const rec={
@@ -1123,13 +1207,22 @@ async function saveToArchive(silent){
   };
   await dbPut(rec);
   await refreshArchiveIndex();
-  if(!silent) $("archiveStatus").textContent="Saved to library: "+date+" · "+mealLabel(meal);
+  if(!silent){
+    $("archiveStatus").textContent="Saved to library: "+date+" · "+mealLabel(meal);
+  } else {
+    const el=$("archiveStatus");
+    if(el) el.textContent="Auto-saved to calendar: "+date+" · "+mealLabel(meal);
+  }
+  return true;
 }
-async function loadFromArchive(date, meal){
+async function loadFromArchive(date, meal, quiet){
   const id=archiveKey(date,meal);
   let rec=archiveIndex.find(r=>r.id===id);
   if(!rec) rec=await dbGet(id);
-  if(!rec){ alert("No menu saved for "+date+" · "+mealLabel(meal)+". Use Save to library or Import JSON first."); return false; }
+  if(!rec){
+    if(!quiet) alert("No menu saved for "+date+" · "+mealLabel(meal)+". Use Save to library or Import JSON first.");
+    return false;
+  }
   archiveCtx={date, meal};
   $("archiveDate").value=date;
   document.querySelectorAll(".meal-tab").forEach(t=> t.classList.toggle("on", t.dataset.meal===meal));
@@ -1165,7 +1258,12 @@ async function importProjectFileToLibrary(file){
 }
 function scheduleArchiveSave(){
   clearTimeout(archiveTimer);
-  archiveTimer=setTimeout(()=>saveToArchive(true).catch(()=>{}), 1200);
+  archiveTimer=setTimeout(()=>{
+    saveToArchive(true).catch(()=>{
+      const el=$("archiveStatus");
+      if(el) el.textContent="Could not auto-save — try Save to library or use the HTTPS link (not a file).";
+    });
+  }, 800);
 }
 function updateArchiveStatus(){
   const key=archiveKey(archiveCtx.date, archiveCtx.meal);
@@ -1189,7 +1287,8 @@ function setMealTab(meal){
 }
 
 /* ---------------- Library browser UI ---------------- */
-function openLibrary(){
+async function openLibrary(){
+  try{ await refreshArchiveIndex(); }catch(e){}
   libCalYear=new Date(archiveCtx.date+"T12:00:00").getFullYear();
   libCalMonth=new Date(archiveCtx.date+"T12:00:00").getMonth();
   $("libOverlay").classList.add("open");
@@ -1241,15 +1340,19 @@ function renderCalendar(){
   $("calPrev").onclick=()=>{ libCalMonth--; if(libCalMonth<0){libCalMonth=11;libCalYear--;} renderCalendar(); };
   $("calNext").onclick=()=>{ libCalMonth++; if(libCalMonth>11){libCalMonth=0;libCalYear++;} renderCalendar(); };
   wrap.querySelectorAll(".cal-day").forEach(el=>{
-    el.onclick=()=>{
+    el.onclick=async ()=>{
       const date=el.dataset.date;
       archiveCtx.date=date; $("archiveDate").value=date;
       const meals=(byDate[date]||[]);
       if(meals.includes("dinner")) setMealTab("dinner");
       else if(meals.includes("lunch")) setMealTab("lunch");
-      loadFromArchive(date, archiveCtx.meal).then(found=>{
-        if(!found && meals.length) loadFromArchive(date, meals[0]);
-      });
+      if(meals.length){
+        const meal=meals.includes(archiveCtx.meal)?archiveCtx.meal:meals[0];
+        await loadFromArchive(date, meal, true);
+      } else {
+        updateArchiveStatus();
+        showArchiveOffer();
+      }
       closeLibrary();
     };
   });
@@ -1641,6 +1744,7 @@ function applyParsed(r, replace){
   if(replace && r.infoText) data.infoText = r.infoText;
   if(replace && r.infoAllergens) data.infoAllergens = r.infoAllergens;
   save(); resetForm(); syncInputs(); render();
+  saveToArchive(true).catch(()=>{});
 }
 $("genBtn").onclick = ()=>{
   const txt=$("bulkText").value; if(!txt.trim()) return;
@@ -2115,7 +2219,7 @@ buildChips();
 buildTplGrid();
 syncInputs();
 render();
-refreshArchiveIndex().catch(()=>{
+detectArchiveStorage().then(()=>refreshArchiveIndex()).catch(()=>{
   updateArchiveStatus();
   showArchiveOffer();
 });
