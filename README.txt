@@ -27,8 +27,14 @@ and no internet needed after you open the app.
 
 HOW TO OPEN THE APP
 -------------------
-  Option 1 (easiest): Double-click "Start Menu Creator.bat"
-  Option 2: Double-click "index.html" (opens in your default browser)
+  Option 1 (recommended): Double-click "Start Menu Creator.bat"
+      This starts the local server and opens http://127.0.0.1:4002/
+      Use this for Print / Save PDF so you are not on an old cached copy.
+      Confirm the header shows "v9" (build stamp).
+  Option 2: In this folder run  npm start  then open http://127.0.0.1:4002/
+  Option 3: Double-click "index.html" (file://) — works for editing, but
+      Chrome may keep an old installed PWA / cache. Close any "Menu Creator"
+      app window first. github.io and onrender.com are not serving this repo.
 
 Optional: Run "Install Desktop Shortcut.bat" once to put a shortcut on
 your Desktop.

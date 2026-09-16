@@ -1,4 +1,6 @@
 name: Deploy to GitHub Pages
+# Requires Pages enabled: repo Settings → Pages → Source: GitHub Actions.
+# Until that is set, this job fails with HttpError 404 and github.io stays down.
 
 on:
   push:

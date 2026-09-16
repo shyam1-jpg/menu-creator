@@ -23,10 +23,11 @@ echo      3. Manual Deploy - Deploy latest commit
 echo      Build: npm install ^&^& npm run build
 echo      Publish directory: _site
 echo.
-echo  [C] GITHUB PAGES (permanent, free):
+echo  [C] GITHUB PAGES (permanent, free) — currently 404 until enabled:
 echo      https://github.com/shyam1-jpg/menu-creator/settings/pages
 echo      Source: GitHub Actions  (not "Deploy from branch")
 echo      Then open: https://shyam1-jpg.github.io/menu-creator/
+echo      Until then use Start Menu Creator.bat → http://127.0.0.1:4002/
 echo.
 echo  Building _site folder now (needed for Netlify + Render)...
 echo.

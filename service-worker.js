@@ -1,4 +1,5 @@
-const CACHE_NAME = "menu-creator-v8";
+const CACHE_NAME = "menu-creator-v9";
+const APP_BUILD = "v9";
 const ASSETS = [
   "./index.html",
   "./vedanta-menu-creator.html",
@@ -30,6 +31,10 @@ self.addEventListener("activate", (event) => {
   })());
 });
 
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") self.skipWaiting();
+});
+
 function isNavigation(request) {
   return request.mode === "navigate" || request.destination === "document";
 }
@@ -44,8 +49,15 @@ function networkWithTimeout(url, ms) {
   return fetch(url, { cache: "no-store", signal: ctrl.signal }).finally(() => clearTimeout(timer));
 }
 
-async function cachedPage() {
-  return (await caches.match("./index.html")) || (await caches.match("./"));
+function cacheKeyForPath(pathname) {
+  if (pathname.endsWith("vedanta-menu-creator.html")) return "./vedanta-menu-creator.html";
+  if (pathname.endsWith("install.html")) return "./install.html";
+  return "./index.html";
+}
+
+async function cachedPage(pathname) {
+  const key = cacheKeyForPath(pathname || "/");
+  return (await caches.match(key)) || (await caches.match("./index.html")) || (await caches.match("./"));
 }
 
 self.addEventListener("fetch", (event) => {
@@ -67,11 +79,11 @@ async function handleFetch(request, url) {
       const fresh = await networkWithTimeout(url.href, NAV_TIMEOUT_MS);
       if (fresh && fresh.ok) {
         const cache = await caches.open(CACHE_NAME);
-        cache.put("./index.html", fresh.clone());
+        cache.put(cacheKeyForPath(url.pathname), fresh.clone());
         return fresh;
       }
     } catch (_) { /* timeout, abort, or offline — use cache */ }
-    return (await cachedPage()) || fetch(url.href);
+    return (await cachedPage(url.pathname)) || fetch(url.href);
   }
 
   const cached = await caches.match(request);
@@ -90,6 +102,6 @@ async function handleFetch(request, url) {
     }
     return response;
   } catch (_) {
-    return (await caches.match(request)) || (await cachedPage()) || Response.error();
+    return (await caches.match(request)) || (await cachedPage(url.pathname)) || Response.error();
   }
 }
