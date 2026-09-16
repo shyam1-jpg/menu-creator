@@ -1725,16 +1725,26 @@ function parseBulk(text){
       expectName = true;
       continue;
     }
-    // a short standalone diet line (e.g. "Vegan")
-    if(cur && cur.name && !expectName && parseDiets(raw).length && raw.split(/\s+/).length<=3){
+    // a short standalone diet line (e.g. "Vegan"), including after a Contains line
+    if(cur && cur.name && parseDiets(raw).length && raw.split(/\s+/).length<=3){
       cur.diet = [...new Set([...(cur.diet||[]), ...parseDiets(raw)])]; continue;
     }
 
     // menu title (first MENU line at the very top)
     if(/menu\s*$/i.test(raw) && !title && !dishes.length && !cur){ title = raw; continue; }
 
-    // an ALL-CAPS line always starts a new dish (handles menus with no blank lines)
+    const looksLikeDescription = s => {
+      const words = s.split(/\s+/).filter(Boolean);
+      return /[.!?]$/.test(s) || words.length >= 8 || s.length >= 60;
+    };
+
+    // Short ALL-CAPS lines start a new dish when menus have no blank lines.
+    // Sentence-like ALL-CAPS lines are descriptions, not extra titles.
     if(isCaps(raw) && cur && cur.name && !expectName){
+      if(looksLikeDescription(raw)){
+        cur.desc = cur.desc ? cur.desc+" "+raw : raw;
+        continue;
+      }
       push(); cur = newDish(); cur.name = toTitle(raw); expectName = false; continue;
     }
 
