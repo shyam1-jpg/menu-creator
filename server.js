@@ -26,6 +26,10 @@ app.use(
 );
 
 app.get("*", (req, res) => {
+  if (/\.(js|json|png|svg|css|map|webmanifest|ico)$/i.test(req.path)) {
+    res.status(404).end();
+    return;
+  }
   res.sendFile(path.join(root, "index.html"));
 });
 
