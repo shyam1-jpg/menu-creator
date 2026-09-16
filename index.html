@@ -487,10 +487,13 @@
   }
   .menu-sub{color:var(--muted);font-size:12px;letter-spacing:.18em;text-transform:uppercase;}
 
+  /* Casing is applied in the text nodes (displayDishName / sentenceCase / containsLine).
+     Do not use text-transform here: Chrome/Skia print-to-PDF bakes it into extracted
+     characters and can leak .dish-name uppercase onto descriptions and Contains lines. */
   .dish{margin-bottom:15px;text-align:center;text-transform:none;}
   .dish-name{
     font-family:var(--serif);font-size:16px;font-weight:700;letter-spacing:.07em;
-    text-transform:uppercase;margin:0 0 3px;color:var(--ink);
+    text-transform:none;margin:0 0 3px;color:var(--ink);
   }
   .dish-desc{
     font-size:12.5px;line-height:1.45;color:#3c463f;max-width:540px;margin:0 auto 3px;font-style:italic;
@@ -498,11 +501,11 @@
   }
   .dish-contains{
     font-size:11px;letter-spacing:.02em;color:var(--gold);
-    text-transform:lowercase;font-weight:700;
+    text-transform:none;font-weight:700;
   }
   .dish-diet{
     font-size:10.5px;letter-spacing:.02em;color:var(--accent);
-    text-transform:lowercase;font-weight:700;margin-top:1px;
+    text-transform:none;font-weight:700;margin-top:1px;
   }
   .dish-sep{width:42px;height:1px;background:var(--line);margin:11px auto 0;}
 
@@ -960,10 +963,12 @@
     .page.tpl-banquet .menu-logo-text{color:#6e2430 !important;}
     .menu-qr-wrap img{max-width:none !important;background:#fff !important;}
     .page-foot{position:absolute !important;bottom:22px;left:0;right:0;}
-    /* Print/PDF: keep the three text roles, never inherit a parent uppercase. */
-    .dish-name{text-transform:uppercase !important;}
-    .dish-desc{text-transform:none !important;font-weight:400 !important;}
-    .dish-contains,.dish-diet{text-transform:lowercase !important;font-weight:700 !important;}
+    /* Print/PDF: never transform dish text — the three roles are already cased in the DOM. */
+    .dish,.dish-name,.dish-desc,.dish-contains,.dish-diet{
+      text-transform:none !important;
+    }
+    .dish-desc{font-weight:400 !important;}
+    .dish-contains,.dish-diet{font-weight:700 !important;}
   }
 </style>
 </head>
@@ -1942,7 +1947,13 @@ function parseBulk(text){
   const letters = s => s.replace(/[^a-zA-Z]/g,"");
   const isCaps = s => { const L=letters(s); return L.length>=2 && s.toUpperCase()===s && /[A-Z]/.test(s); };
   const newDish = ()=>({name:"",desc:"",allergens:[],diet:[]});
-  const push = ()=>{ if(cur && cur.name) dishes.push(cur); cur=null; expectName=true; };
+  const push = ()=>{
+    if(cur && cur.name){
+      if(cur.desc) cur.desc = sentenceCase(cur.desc);
+      dishes.push(cur);
+    }
+    cur=null; expectName=true;
+  };
 
   for(const line of rawLines){
     const raw = line.replace(/\s+/g," ").trim();
@@ -2049,6 +2060,9 @@ function wordTpl(tpl){
   };
   return map[t]||map.classic;
 }
+function wordRoleStyle(style){
+  return String(style||"").replace(/text-transform\s*:\s*[^;]+;?/gi,"") + "text-transform:none;";
+}
 function buildWordPage(m, snap, idx, tpl){
   const s=wordTpl(tpl);
   const items=(snap?.infoAllergens||data.infoAllergens||"").split(",").map(x=>x.trim()).filter(Boolean);
@@ -2061,10 +2075,10 @@ function buildWordPage(m, snap, idx, tpl){
   const dishes=(m.dishes||[]);
   const rom=["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX"];
   const wordDish=(d,prefix)=>`
-    <p style="${s.dish}margin:9pt 0 2pt;">${esc(prefix?prefix+"  "+d.name:d.name)}</p>
-    ${d.desc?`<p style="${s.desc}margin:0 0 2pt;">${esc(sentenceCase(d.desc))}</p>`:""}
-    ${d.allergens?.length?`<p style="${s.allg}margin:0;">${esc(containsLine(d.allergens))}</p>`:""}
-    ${d.diet?.length?`<p style="${s.diet}margin:0;">${esc(dietLine(d.diet))}</p>`:""}
+    <p style="${wordRoleStyle(s.dish)}margin:9pt 0 2pt;">${esc(displayDishName(prefix?prefix+"  "+d.name:d.name))}</p>
+    ${d.desc?`<p style="${wordRoleStyle(s.desc)}margin:0 0 2pt;">${esc(sentenceCase(d.desc))}</p>`:""}
+    ${d.allergens?.length?`<p style="${wordRoleStyle(s.allg)}margin:0;font-weight:bold;">${esc(containsLine(d.allergens))}</p>`:""}
+    ${d.diet?.length?`<p style="${wordRoleStyle(s.diet)}margin:0;font-weight:bold;">${esc(dietLine(d.diet))}</p>`:""}
   `;
   const sectionStyle=s.section||"text-align:center;font-family:Georgia,serif;font-size:10pt;letter-spacing:2px;text-transform:uppercase;color:#2f6b4f;";
   const groups=groupMenuDishes(dishes);
@@ -2153,12 +2167,15 @@ function isAllCapsText(s){
   const letters = String(s||"").replace(/[^A-Za-z]/g,"");
   return letters.length>=2 && letters === letters.toUpperCase() && /[A-Z]/.test(letters);
 }
+function displayDishName(s){
+  return String(s||"").replace(/\s+/g," ").trim().toUpperCase();
+}
 function sentenceCase(s){
   s = String(s||"").replace(/\s+/g," ").trim();
   if(!s) return "";
   if(!isAllCapsText(s)) return s;
   s = s.toLowerCase();
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return s.replace(/(^|[.!?]\s+)([a-z])/g, (m, p, c) => p + c.toUpperCase());
 }
 function containsLine(a){
   if(!a||!a.length) return "";
@@ -2222,7 +2239,7 @@ function renderTabs(){
 
 function dishCardHTML(d, showSep){
   return `<div class="dish">
-          <div class="dish-name">${esc(d.name)}</div>
+          <div class="dish-name">${esc(displayDishName(d.name))}</div>
           ${d.desc?`<div class="dish-desc">${esc(sentenceCase(d.desc))}</div>`:""}
           ${d.allergens&&d.allergens.length?`<div class="dish-contains">${esc(containsLine(d.allergens))}</div>`:""}
           ${d.diet&&d.diet.length?`<div class="dish-diet">${esc(dietLine(d.diet))}</div>`:""}
