@@ -1,4 +1,4 @@
-const CACHE_NAME = "menu-creator-v5";
+const CACHE_NAME = "menu-creator-v6";
 const ASSETS = [
   "./",
   "./index.html",
