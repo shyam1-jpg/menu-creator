@@ -258,8 +258,210 @@
   .page.tpl-rustic .info-title{color:#5c3d1e;font-family:"Palatino Linotype",Palatino,serif;}
   .page.tpl-rustic .info-list{background:#f5ebe0;}
 
+  /* Course / meal headings (Breakfast, Lunch, Starter…) when pasted as their own line */
+  .section-title{
+    font-family:var(--serif);font-size:12.5px;font-weight:700;letter-spacing:.18em;
+    text-transform:uppercase;text-align:center;color:var(--accent);
+    margin:18px 0 10px;
+  }
+  .menu-section:first-child .section-title{margin-top:0;}
+  .dishes-wrap.has-sections .dish-sep{max-width:80px;}
+
+  /* ---------- Template: Wellness / Deep Health ---------- */
+  .page.tpl-wellness{background:#f7f5f0;padding:58px 72px 64px;border-color:#e4ddd2;}
+  .page.tpl-wellness::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:10px;z-index:0;pointer-events:none;
+    background:linear-gradient(90deg,#c5d4ce,#e8ddd0,#c5d4ce);
+  }
+  .page.tpl-wellness::after{
+    content:"";position:absolute;inset:28px;border:1px solid rgba(94,128,120,.38);
+    pointer-events:none;z-index:0;
+  }
+  .page.tpl-wellness .menu-head{border-bottom:none;padding-bottom:6px;margin-bottom:32px;}
+  .page.tpl-wellness .menu-title{
+    font-family:var(--sans);font-weight:300;letter-spacing:.28em;font-size:24px;color:#3d534e;
+  }
+  .page.tpl-wellness .menu-title::after{
+    content:"";display:block;width:9px;height:9px;margin:14px auto 0;
+    border:1px solid #5e8078;border-radius:50%;
+  }
+  .page.tpl-wellness .menu-logo-text{font-family:var(--sans);color:#5e8078;letter-spacing:.18em;font-size:13px;font-weight:600;}
+  .page.tpl-wellness .menu-sub{color:#7a8883;letter-spacing:.2em;}
+  .page.tpl-wellness .dish{margin-bottom:22px;}
+  .page.tpl-wellness .dish-name{
+    font-family:var(--sans);font-size:13.5px;font-weight:600;letter-spacing:.16em;color:#2c3936;
+  }
+  .page.tpl-wellness .dish-desc{font-style:normal;color:#5c6b66;max-width:520px;}
+  .page.tpl-wellness .dish-contains{color:#5e8078;}
+  .page.tpl-wellness .dish-diet{color:#3d534e;}
+  .page.tpl-wellness .dish-sep{width:22px;background:#c5d4ce;}
+  .page.tpl-wellness .info-block{border-top:1px solid #c5d4ce;padding-top:16px;}
+  .page.tpl-wellness .info-title{font-family:var(--sans);font-weight:500;letter-spacing:.18em;color:#3d534e;font-size:13px;}
+  .page.tpl-wellness .info-list{background:#eef2ef;border-radius:0;}
+  .page.tpl-wellness .section-title{font-family:var(--sans);letter-spacing:.22em;color:#5e8078;font-weight:600;}
+  .page.tpl-wellness .menu-qr-caption{color:#7a8883;}
+  .page.tpl-wellness .page-foot{bottom:32px;}
+
+  /* ---------- Template: Fine Dining / Tasting ---------- */
+  .page.tpl-tasting{background:#fbf8f2;padding:52px 60px 58px;border-color:#e6dccb;}
+  .page.tpl-tasting::before{
+    content:"";position:absolute;inset:18px;
+    border:1px solid #8c3a32;pointer-events:none;z-index:0;
+  }
+  .page.tpl-tasting::after{
+    content:"";position:absolute;inset:22px;
+    border:1px solid rgba(140,58,50,.28);pointer-events:none;z-index:0;
+  }
+  .page.tpl-tasting .menu-head{border-bottom:none;padding-bottom:4px;margin-bottom:8px;}
+  .page.tpl-tasting .menu-title{
+    font-size:28px;letter-spacing:.32em;color:#1c1917;font-weight:400;
+  }
+  .page.tpl-tasting .menu-title::after{
+    content:"";display:block;width:64px;height:1px;background:#8c3a32;margin:14px auto 0;
+  }
+  .page.tpl-tasting .menu-logo-text{color:#8c3a32;letter-spacing:.12em;}
+  .page.tpl-tasting .menu-sub{color:#8a7a6e;}
+  .page.tpl-tasting .dishes-wrap,.page.tpl-tasting .menu-section{counter-reset:course;}
+  .page.tpl-tasting .dish{
+    counter-increment:course;
+    display:grid;grid-template-columns:52px 1fr;column-gap:12px;
+    text-align:left;margin-bottom:20px;padding-bottom:4px;
+  }
+  .page.tpl-tasting .dish::before{
+    content:counter(course, upper-roman);
+    grid-row:1 / span 5;align-self:start;
+    font-family:var(--serif);font-size:12px;letter-spacing:.14em;color:#8c3a32;
+    padding-top:3px;
+  }
+  .page.tpl-tasting .dish-name{grid-column:2;font-size:15px;letter-spacing:.12em;color:#1c1917;}
+  .page.tpl-tasting .dish-desc{grid-column:2;margin:0;max-width:none;font-style:italic;color:#5a5148;}
+  .page.tpl-tasting .dish-contains{grid-column:2;color:#8c3a32;}
+  .page.tpl-tasting .dish-diet{grid-column:2;color:#5a5148;}
+  .page.tpl-tasting .dish-sep{display:none;}
+  .page.tpl-tasting .section-title{
+    text-align:left;color:#8c3a32;letter-spacing:.22em;font-size:11px;
+    border-bottom:1px solid #e6dccb;padding-bottom:6px;margin:8px 0 14px;
+  }
+  .page.tpl-tasting .info-block{border-top:1px solid #8c3a32;}
+  .page.tpl-tasting .info-title{color:#8c3a32;letter-spacing:.18em;font-size:15px;}
+  .page.tpl-tasting .info-list{background:#f3ece3;border-radius:0;}
+  .page.tpl-tasting .menu-qr-caption{color:#8a7a6e;}
+  .page.tpl-tasting .page-foot{bottom:28px;}
+
+  /* ---------- Template: Café / Brunch ---------- */
+  .page.tpl-brunch{background:#fff8ee;padding:40px 44px 52px;border-color:#ead9c6;}
+  .page.tpl-brunch::before{display:none;}
+  .page.tpl-brunch .menu-head{
+    text-align:left;border-bottom:none;background:#5c3a27;color:#fff8ee;
+    padding:16px 20px;border-radius:14px;margin-bottom:22px;
+  }
+  .page.tpl-brunch .menu-title{
+    font-family:"Palatino Linotype",Palatino,serif;color:#fff8ee;
+    letter-spacing:.08em;font-size:26px;
+  }
+  .page.tpl-brunch .menu-logo-text{color:#f0c9a0;font-family:"Palatino Linotype",Palatino,serif;}
+  .page.tpl-brunch .menu-sub,.page.tpl-brunch .menu-head .menu-sub{color:#f0c9a0 !important;}
+  .page.tpl-brunch .dishes-wrap{column-count:2;column-gap:28px;}
+  .page.tpl-brunch .dishes-wrap.has-sections{
+    column-count:unset;display:grid;grid-template-columns:1fr 1fr;gap:16px 24px;
+  }
+  .page.tpl-brunch .menu-section,.page.tpl-brunch .dish{break-inside:avoid;-webkit-column-break-inside:avoid;}
+  .page.tpl-brunch .dish{
+    text-align:left;margin-bottom:12px;padding-bottom:10px;
+    border-bottom:1px dotted #e0c8b0;
+  }
+  .page.tpl-brunch .dish-name{
+    font-family:"Palatino Linotype",Palatino,serif;font-size:14px;letter-spacing:.04em;color:#5c3a27;
+  }
+  .page.tpl-brunch .dish-desc{margin:0;max-width:none;font-style:normal;color:#6b5344;font-size:12px;}
+  .page.tpl-brunch .dish-contains{color:#c46a3a;}
+  .page.tpl-brunch .dish-diet{color:#5c7a3a;}
+  .page.tpl-brunch .dish-sep{display:none;}
+  .page.tpl-brunch .section-title{
+    text-align:left;color:#c46a3a;letter-spacing:.14em;font-size:11.5px;
+    font-family:"Palatino Linotype",Palatino,serif;margin:0 0 8px;
+  }
+  .page.tpl-brunch .info-block{border-top:none;background:#f7eadc;padding:12px 14px;border-radius:12px;}
+  .page.tpl-brunch .info-title{font-family:"Palatino Linotype",Palatino,serif;color:#5c3a27;text-align:left;}
+  .page.tpl-brunch .info-sub{text-align:left;}
+  .page.tpl-brunch .info-list{background:#fff;border-radius:8px;}
+
+  /* ---------- Template: Retreat meal board ---------- */
+  .page.tpl-retreat{background:#f4efe6;padding:36px 34px 48px;border-color:#d7c4a3;}
+  .page.tpl-retreat::before{
+    content:"";position:absolute;inset:14px;
+    border:8px solid #355c4a;box-shadow:inset 0 0 0 2px #d7c4a3;
+    pointer-events:none;z-index:0;
+  }
+  .page.tpl-retreat .menu-head{
+    background:#355c4a;border-bottom:none;padding:14px 16px;margin:10px 12px 18px;border-radius:2px;
+  }
+  .page.tpl-retreat .menu-title{color:#f4efe6;font-size:22px;letter-spacing:.14em;}
+  .page.tpl-retreat .menu-logo-text{color:#e8d5a3;}
+  .page.tpl-retreat .menu-sub,.page.tpl-retreat .menu-head .menu-sub{color:#d5e0d9 !important;}
+  .page.tpl-retreat .dishes-wrap{padding:0 12px;}
+  .page.tpl-retreat .dishes-wrap.has-sections{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;padding:0 12px;
+  }
+  .page.tpl-retreat .menu-section{
+    background:#fffdf8;border:1px solid #d7c4a3;padding:12px 12px 8px;border-radius:4px;
+  }
+  .page.tpl-retreat .section-title{
+    background:#e8d5a3;color:#355c4a;font-size:11px;letter-spacing:.16em;
+    margin:-12px -12px 10px;padding:6px 8px;
+  }
+  .page.tpl-retreat .dish{text-align:left;margin-bottom:11px;}
+  .page.tpl-retreat .dish-name{font-size:12.5px;letter-spacing:.05em;color:#2a3d33;}
+  .page.tpl-retreat .dish-desc{font-size:11px;font-style:normal;margin:0;max-width:none;color:#5a6158;}
+  .page.tpl-retreat .dish-contains{color:#8a6a32;}
+  .page.tpl-retreat .dish-diet{color:#355c4a;}
+  .page.tpl-retreat .dish-sep{display:none;}
+  .page.tpl-retreat .info-block{
+    border-top:none;background:#fffdf8;margin:14px 12px 0;padding:12px 14px;border:1px solid #d7c4a3;
+  }
+  .page.tpl-retreat .info-title{color:#355c4a;font-size:15px;}
+  .page.tpl-retreat .info-list{background:#f4efe6;}
+  .page.tpl-retreat .menu-qr-caption{color:#5a6158;}
+  .page.tpl-retreat .page-foot{bottom:30px;color:#355c4a;}
+
+  /* ---------- Template: Festival / Banquet ---------- */
+  .page.tpl-banquet{background:#fffaf3;padding:40px 40px 52px;border-color:#e4d3b8;}
+  .page.tpl-banquet::before,
+  .page.tpl-banquet::after{
+    content:"";position:absolute;left:0;right:0;height:16px;z-index:0;pointer-events:none;
+    background:repeating-linear-gradient(90deg,#6e2430 0 16px,#c4a35a 16px 32px);
+  }
+  .page.tpl-banquet::before{top:0;}
+  .page.tpl-banquet::after{bottom:0;}
+  .page.tpl-banquet .menu-head{
+    border-bottom:2px solid #c4a35a;padding-bottom:10px;margin-bottom:14px;margin-top:6px;
+  }
+  .page.tpl-banquet .menu-title{font-size:26px;letter-spacing:.2em;color:#6e2430;}
+  .page.tpl-banquet .menu-logo-text{color:#6e2430;}
+  .page.tpl-banquet .menu-sub{color:#8a6a32;}
+  .page.tpl-banquet .dishes-wrap{column-count:2;column-gap:22px;}
+  .page.tpl-banquet .dishes-wrap.has-sections{
+    column-count:unset;display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;
+  }
+  .page.tpl-banquet .menu-section,.page.tpl-banquet .dish{break-inside:avoid;-webkit-column-break-inside:avoid;}
+  .page.tpl-banquet .section-title{
+    background:#6e2430;color:#fffaf3;font-size:11px;letter-spacing:.16em;
+    padding:5px 8px;margin:0 0 8px;
+  }
+  .page.tpl-banquet .dish{text-align:left;margin-bottom:9px;}
+  .page.tpl-banquet .dish-name{font-size:12.5px;letter-spacing:.06em;color:#3a241c;}
+  .page.tpl-banquet .dish-desc{font-size:11px;margin:0;max-width:none;font-style:normal;color:#5c4a3e;line-height:1.35;}
+  .page.tpl-banquet .dish-contains{color:#6e2430;font-size:10px;}
+  .page.tpl-banquet .dish-diet{color:#8a6a32;font-size:10px;}
+  .page.tpl-banquet .dish-sep{display:none;}
+  .page.tpl-banquet .info-block{border-top:2px solid #c4a35a;padding-top:10px;margin-top:14px;}
+  .page.tpl-banquet .info-title{color:#6e2430;font-size:15px;}
+  .page.tpl-banquet .info-list{background:#f7ead6;border-radius:0;}
+  .page.tpl-banquet .menu-qr-caption{color:#5c4a3e;}
+  .page.tpl-banquet .page-foot{bottom:28px;}
+
   /* template picker */
-  .tpl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+  .tpl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;max-height:420px;overflow:auto;padding-right:2px;}
   .tpl-card{
     border:2px solid var(--line);border-radius:10px;padding:10px;cursor:pointer;
     background:#fbfaf7;transition:.15s;text-align:center;
@@ -673,6 +875,42 @@
       pointer-events:none;z-index:0;
       background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%235a7d5a' d='M32 4c-8 16-4 28 0 36 4-8 8-20 0-36zm0 36c-12 4-20 12-24 24 12-4 20-12 24-24zm0 0c12 4 20 12 24 24-12-4-20-12-24-24z'/%3E%3C/svg%3E") center/contain no-repeat !important;
     }
+    .page.tpl-wellness{background:#f7f5f0 !important;padding:50px 58px 56px !important;}
+    .page.tpl-wellness::before{
+      content:"" !important;position:absolute !important;top:0;left:0;right:0;height:10px;
+      background:linear-gradient(90deg,#c5d4ce,#e8ddd0,#c5d4ce) !important;
+    }
+    .page.tpl-wellness::after{
+      content:"" !important;position:absolute !important;inset:28px;
+      border:1px solid rgba(94,128,120,.38) !important;
+    }
+    .page.tpl-tasting{background:#fbf8f2 !important;padding:48px 52px 54px !important;}
+    .page.tpl-tasting::before{
+      content:"" !important;position:absolute !important;inset:18px;border:1px solid #8c3a32 !important;
+    }
+    .page.tpl-tasting::after{
+      content:"" !important;position:absolute !important;inset:22px;border:1px solid rgba(140,58,50,.28) !important;
+    }
+    .page.tpl-tasting .dish::before{content:counter(course, upper-roman) !important;color:#8c3a32 !important;}
+    .page.tpl-brunch{background:#fff8ee !important;padding:36px 40px 48px !important;}
+    .page.tpl-brunch .menu-head{background:#5c3a27 !important;color:#fff8ee !important;}
+    .page.tpl-brunch .menu-title{color:#fff8ee !important;}
+    .page.tpl-retreat{background:#f4efe6 !important;padding:32px 30px 44px !important;}
+    .page.tpl-retreat::before{
+      content:"" !important;position:absolute !important;inset:14px;
+      border:8px solid #355c4a !important;box-shadow:inset 0 0 0 2px #d7c4a3 !important;
+    }
+    .page.tpl-retreat .menu-head{background:#355c4a !important;}
+    .page.tpl-retreat .menu-title{color:#f4efe6 !important;}
+    .page.tpl-banquet{background:#fffaf3 !important;padding:36px 36px 48px !important;}
+    .page.tpl-banquet::before,
+    .page.tpl-banquet::after{
+      content:"" !important;position:absolute !important;left:0;right:0;height:16px;
+      background:repeating-linear-gradient(90deg,#6e2430 0 16px,#c4a35a 16px 32px) !important;
+    }
+    .page.tpl-banquet::before{top:0;}
+    .page.tpl-banquet::after{bottom:0;}
+    .section-title{text-transform:uppercase !important;}
     /* allergen block layout */
     .info-block{
       page-break-inside:avoid;break-inside:avoid;
@@ -715,6 +953,11 @@
     .page.tpl-botanical .menu-logo-text{color:#5a7d5a !important;}
     .page.tpl-artdeco .menu-logo-text{color:#1a1a1a !important;}
     .page.tpl-rustic .menu-logo-text{color:#8b5a2b !important;}
+    .page.tpl-wellness .menu-logo-text{color:#5e8078 !important;}
+    .page.tpl-tasting .menu-logo-text{color:#8c3a32 !important;}
+    .page.tpl-brunch .menu-logo-text{color:#f0c9a0 !important;}
+    .page.tpl-retreat .menu-logo-text{color:#e8d5a3 !important;}
+    .page.tpl-banquet .menu-logo-text{color:#6e2430 !important;}
     .menu-qr-wrap img{max-width:none !important;background:#fff !important;}
     .page-foot{position:absolute !important;bottom:22px;left:0;right:0;}
     /* Print/PDF: keep the three text roles, never inherit a parent uppercase. */
@@ -794,6 +1037,7 @@
     <div class="group">
       <label>Menu style — pick a unique look</label>
       <div class="tpl-grid" id="tplGrid"></div>
+      <div class="hint">Retreat Board, Tasting, and Banquet group dishes under headings such as Breakfast / Lunch / Dinner or Starter / Main when those lines stand alone (no description).</div>
     </div>
 
     <div class="group">
@@ -957,7 +1201,12 @@ const TEMPLATES={
   luxury:{name:"Luxury Dark",desc:"Dark navy with gold accents",swatch:"linear-gradient(135deg,#1a1f2e,#c9a84c)"},
   botanical:{name:"Botanical",desc:"Soft sage green, organic feel",swatch:"linear-gradient(135deg,#f7f9f4,#5a7d5a)"},
   artdeco:{name:"Art Deco",desc:"Bold 1920s geometric style",swatch:"linear-gradient(135deg,#fff8f0,#1a1a1a)"},
-  rustic:{name:"Rustic Warm",desc:"Warm farmhouse, dashed border",swatch:"linear-gradient(135deg,#faf6f0,#8b5a2b)"}
+  rustic:{name:"Rustic Warm",desc:"Warm farmhouse, dashed border",swatch:"linear-gradient(135deg,#faf6f0,#8b5a2b)"},
+  wellness:{name:"Deep Health",desc:"Calm spa linen, airy modern type",swatch:"linear-gradient(135deg,#f7f5f0,#5e8078)"},
+  tasting:{name:"Tasting Menu",desc:"Ivory courses with roman numerals",swatch:"linear-gradient(135deg,#fbf8f2,#8c3a32)"},
+  brunch:{name:"Café Brunch",desc:"Warm terracotta, two-column café",swatch:"linear-gradient(135deg,#fff8ee,#c46a3a)"},
+  retreat:{name:"Retreat Board",desc:"Breakfast / lunch / dinner day board",swatch:"linear-gradient(135deg,#f4efe6,#355c4a)"},
+  banquet:{name:"Festival Banquet",desc:"Dense maroon-gold feast layout",swatch:"linear-gradient(135deg,#fffaf3,#6e2430)"}
 };
 function makeDefault(){
   return { logoText:"", logoImg:null, infoText:DEFAULT_INFO, infoAllergens:DEFAULT_INFO_ALLERGENS,
@@ -1791,7 +2040,12 @@ function wordTpl(tpl){
     luxury:{wrap:"border:2px solid #c9a84c;padding:22pt 20pt;background:#1a1f2e;",bg:"background:#1a1f2e;",title:"text-align:center;font-family:Georgia,serif;font-size:20pt;letter-spacing:4px;text-transform:uppercase;border-bottom:1px solid #c9a84c;color:#f5e6c8;",logo:"font-family:Georgia,serif;font-size:15pt;color:#c9a84c;text-align:center;",dish:"text-align:center;font-family:Georgia,serif;font-size:12pt;font-weight:bold;text-transform:uppercase;color:#f5e6c8;",desc:"text-align:center;font-style:italic;font-size:9.5pt;color:#c4b89a;text-transform:none;",allg:"text-align:center;font-size:8pt;color:#c9a84c;text-transform:lowercase;font-weight:bold;",diet:"text-align:center;font-size:8pt;color:#8fbc8f;text-transform:lowercase;font-weight:bold;",info:"color:#c9a84c;",rule:"border-top:1px solid #c9a84c;",body:"color:#c4b89a;"},
     botanical:{wrap:"border:2px solid #5a7d5a;padding:20pt 18pt;background:#f7f9f4;",bg:"",title:"text-align:center;font-family:Georgia,serif;font-size:19pt;color:#3d5c3d;text-transform:uppercase;",logo:"font-family:Georgia,serif;font-size:15pt;color:#5a7d5a;text-align:center;",dish:"text-align:center;font-family:Georgia,serif;font-size:12pt;font-weight:bold;text-transform:uppercase;color:#3d5c3d;",desc:"text-align:center;font-style:italic;font-size:9.5pt;color:#4a6048;text-transform:none;",allg:"text-align:center;font-size:8pt;color:#5a7d5a;text-transform:lowercase;font-weight:bold;",diet:"text-align:center;font-size:8pt;color:#3d5c3d;text-transform:lowercase;font-weight:bold;",info:"color:#3d5c3d;",rule:"border-top:none;background:#eef3ea;padding:10pt;border-radius:8pt;"},
     artdeco:{wrap:"border:4px solid #1a1a1a;padding:22pt 20pt;background:#fff8f0;",bg:"",title:"text-align:center;font-family:Georgia,serif;font-size:22pt;letter-spacing:6px;text-transform:uppercase;border-bottom:4px double #1a1a1a;color:#1a1a1a;font-weight:bold;",logo:"font-family:Georgia,serif;font-size:15pt;color:#1a1a1a;text-align:center;font-weight:bold;",dish:"text-align:center;font-family:Georgia,serif;font-size:12pt;font-weight:bold;text-transform:uppercase;letter-spacing:2px;color:#1a1a1a;",desc:"text-align:center;font-size:9.5pt;color:#333;text-transform:none;",allg:"text-align:center;font-size:8pt;color:#1a1a1a;text-transform:lowercase;font-weight:bold;",diet:"text-align:center;font-size:8pt;color:#8b4513;text-transform:lowercase;font-weight:bold;",info:"color:#1a1a1a;",rule:"border-top:4px double #1a1a1a;"},
-    rustic:{wrap:"border:2px dashed #8b5a2b;padding:20pt 18pt;background:#faf6f0;",bg:"",title:"text-align:center;font-family:Palatino,Georgia,serif;font-size:19pt;color:#5c3d1e;",logo:"font-family:Palatino,Georgia,serif;font-size:15pt;color:#8b5a2b;text-align:center;",dish:"text-align:center;font-family:Palatino,Georgia,serif;font-size:12pt;font-weight:bold;text-transform:uppercase;color:#5c3d1e;",desc:"text-align:center;font-style:italic;font-size:9.5pt;color:#6b5344;text-transform:none;",allg:"text-align:center;font-size:8pt;color:#8b5a2b;text-transform:lowercase;font-weight:bold;",diet:"text-align:center;font-size:8pt;color:#5c7a3a;text-transform:lowercase;font-weight:bold;",info:"color:#5c3d1e;",rule:"border-top:2px solid #8b5a2b;background:#fff9f2;padding:10pt;"}
+    rustic:{wrap:"border:2px dashed #8b5a2b;padding:20pt 18pt;background:#faf6f0;",bg:"",title:"text-align:center;font-family:Palatino,Georgia,serif;font-size:19pt;color:#5c3d1e;",logo:"font-family:Palatino,Georgia,serif;font-size:15pt;color:#8b5a2b;text-align:center;",dish:"text-align:center;font-family:Palatino,Georgia,serif;font-size:12pt;font-weight:bold;text-transform:uppercase;color:#5c3d1e;",desc:"text-align:center;font-style:italic;font-size:9.5pt;color:#6b5344;text-transform:none;",allg:"text-align:center;font-size:8pt;color:#8b5a2b;text-transform:lowercase;font-weight:bold;",diet:"text-align:center;font-size:8pt;color:#5c7a3a;text-transform:lowercase;font-weight:bold;",info:"color:#5c3d1e;",rule:"border-top:2px solid #8b5a2b;background:#fff9f2;padding:10pt;"},
+    wellness:{wrap:"border:1px solid #5e8078;padding:24pt 22pt;background:#f7f5f0;",bg:"",title:"text-align:center;font-family:Arial,sans-serif;font-size:16pt;letter-spacing:6px;font-weight:300;text-transform:uppercase;color:#3d534e;",logo:"font-family:Arial,sans-serif;font-size:11pt;color:#5e8078;text-align:center;letter-spacing:3px;",dish:"text-align:center;font-family:Arial,sans-serif;font-size:10.5pt;font-weight:bold;text-transform:uppercase;letter-spacing:2px;color:#2c3936;",desc:"text-align:center;font-style:normal;font-size:9.5pt;color:#5c6b66;text-transform:none;",allg:"text-align:center;font-size:8pt;color:#5e8078;text-transform:lowercase;font-weight:bold;",diet:"text-align:center;font-size:8pt;color:#3d534e;text-transform:lowercase;font-weight:bold;",info:"color:#3d534e;",rule:"border-top:1px solid #c5d4ce;",section:"text-align:center;font-family:Arial,sans-serif;font-size:9pt;letter-spacing:3px;text-transform:uppercase;color:#5e8078;font-weight:bold;"},
+    tasting:{wrap:"border:1px solid #8c3a32;padding:22pt 20pt;background:#fbf8f2;",bg:"",title:"text-align:center;font-family:Georgia,serif;font-size:18pt;letter-spacing:7px;text-transform:uppercase;color:#1c1917;border-bottom:1px solid #8c3a32;",logo:"font-family:Georgia,serif;font-size:13pt;color:#8c3a32;text-align:center;",dish:"font-family:Georgia,serif;font-size:11pt;font-weight:bold;text-transform:uppercase;letter-spacing:2px;color:#1c1917;",desc:"font-style:italic;font-size:9.5pt;color:#5a5148;text-transform:none;",allg:"font-size:8pt;color:#8c3a32;text-transform:lowercase;font-weight:bold;",diet:"font-size:8pt;color:#5a5148;text-transform:lowercase;font-weight:bold;",info:"color:#8c3a32;",rule:"border-top:1px solid #8c3a32;",section:"font-family:Georgia,serif;font-size:9pt;letter-spacing:3px;text-transform:uppercase;color:#8c3a32;border-bottom:1px solid #e6dccb;padding-bottom:3pt;"},
+    brunch:{wrap:"padding:0;background:#fff8ee;",bg:"",title:"font-family:Palatino,Georgia,serif;font-size:18pt;color:#fff8ee;background:#5c3a27;padding:10pt 12pt;text-transform:uppercase;",logo:"font-family:Palatino,Georgia,serif;font-size:12pt;color:#f0c9a0;background:#5c3a27;padding:8pt 12pt 0;",dish:"font-family:Palatino,Georgia,serif;font-size:11pt;font-weight:bold;text-transform:uppercase;color:#5c3a27;",desc:"font-size:9pt;color:#6b5344;text-transform:none;",allg:"font-size:8pt;color:#c46a3a;text-transform:lowercase;font-weight:bold;",diet:"font-size:8pt;color:#5c7a3a;text-transform:lowercase;font-weight:bold;",info:"color:#5c3a27;",rule:"background:#f7eadc;padding:10pt;",section:"font-family:Palatino,Georgia,serif;font-size:10pt;letter-spacing:2px;text-transform:uppercase;color:#c46a3a;"},
+    retreat:{wrap:"border:6pt solid #355c4a;padding:16pt 14pt;background:#f4efe6;",bg:"",title:"text-align:center;font-family:Georgia,serif;font-size:16pt;color:#f4efe6;background:#355c4a;padding:8pt;text-transform:uppercase;",logo:"font-family:Georgia,serif;font-size:12pt;color:#e8d5a3;text-align:center;background:#355c4a;padding:6pt 8pt 0;",dish:"font-family:Georgia,serif;font-size:10.5pt;font-weight:bold;text-transform:uppercase;color:#2a3d33;",desc:"font-size:9pt;color:#5a6158;text-transform:none;",allg:"font-size:8pt;color:#8a6a32;text-transform:lowercase;font-weight:bold;",diet:"font-size:8pt;color:#355c4a;text-transform:lowercase;font-weight:bold;",info:"color:#355c4a;",rule:"border:1px solid #d7c4a3;background:#fffdf8;padding:8pt;",section:"text-align:center;font-family:Georgia,serif;font-size:9pt;letter-spacing:2px;text-transform:uppercase;color:#355c4a;background:#e8d5a3;padding:4pt;"},
+    banquet:{wrap:"border-top:8pt solid #6e2430;border-bottom:8pt solid #c4a35a;padding:16pt 14pt;background:#fffaf3;",bg:"",title:"text-align:center;font-family:Georgia,serif;font-size:17pt;letter-spacing:4px;text-transform:uppercase;color:#6e2430;border-bottom:2px solid #c4a35a;",logo:"font-family:Georgia,serif;font-size:13pt;color:#6e2430;text-align:center;",dish:"font-family:Georgia,serif;font-size:10pt;font-weight:bold;text-transform:uppercase;color:#3a241c;",desc:"font-size:8.5pt;color:#5c4a3e;text-transform:none;",allg:"font-size:7.5pt;color:#6e2430;text-transform:lowercase;font-weight:bold;",diet:"font-size:7.5pt;color:#8a6a32;text-transform:lowercase;font-weight:bold;",info:"color:#6e2430;",rule:"border-top:2px solid #c4a35a;",section:"text-align:center;font-family:Georgia,serif;font-size:9pt;letter-spacing:2px;text-transform:uppercase;color:#fffaf3;background:#6e2430;padding:4pt;"}
   };
   return map[t]||map.classic;
 }
@@ -1805,12 +2059,21 @@ function buildWordPage(m, snap, idx, tpl){
   const logoHead=logo.logoImg?`<p style="text-align:center;margin:0 0 4pt;"><img src="${logo.logoImg}" alt="logo" style="display:block;margin:0 auto;max-height:78px;max-width:220px;"/></p>`
     :(logo.logoText?`<p style="text-align:center;${s.logo}margin:0 0 4pt;">${esc(logo.logoText)}</p>`:"");
   const dishes=(m.dishes||[]);
-  const dishesHTML=dishes.map(d=>`
-    <p style="${s.dish}margin:9pt 0 2pt;">${esc(d.name)}</p>
+  const rom=["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX"];
+  const wordDish=(d,prefix)=>`
+    <p style="${s.dish}margin:9pt 0 2pt;">${esc(prefix?prefix+"  "+d.name:d.name)}</p>
     ${d.desc?`<p style="${s.desc}margin:0 0 2pt;">${esc(sentenceCase(d.desc))}</p>`:""}
     ${d.allergens?.length?`<p style="${s.allg}margin:0;">${esc(containsLine(d.allergens))}</p>`:""}
     ${d.diet?.length?`<p style="${s.diet}margin:0;">${esc(dietLine(d.diet))}</p>`:""}
-  `).join("");
+  `;
+  const sectionStyle=s.section||"text-align:center;font-family:Georgia,serif;font-size:10pt;letter-spacing:2px;text-transform:uppercase;color:#2f6b4f;";
+  const groups=groupMenuDishes(dishes);
+  const hasSections=groups.some(g=>g.title);
+  const numberCourses=(tpl||data.template)==="tasting";
+  const dishesHTML=(!dishes.length?"":(hasSections?groups.map(g=>
+    (g.title?`<p style="${sectionStyle}margin:12pt 0 4pt;">${esc(g.title)}</p>`:"")+
+    g.items.map((d,i)=>wordDish(d, numberCourses?(rom[i+1]||String(i+1)):"" )).join("")
+  ).join(""):dishes.map((d,i)=>wordDish(d, numberCourses?(rom[i+1]||String(i+1)):"")).join("")));
   return `<div style="${idx?'page-break-before:always;':''}${s.bg||''}">
     <div style="${s.wrap}">
       ${logoHead}
@@ -1957,22 +2220,59 @@ function renderTabs(){
   wrap.querySelectorAll(".day-tab").forEach(el=> el.onclick=()=>switchDay(el.dataset.id) );
 }
 
-function pageHTML(m){
-  const dishes = m.dishes.length
-    ? m.dishes.map((d,i)=>`
-        <div class="dish">
+function dishCardHTML(d, showSep){
+  return `<div class="dish">
           <div class="dish-name">${esc(d.name)}</div>
           ${d.desc?`<div class="dish-desc">${esc(sentenceCase(d.desc))}</div>`:""}
           ${d.allergens&&d.allergens.length?`<div class="dish-contains">${esc(containsLine(d.allergens))}</div>`:""}
           ${d.diet&&d.diet.length?`<div class="dish-diet">${esc(dietLine(d.diet))}</div>`:""}
-          ${i<m.dishes.length-1?`<div class="dish-sep"></div>`:""}
-        </div>`).join("")
-    : `<div class="empty-note">No dishes yet — add one on the left, or click “Load sample”.</div>`;
+          ${showSep?`<div class="dish-sep"></div>`:""}
+        </div>`;
+}
+function isSectionHeading(d){
+  const name = String(d.name||"").replace(/[:.\-–—|/]/g," ").replace(/\s+/g," ").trim();
+  if(!name || name.split(" ").length>4) return false;
+  const hasDesc = !!(d.desc && String(d.desc).trim());
+  const hasAllergen = Array.isArray(d.allergens) && d.allergens.length && !d.allergens.every(a=>/^none$/i.test(String(a)));
+  const hasDiet = Array.isArray(d.diet) && d.diet.length;
+  if(hasDesc || hasAllergen || hasDiet) return false;
+  return /^(breakfast|brunch|lunch|dinner|supper|tea|afternoon tea|morning tea|snacks?|starters?|antipasti|mains?|main course|desserts?|pudding|sweets?|sides?|to start|to follow|to finish|first course|second course|third course|amuse(?:\s*bouche)?|palate cleanser|petit fours|canapes|canapés|welcome drink|welcome|opening|closing|banquet|feast|course\s*([0-9]+|[ivxlcdm]+))$/i.test(name);
+}
+function groupMenuDishes(dishes){
+  const groups=[];
+  let cur={title:"",items:[]};
+  for(const d of dishes||[]){
+    if(isSectionHeading(d)){
+      if(cur.title || cur.items.length) groups.push(cur);
+      cur={title:d.name, items:[]};
+    } else cur.items.push(d);
+  }
+  if(cur.title || cur.items.length) groups.push(cur);
+  return groups;
+}
+function dishesMarkup(dishes){
+  if(!dishes.length) return `<div class="empty-note">No dishes yet — add one on the left, or click “Load sample”.</div>`;
+  const groups = groupMenuDishes(dishes);
+  const hasSections = groups.some(g=>g.title);
+  if(!hasSections){
+    return dishes.map((d,i)=>dishCardHTML(d, i<dishes.length-1)).join("");
+  }
+  return groups.map(g=>`
+      <section class="menu-section">
+        ${g.title?`<h3 class="section-title">${esc(g.title)}</h3>`:""}
+        ${g.items.length?g.items.map((d,i)=>dishCardHTML(d, i<g.items.length-1)).join(""):""}
+      </section>`).join("");
+}
+
+function pageHTML(m){
+  const groups = groupMenuDishes(m.dishes||[]);
+  const hasSections = (m.dishes||[]).length && groups.some(g=>g.title);
+  const dishes = dishesMarkup(m.dishes||[]);
   const infoBody = (data.infoText||"").split(/\n{2,}/).map(p=>`<p>${esc(p).replace(/\n/g,"<br>")}</p>`).join("");
   const items = (data.infoAllergens||"").split(",").map(s=>s.trim()).filter(Boolean);
   const infoList = items.length? `<div class="info-list">${items.map(i=>`<span>${esc(i)}</span>`).join("")}</div>` : "";
   return `
-    <div class="dishes-wrap">${dishes}</div>
+    <div class="dishes-wrap${hasSections?' has-sections':''}">${dishes}</div>
     <div class="info-block">
       <h2 class="info-title">Allergen Information</h2>
       <div class="info-sub">Allergen &amp; Dietary Information</div>
