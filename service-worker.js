@@ -1,7 +1,8 @@
-const CACHE_NAME = "menu-creator-v4";
+const CACHE_NAME = "menu-creator-v5";
 const ASSETS = [
   "./",
   "./index.html",
+  "./vedanta-menu-creator.html",
   "./install.html",
   "./manifest.json",
   "./icons/icon-192.png",
