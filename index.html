@@ -6,6 +6,8 @@
 <meta name="description" content="Menu Creator — design printable restaurant menus offline. Paste menus, save to library, print or export to Word." />
 <meta name="application-name" content="Menu Creator" />
 <meta name="theme-color" content="#2f6b4f" />
+<meta name="menu-creator-build" content="v9" />
+<meta http-equiv="Cache-Control" content="no-store" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-title" content="Menu Creator" />
@@ -497,15 +499,15 @@
   }
   .dish-desc{
     font-size:12.5px;line-height:1.45;color:#3c463f;max-width:540px;margin:0 auto 3px;font-style:italic;
-    text-transform:none;font-weight:400;
+    text-transform:none;font-weight:400;font-variant:normal;letter-spacing:normal;
   }
   .dish-contains{
-    font-size:11px;letter-spacing:.02em;color:var(--gold);
-    text-transform:none;font-weight:700;
+    font-size:11px;letter-spacing:normal;color:var(--gold);
+    text-transform:none;font-weight:700;font-variant:normal;
   }
   .dish-diet{
-    font-size:10.5px;letter-spacing:.02em;color:var(--accent);
-    text-transform:none;font-weight:700;margin-top:1px;
+    font-size:10.5px;letter-spacing:normal;color:var(--accent);
+    text-transform:none;font-weight:700;margin-top:1px;font-variant:normal;
   }
   .dish-sep{width:42px;height:1px;background:var(--line);margin:11px auto 0;}
 
@@ -762,6 +764,13 @@
   }
   .file-warn strong{display:block;margin-bottom:4px;}
   .file-warn a{color:var(--accent);font-weight:600;}
+  .build-stamp{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.04em;margin-left:8px;text-transform:none;}
+  .update-banner{
+    display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    background:#2f6b4f;color:#fff;padding:10px 16px;font-size:13.5px;line-height:1.4;
+  }
+  .update-banner.show{display:flex;}
+  .update-banner .btn{background:#fff;color:#2f6b4f;}
 
   @media (max-width:900px){
     .app{grid-template-columns:1fr;grid-template-rows:auto 1fr;}
@@ -792,7 +801,7 @@
       background:#fff !important;overflow:visible !important;
     }
     /* hide all chrome — editor, toolbars, mobile UI, overlays */
-    .editor,.toolbar,.mobile-tabs,.file-warn,.lib-overlay,
+    .editor,.toolbar,.mobile-tabs,.file-warn,.update-banner,.lib-overlay,
     .ebook-overlay,.btn-install{display:none !important;}
     .app{display:block !important;grid-template-columns:1fr !important;min-height:0;}
     .preview-wrap{
@@ -973,11 +982,16 @@
 </style>
 </head>
 <body>
+<div class="update-banner" id="updateBanner">
+  <span><strong>Menu Creator was updated (build v9).</strong> If descriptions still look ALL CAPS, this window is an old cached copy — click to reload a fresh page.</span>
+  <button type="button" class="btn" id="forceRefreshBtn">Refresh &amp; clear cache</button>
+</div>
 <div class="file-warn" id="fileWarn">
-  <strong>⚠ Opened as a file — calendar save may not work on Mac Safari.</strong>
-  Use the live link instead:
-  <a href="https://shyam1-jpg.github.io/menu-creator/" target="_blank" rel="noopener">shyam1-jpg.github.io/menu-creator</a>
-  (or run <code>npm start</code> in this folder and open <code>http://localhost:3000</code>).
+  <strong>⚠ Opened as a file — Print/PDF updates and the menu library need the local server.</strong>
+  Close any installed “Menu Creator” app window (it can keep an old cache). Then double-click
+  <code>Start Menu Creator.bat</code> or run <code>npm start</code> and open
+  <a href="http://127.0.0.1:4002/">http://127.0.0.1:4002/</a>
+  — not the github.io / Render links (those are not serving this repo yet).
 </div>
 <div class="mobile-tabs" id="mobileTabs">
   <button type="button" class="mobile-tab on" data-panel="editor">✏️ Edit</button>
@@ -986,7 +1000,7 @@
 <div class="app">
   <!-- ===================== EDITOR ===================== -->
   <aside class="editor">
-    <div class="brand"><span class="dot"></span> Menu Creator</div>
+    <div class="brand"><span class="dot"></span> Menu Creator <small class="build-stamp" id="buildStamp">v9</small></div>
     <p class="sub">Add dishes, set allergens, then print or save as PDF. For Vedanta layouts, open the <a href="vedanta-menu-creator.html">Vedanta Menu Creator</a>.</p>
 
     <div class="group archive-box">
@@ -1172,6 +1186,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 /* ---------------- Data ---------------- */
 const ALLERGENS = ["Gluten","Dairy","Celery","Soy","Nuts","Peanuts","Sesame","Eggs","Fish","Crustaceans","Molluscs","Mustard","Lupin","Sulphur Dioxide","None"];
 const DIETS = ["Vegan","Vegetarian","Gluten-Free","Dairy-Free","Halal","Nut-Free"];
+const APP_BUILD = "v9";
 
 const MENU_QR_URL = "https://pureprasadkitchen.com";
 const MENU_QR_CAPTION = "Scan the QR code \u2014 Recipe by Shyam Prasad, Head Chef";
@@ -1219,11 +1234,14 @@ function makeDefault(){
 }
 function migrate(old){
   if(!old) return null;
-  if(old.menus) return old;
+  if(old.menus){
+    old.menus.forEach(m=>{ m.dishes = repairDishList(m.dishes); });
+    return old;
+  }
   const d = makeDefault();
   d.logoText=old.logoText||""; d.logoImg=old.logoImg||null;
   d.infoText=old.infoText||DEFAULT_INFO; d.infoAllergens=old.infoAllergens||DEFAULT_INFO_ALLERGENS;
-  d.menus=[ Object.assign(newMenu("Day 1"), {title:old.title||"DINNER MENU", sub:old.sub||"", dishes:old.dishes||[]}) ];
+  d.menus=[ Object.assign(newMenu("Day 1"), {title:old.title||"DINNER MENU", sub:old.sub||"", dishes:repairDishList(old.dishes||[])}) ];
   return d;
 }
 let data = migrate(loadRaw()) || makeDefault();
@@ -1419,7 +1437,7 @@ function applyArchiveSnapshot(snap){
   data.template=snap.template||data.template||"classic"; buildTplGrid();
   const m=current();
   m.title=snap.title||"DINNER MENU"; m.sub=snap.sub||"";
-  m.dishes=JSON.parse(JSON.stringify(snap.dishes||[]));
+  m.dishes=repairDishList(JSON.parse(JSON.stringify(snap.dishes||[])));
   resetForm(); syncInputs(); render();
   save();
 }
@@ -1780,7 +1798,7 @@ $("loadSample").onclick = ()=>{
   data.logoText=SAMPLE.logoText; data.logoImg=SAMPLE.logoImg;
   data.infoText=SAMPLE.infoText; data.infoAllergens=SAMPLE.infoAllergens;
   const m=current(); m.title=SAMPLE.title; m.sub=SAMPLE.sub;
-  m.dishes=JSON.parse(JSON.stringify(SAMPLE.dishes));
+  m.dishes=repairDishList(JSON.parse(JSON.stringify(SAMPLE.dishes)));
   save(); resetForm(); syncInputs(); render();
 };
 $("resetAll").onclick = ()=>{
@@ -2023,7 +2041,7 @@ function parseBulk(text){
 function applyParsed(r, replace){
   const m=current();
   if(r.title && (replace || !m.title)) m.title = r.title;
-  m.dishes = replace ? r.dishes : m.dishes.concat(r.dishes);
+  m.dishes = repairDishList(replace ? r.dishes : m.dishes.concat(r.dishes));
   if(replace && r.infoText) data.infoText = r.infoText;
   if(replace && r.infoAllergens) data.infoAllergens = r.infoAllergens;
   save(); resetForm(); syncInputs(); render();
@@ -2072,7 +2090,7 @@ function buildWordPage(m, snap, idx, tpl){
   const logo=snap||data;
   const logoHead=logo.logoImg?`<p style="text-align:center;margin:0 0 4pt;"><img src="${logo.logoImg}" alt="logo" style="display:block;margin:0 auto;max-height:78px;max-width:220px;"/></p>`
     :(logo.logoText?`<p style="text-align:center;${s.logo}margin:0 0 4pt;">${esc(logo.logoText)}</p>`:"");
-  const dishes=(m.dishes||[]);
+  const dishes=repairDishList(m.dishes||[]);
   const rom=["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX"];
   const wordDish=(d,prefix)=>`
     <p style="${wordRoleStyle(s.dish)}margin:9pt 0 2pt;">${esc(displayDishName(prefix?prefix+"  "+d.name:d.name))}</p>
@@ -2165,7 +2183,9 @@ function qrHTMLWord(url){
 function esc(s){ return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 function isAllCapsText(s){
   const letters = String(s||"").replace(/[^A-Za-z]/g,"");
-  return letters.length>=2 && letters === letters.toUpperCase() && /[A-Z]/.test(letters);
+  if(letters.length<2) return false;
+  const upper = letters.replace(/[^A-Z]/g,"").length;
+  return upper / letters.length >= 0.85 && /[A-Z]/.test(letters);
 }
 function displayDishName(s){
   return String(s||"").replace(/\s+/g," ").trim().toUpperCase();
@@ -2176,6 +2196,48 @@ function sentenceCase(s){
   if(!isAllCapsText(s)) return s;
   s = s.toLowerCase();
   return s.replace(/(^|[.!?]\s+)([a-z])/g, (m, p, c) => p + c.toUpperCase());
+}
+function looksLikeDescription(s){
+  const t = String(s||"").replace(/\s+/g," ").trim();
+  if(!t) return false;
+  const words = t.split(/\s+/).filter(Boolean);
+  return /[.!?]$/.test(t) || words.length >= 8 || t.length >= 60;
+}
+function repairDishList(dishes){
+  const out = [];
+  for(const raw of dishes||[]){
+    const d = {
+      name: String(raw.name||"").replace(/\s+/g," ").trim(),
+      desc: String(raw.desc||"").replace(/\s+/g," ").trim(),
+      allergens: Array.isArray(raw.allergens) ? raw.allergens.slice() : [],
+      diet: Array.isArray(raw.diet) ? raw.diet.slice() : []
+    };
+    if(/^contains\s*:/i.test(d.name) && out.length){
+      const prev = out[out.length-1];
+      const extra = parseAllergens(d.name.replace(/^contains\s*:?\s*/i,""));
+      prev.allergens = [...new Set([...(prev.allergens||[]), ...extra, ...d.allergens])];
+      if(d.desc) prev.desc = prev.desc ? prev.desc+" "+d.desc : d.desc;
+      if(d.diet.length) prev.diet = [...new Set([...(prev.diet||[]), ...d.diet])];
+      continue;
+    }
+    if(looksLikeDescription(d.name) && !d.desc && out.length && !isSectionHeading({name:d.name, desc:"", allergens:[], diet:[]}) && (isAllCapsText(d.name) || /[.!?]$/.test(d.name))){
+      const prev = out[out.length-1];
+      if(!looksLikeDescription(prev.name)){
+        prev.desc = prev.desc ? prev.desc+" "+d.name : d.name;
+        if(d.allergens.length) prev.allergens = [...new Set([...(prev.allergens||[]), ...d.allergens])];
+        if(d.diet.length) prev.diet = [...new Set([...(prev.diet||[]), ...d.diet])];
+        continue;
+      }
+    }
+    out.push(d);
+  }
+  return out.map(d => Object.assign(d, { desc: sentenceCase(d.desc) }));
+}
+function applyDomCasing(root){
+  const scope = root || document;
+  scope.querySelectorAll(".dish-name").forEach(el=>{ el.textContent = displayDishName(el.textContent); });
+  scope.querySelectorAll(".dish-desc").forEach(el=>{ el.textContent = sentenceCase(el.textContent); });
+  scope.querySelectorAll(".dish-contains,.dish-diet,.contains").forEach(el=>{ el.textContent = String(el.textContent||"").toLowerCase(); });
 }
 function containsLine(a){
   if(!a||!a.length) return "";
@@ -2218,6 +2280,9 @@ function fitPages(){
 }
 
 function preparePrint(){
+  (data.menus||[]).forEach(m=>{ m.dishes = repairDishList(m.dishes); });
+  render();
+  applyDomCasing(document);
   fitPages();
   document.querySelectorAll("#pagesOut .menu-logo").forEach(img=>{
     if(img.complete) return;
@@ -2300,6 +2365,7 @@ function pageHTML(m){
 }
 
 function render(){
+  (data.menus||[]).forEach(m=>{ m.dishes = repairDishList(m.dishes); });
   renderTabs();
 
   // editor logo preview (shared)
@@ -2315,6 +2381,7 @@ function render(){
      </section>`
   ).join("");
   pages.querySelectorAll(".page").forEach(el=> el.onclick=()=>{ if(el.dataset.id!==data.currentId) switchDay(el.dataset.id); });
+  applyDomCasing(pages);
   fitPages();
   pages.querySelectorAll("img").forEach(img=>{ img.onload=fitPages; });
 
@@ -2427,7 +2494,11 @@ function showSlide(anim){
   const slide=ebSlides[ebIndex];
   const el=makePageEl(slide, anim);
   ebBook.appendChild(el);
-  if(slide.type==="page"){ fitEbookInner(el); el.querySelectorAll("img").forEach(img=>{ img.onload=()=>{fitEbookInner(el);fitBook();}; }); }
+  if(slide.type==="page"){
+    applyDomCasing(el);
+    fitEbookInner(el);
+    el.querySelectorAll("img").forEach(img=>{ img.onload=()=>{fitEbookInner(el);fitBook();}; });
+  }
   fitBook();
   updateEbChrome();
 }
@@ -2458,7 +2529,7 @@ $("ebookBtn").onclick=openEbook;
 $("ebookClose").onclick=closeEbook;
 $("ebookPrev").onclick=()=>turnPage(-1);
 $("ebookNext").onclick=()=>turnPage(1);
-$("ebookPrint").onclick=()=>window.print();
+$("ebookPrint").onclick=()=>{ preparePrint(); window.print(); };
 ebStage.onclick=(e)=>{
   if(ebAnimating) return;
   const r=ebStage.getBoundingClientRect();
@@ -2561,10 +2632,56 @@ window.addEventListener("appinstalled", () => {
   installBtn.classList.add("hidden");
 });
 
-if("serviceWorker" in navigator && !isFileProtocol){
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./service-worker.js", { updateViaCache: "none" }).catch(() => {});
-  });
+window.addEventListener("load", () => { bootAppBuild(); });
+
+async function clearAppCaches(){
+  if(window.caches){
+    const keys = await caches.keys();
+    await Promise.all(keys.map(k => caches.delete(k)));
+  }
+  if(navigator.serviceWorker){
+    const regs = await navigator.serviceWorker.getRegistrations();
+    await Promise.all(regs.map(r => r.unregister()));
+  }
+}
+
+async function bootAppBuild(){
+  const stamp = $("buildStamp");
+  if(stamp) stamp.textContent = APP_BUILD;
+  const prev = localStorage.getItem("menuCreatorBuild");
+  const banner = $("updateBanner");
+  const refreshBtn = $("forceRefreshBtn");
+  if(refreshBtn){
+    refreshBtn.onclick = async ()=>{
+      try{ await clearAppCaches(); }catch(e){}
+      localStorage.setItem("menuCreatorBuild", APP_BUILD);
+      location.reload();
+    };
+  }
+  let hadWorker = false;
+  try{
+    if(navigator.serviceWorker){
+      hadWorker = (await navigator.serviceWorker.getRegistrations()).length > 0;
+    }
+  }catch(e){}
+  if(prev !== APP_BUILD){
+    try{ await clearAppCaches(); }catch(e){}
+    localStorage.setItem("menuCreatorBuild", APP_BUILD);
+    if(banner) banner.classList.add("show");
+    if((prev || hadWorker) && !sessionStorage.getItem("menuCreatorReloaded_"+APP_BUILD)){
+      sessionStorage.setItem("menuCreatorReloaded_"+APP_BUILD, "1");
+      location.reload();
+      return;
+    }
+  }
+  if("serviceWorker" in navigator && !isFileProtocol){
+    navigator.serviceWorker.register("./service-worker.js", { updateViaCache: "none" })
+      .then(reg => {
+        if(reg.waiting) reg.waiting.postMessage({type:"SKIP_WAITING"});
+        return reg.update();
+      })
+      .catch(()=>{});
+  }
 }
 
 /* ---------------- Init ---------------- */

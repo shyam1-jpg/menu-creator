@@ -57,14 +57,25 @@ Subdomain alternative (if your hosting supports it):
 
 OPTION C: GITHUB PAGES (free, permanent HTTPS link)
 ---------------------------------------------------
-Good if you use GitHub.
+This repo already has a Pages workflow (.github/workflows/pages.yml) that
+publishes the `_site` folder. It is currently FAILING because GitHub Pages
+is not enabled on the repository (github.io returns 404).
 
-  1. Create a new GitHub repository (e.g. menu-creator).
-  2. Upload all menu-creator files to the repo.
-  3. Go to Settings → Pages → Source: Deploy from branch → main → / (root).
-  4. Wait 1–2 minutes. Your link will be:
-       https://YOUR-USERNAME.github.io/menu-creator/
-  5. Share that link with phones.
+Until Pages is on, do NOT use https://shyam1-jpg.github.io/menu-creator/
+and do NOT use an installed PWA that was added from that link — it will
+keep showing a cached old menu.
+
+Enable it once:
+  1. Open https://github.com/shyam1-jpg/menu-creator/settings/pages
+  2. Source: GitHub Actions  (not "Deploy from a branch")
+  3. Re-run the "Deploy to GitHub Pages" workflow, or push to main.
+  4. Then the live link is:
+       https://shyam1-jpg.github.io/menu-creator/
+
+Until that works, use the PC app:
+  • Double-click Start Menu Creator.bat
+    (starts http://127.0.0.1:4002/ — required for Print/PDF cache updates)
+  • Or Netlify Drop of the `_site` folder (see Option B / NETLIFY-DROP.bat)
 
 
 OPTION D: RENDER + KITELINE (recommended — same host as kiteline.uk)
