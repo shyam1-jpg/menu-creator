@@ -6,7 +6,7 @@
 <meta name="description" content="Menu Creator — design printable restaurant menus offline. Paste menus, save to library, print or export to Word." />
 <meta name="application-name" content="Menu Creator" />
 <meta name="theme-color" content="#2f6b4f" />
-<meta name="menu-creator-build" content="v10" />
+<meta name="menu-creator-build" content="v11" />
 <link rel="preload" as="image" href="assets/vedanta-logo.png" />
 <meta http-equiv="Cache-Control" content="no-store" />
 <meta name="mobile-web-app-capable" content="yes" />
@@ -482,7 +482,7 @@
   .menu-head{text-align:center;border-bottom:2px solid var(--gold);padding-bottom:14px;margin-bottom:20px;position:relative;z-index:2;}
   .menu-logo-slot{min-height:0;margin-bottom:6px;}
   .menu-logo-slot:empty{display:none;}
-  .menu-logo{max-height:70px;max-width:300px;margin:0 auto 10px;display:block;object-fit:contain;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .menu-logo{max-height:64px;max-width:360px;margin:0 auto 10px;display:block;object-fit:contain;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .menu-logo-text{font-family:var(--serif);font-size:20px;color:var(--accent);letter-spacing:.04em;margin-bottom:4px;display:block;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .menu-date{
     font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
@@ -971,8 +971,8 @@
       color-adjust:exact !important;
     }
     .menu-logo,.menu-head img{
-      max-height:70px !important;
-      max-width:300px !important;
+      max-height:64px !important;
+      max-width:360px !important;
       width:auto !important;
       height:auto !important;
       margin-left:auto !important;
@@ -1012,7 +1012,7 @@
 </head>
 <body>
 <div class="update-banner" id="updateBanner">
-  <span><strong>Menu Creator was updated (build v10).</strong> If the Vedanta logo, date, or second QR is missing, this window is an old cached copy — click to reload a fresh page.</span>
+  <span><strong>Menu Creator was updated (build v11).</strong> If the Vedanta wordmark, date, or second QR is missing, this window is an old cached copy — click to reload a fresh page.</span>
   <button type="button" class="btn" id="forceRefreshBtn">Refresh &amp; clear cache</button>
 </div>
 <div class="file-warn" id="fileWarn">
@@ -1029,7 +1029,7 @@
 <div class="app">
   <!-- ===================== EDITOR ===================== -->
   <aside class="editor">
-    <div class="brand"><span class="dot"></span> Menu Creator <small class="build-stamp" id="buildStamp">v10</small></div>
+    <div class="brand"><span class="dot"></span> Menu Creator <small class="build-stamp" id="buildStamp">v11</small></div>
     <p class="sub">Add dishes, set allergens, then print or save as PDF. For Vedanta layouts, open the <a href="vedanta-menu-creator.html">Vedanta Menu Creator</a>.</p>
 
     <div class="group archive-box">
@@ -1098,7 +1098,7 @@
         </div>
       </div>
       <button class="btn btn-line btn-sm" id="clearLogo" style="margin-top:8px">Restore default logo</button>
-      <div class="hint">The Vedanta wordmark is built into every template. Upload a file to replace it; restore default to put it back.</div>
+      <div class="hint">The Vedānta wordmark is built into every template. Upload a file to replace it; restore default to put it back.</div>
     </div>
 
     <div class="group">
@@ -1227,7 +1227,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 /* ---------------- Data ---------------- */
 const ALLERGENS = ["Gluten","Dairy","Celery","Soy","Nuts","Peanuts","Sesame","Eggs","Fish","Crustaceans","Molluscs","Mustard","Lupin","Sulphur Dioxide","None"];
 const DIETS = ["Vegan","Vegetarian","Gluten-Free","Dairy-Free","Halal","Nut-Free"];
-const APP_BUILD = "v10";
+const APP_BUILD = "v11";
 
 const DEFAULT_LOGO_SRC = "assets/vedanta-logo.png";
 const MENU_QR_URL = "https://pureprasadkitchen.com";

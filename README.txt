@@ -30,7 +30,7 @@ HOW TO OPEN THE APP
   Option 1 (recommended): Double-click "Start Menu Creator.bat"
       This starts the local server and opens http://127.0.0.1:4002/
       Use this for Print / Save PDF so you are not on an old cached copy.
-      Confirm the header shows "v10" (build stamp).
+      Confirm the header shows "v11" (build stamp).
   Option 2: In this folder run  npm start  then open http://127.0.0.1:4002/
   Option 3: Double-click "index.html" (file://) — works for editing, but
       Chrome may keep an old installed PWA / cache. Close any "Menu Creator"
@@ -95,7 +95,8 @@ Each printed menu includes two QR codes:
 
 Guests can scan either with a phone camera.
 
-The Vedanta wordmark is built into every template (assets/vedanta-logo.png).
+The Vedānta wordmark (eggplant serif on white) is built into every template
+(assets/vedanta-logo.png).
 You can still upload a different logo; “Restore default logo” puts it back.
 
 Menus also print today’s date automatically in the bottom footer.
@@ -107,7 +108,7 @@ OTHER FEATURES
 --------------
 - Multiple days (Mon–Sun week menus)
 - Several visual templates (Classic Gold, Modern Minimal, etc.)
-- The Vedanta wordmark is the default logo on every template
+- The Vedānta wordmark (eggplant serif) is the default logo on every template
 - Upload a logo image or type logo text to override; restore default anytime
 - Automatic menu date (bottom footer by default; top / both / off)
 - Two QR codes (recipes + The Vedanta)
