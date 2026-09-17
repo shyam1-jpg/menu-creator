@@ -6,7 +6,8 @@
 <meta name="description" content="Menu Creator — design printable restaurant menus offline. Paste menus, save to library, print or export to Word." />
 <meta name="application-name" content="Menu Creator" />
 <meta name="theme-color" content="#2f6b4f" />
-<meta name="menu-creator-build" content="v9" />
+<meta name="menu-creator-build" content="v10" />
+<link rel="preload" as="image" href="assets/vedanta-logo.png" />
 <meta http-equiv="Cache-Control" content="no-store" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -111,7 +112,7 @@
     display:flex;align-items:center;gap:12px;
   }
   .logo-prev{
-    width:64px;height:64px;border-radius:12px;border:1px dashed var(--line);
+    width:120px;height:48px;border-radius:12px;border:1px dashed var(--line);
     display:flex;align-items:center;justify-content:center;overflow:hidden;
     background:#fbfaf7;color:var(--muted);font-size:11px;text-align:center;flex:0 0 auto;
   }
@@ -481,8 +482,21 @@
   .menu-head{text-align:center;border-bottom:2px solid var(--gold);padding-bottom:14px;margin-bottom:20px;position:relative;z-index:2;}
   .menu-logo-slot{min-height:0;margin-bottom:6px;}
   .menu-logo-slot:empty{display:none;}
-  .menu-logo{max-height:74px;max-width:220px;margin:0 auto 10px;display:block;object-fit:contain;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .menu-logo{max-height:70px;max-width:300px;margin:0 auto 10px;display:block;object-fit:contain;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .menu-logo-text{font-family:var(--serif);font-size:20px;color:var(--accent);letter-spacing:.04em;margin-bottom:4px;display:block;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .menu-date{
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    margin-top:6px;-webkit-print-color-adjust:exact;print-color-adjust:exact;
+  }
+  .page.tpl-modern .menu-logo{margin-left:0;margin-right:auto;}
+  .page.tpl-luxury .menu-date{color:#a89878;}
+  .page.tpl-brunch .menu-date{color:#f0c9a0;}
+  .page.tpl-retreat .menu-date{color:#d5e0d9;}
+  .page.tpl-luxury .menu-logo,
+  .page.tpl-brunch .menu-logo,
+  .page.tpl-retreat .menu-logo{
+    background:#fff;border-radius:8px;padding:6px 10px;
+  }
   .menu-title{
     font-family:var(--serif);font-size:30px;letter-spacing:.16em;
     text-transform:uppercase;margin:4px 0 2px;
@@ -529,9 +543,15 @@
   .info-list span::before{content:"•";color:var(--gold);font-size:14px;}
   .page-foot{position:absolute;bottom:22px;left:0;right:0;text-align:center;color:var(--muted);font-size:10px;letter-spacing:.1em;}
   .menu-qr-wrap{text-align:center;margin-top:10px;padding-top:8px;}
+  .menu-qr-row{display:flex;justify-content:center;align-items:flex-start;gap:32px;flex-wrap:wrap;}
+  .menu-qr-item{text-align:center;max-width:190px;}
+  .menu-qr-label{font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin:0 0 6px;color:var(--ink);}
   .menu-qr-wrap img{display:block;margin:0 auto;background:#fff;}
   .menu-qr-caption{font-family:var(--serif);font-size:9px;text-align:center;color:var(--muted);margin:6px 0 0;letter-spacing:.04em;font-style:italic;line-height:1.45;}
   .page.tpl-luxury .menu-qr-caption{color:#c4b89a;}
+  .page.tpl-luxury .menu-qr-label{color:#f5e6c8;}
+  .page.tpl-brunch .menu-qr-label{color:#5c3a27;}
+  .page.tpl-retreat .menu-qr-label{color:#355c4a;}
 
   .empty-note{color:var(--muted);text-align:center;font-style:italic;padding:30px;}
 
@@ -951,12 +971,21 @@
       color-adjust:exact !important;
     }
     .menu-logo,.menu-head img{
-      max-height:74px !important;
-      max-width:220px !important;
+      max-height:70px !important;
+      max-width:300px !important;
       width:auto !important;
       height:auto !important;
       margin-left:auto !important;
       margin-right:auto !important;
+    }
+    .page.tpl-modern .menu-logo{margin-left:0 !important;}
+    .menu-date{display:block !important;visibility:visible !important;}
+    .menu-qr-row{display:flex !important;justify-content:center !important;gap:28px !important;}
+    .menu-qr-item{display:block !important;}
+    .page.tpl-luxury .menu-logo,
+    .page.tpl-brunch .menu-logo,
+    .page.tpl-retreat .menu-logo{
+      background:#fff !important;border-radius:8px !important;padding:6px 10px !important;
     }
     .menu-logo-text{font-size:20px !important;margin-bottom:4px !important;}
     .page.tpl-classic .menu-logo-text{color:#2f6b4f !important;}
@@ -983,7 +1012,7 @@
 </head>
 <body>
 <div class="update-banner" id="updateBanner">
-  <span><strong>Menu Creator was updated (build v9).</strong> If descriptions still look ALL CAPS, this window is an old cached copy — click to reload a fresh page.</span>
+  <span><strong>Menu Creator was updated (build v10).</strong> If the Vedanta logo, date, or second QR is missing, this window is an old cached copy — click to reload a fresh page.</span>
   <button type="button" class="btn" id="forceRefreshBtn">Refresh &amp; clear cache</button>
 </div>
 <div class="file-warn" id="fileWarn">
@@ -1000,7 +1029,7 @@
 <div class="app">
   <!-- ===================== EDITOR ===================== -->
   <aside class="editor">
-    <div class="brand"><span class="dot"></span> Menu Creator <small class="build-stamp" id="buildStamp">v9</small></div>
+    <div class="brand"><span class="dot"></span> Menu Creator <small class="build-stamp" id="buildStamp">v10</small></div>
     <p class="sub">Add dishes, set allergens, then print or save as PDF. For Vedanta layouts, open the <a href="vedanta-menu-creator.html">Vedanta Menu Creator</a>.</p>
 
     <div class="group archive-box">
@@ -1065,16 +1094,28 @@
         <div class="logo-prev" id="logoPrev">No logo</div>
         <div style="flex:1">
           <input type="file" id="logoFile" accept="image/*" style="font-size:12px" />
-          <input type="text" id="logoText" placeholder="or type text, e.g. vedanta.org" style="margin-top:8px" />
+          <input type="text" id="logoText" placeholder="optional text logo (only if the image is hidden)" style="margin-top:8px" />
         </div>
       </div>
-      <button class="btn btn-line btn-sm" id="clearLogo" style="margin-top:8px">Remove logo</button>
+      <button class="btn btn-line btn-sm" id="clearLogo" style="margin-top:8px">Restore default logo</button>
+      <div class="hint">The Vedanta wordmark is built into every template. Upload a file to replace it; restore default to put it back.</div>
+    </div>
+
+    <div class="group">
+      <label>Menu date</label>
+      <select id="datePos">
+        <option value="bottom">Bottom footer (default)</option>
+        <option value="top">Top (under title)</option>
+        <option value="both">Top and bottom</option>
+        <option value="off">Off</option>
+      </select>
+      <div class="hint">Uses the library date above (today if unset) and prints automatically — you do not need to type it in the subtitle.</div>
     </div>
 
     <div class="group">
       <label>Menu title</label>
       <input type="text" id="menuTitle" placeholder="DINNER MENU" />
-      <input type="text" id="menuSub" placeholder="Optional subtitle (date, venue…)" style="margin-top:8px" />
+      <input type="text" id="menuSub" placeholder="Optional subtitle (venue…)" style="margin-top:8px" />
     </div>
 
     <div class="divider"></div>
@@ -1186,17 +1227,22 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 /* ---------------- Data ---------------- */
 const ALLERGENS = ["Gluten","Dairy","Celery","Soy","Nuts","Peanuts","Sesame","Eggs","Fish","Crustaceans","Molluscs","Mustard","Lupin","Sulphur Dioxide","None"];
 const DIETS = ["Vegan","Vegetarian","Gluten-Free","Dairy-Free","Halal","Nut-Free"];
-const APP_BUILD = "v9";
+const APP_BUILD = "v10";
 
+const DEFAULT_LOGO_SRC = "assets/vedanta-logo.png";
 const MENU_QR_URL = "https://pureprasadkitchen.com";
 const MENU_QR_CAPTION = "Scan the QR code \u2014 Recipe by Shyam Prasad, Head Chef";
+const MENU_QR_LABEL = "Recipes";
+const VEDANTA_QR_URL = "https://www.thevedanta.org/";
+const VEDANTA_QR_CAPTION = "The Vedanta \u2014 thevedanta.org";
+const VEDANTA_QR_LABEL = "The Vedanta";
 
 const DEFAULT_INFO = "We carefully select our ingredients and prepare all dishes with attention to allergens. However, please be aware that all food is prepared in a shared kitchen where cross-contamination may occur. While we take every precaution to minimize risk, we cannot guarantee the complete absence of allergens.\n\nIf you have a severe allergy or specific dietary requirement, please speak to a member of our team before serving yourself.\n\nYou can request more information on the allergens listed below.";
 const OLD_INFO_ALLERGENS = "Celery, Cereals containing Gluten, Crustaceans, Lupin, Milk, Mustard, Nuts, Peanuts, Sesame, Soya, Sulphur Dioxide";
 const DEFAULT_INFO_ALLERGENS = "";
 
 const SAMPLE = {
-  logoText:"vedanta.org", logoImg:null,
+  logoText:"", logoImg:DEFAULT_LOGO_SRC,
   title:"DINNER MENU", sub:"",
   dishes:[
     {name:"High Protein Lasagne with Beluga Lentil", desc:"Layered Pasta with Tomato Ragu, Beluga Lentils, Spinach & Plant-Based Cheese, baked to perfection", allergens:["Gluten","Dairy","Celery"]},
@@ -1229,17 +1275,21 @@ const TEMPLATES={
   banquet:{name:"Festival Banquet",desc:"Dense maroon-gold feast layout",swatch:"linear-gradient(135deg,#fffaf3,#6e2430)"}
 };
 function makeDefault(){
-  return { logoText:"", logoImg:null, infoText:DEFAULT_INFO, infoAllergens:DEFAULT_INFO_ALLERGENS,
+  return { logoText:"", logoImg:DEFAULT_LOGO_SRC, datePos:"bottom",
+           infoText:DEFAULT_INFO, infoAllergens:DEFAULT_INFO_ALLERGENS,
            template:"classic", menus:[ newMenu("Day 1") ], currentId:null };
 }
 function migrate(old){
   if(!old) return null;
   if(old.menus){
     old.menus.forEach(m=>{ m.dishes = repairDishList(m.dishes); });
+    if(!old.logoImg) old.logoImg = DEFAULT_LOGO_SRC;
+    if(!old.datePos) old.datePos = "bottom";
     return old;
   }
   const d = makeDefault();
-  d.logoText=old.logoText||""; d.logoImg=old.logoImg||null;
+  d.logoText=old.logoText||""; d.logoImg=old.logoImg||DEFAULT_LOGO_SRC;
+  d.datePos=old.datePos||"bottom";
   d.infoText=old.infoText||DEFAULT_INFO; d.infoAllergens=old.infoAllergens||DEFAULT_INFO_ALLERGENS;
   d.menus=[ Object.assign(newMenu("Day 1"), {title:old.title||"DINNER MENU", sub:old.sub||"", dishes:repairDishList(old.dishes||[])}) ];
   return d;
@@ -1248,13 +1298,44 @@ let data = migrate(loadRaw()) || makeDefault();
 if(!data.currentId || !data.menus.some(m=>m.id===data.currentId)) data.currentId = data.menus[0].id;
 if(["", OLD_INFO_ALLERGENS, "Soya, Sulphur Dioxide"].includes((data.infoAllergens||"").trim())){ data.infoAllergens = DEFAULT_INFO_ALLERGENS; }
 if(!data.template) data.template="classic";
+if(!data.logoImg) data.logoImg = DEFAULT_LOGO_SRC;
+if(!data.datePos) data.datePos = "bottom";
 
-const SHARED = ["logoText","logoImg","infoText","infoAllergens","template"];
-function menuQrUrl(){
-  let u = (MENU_QR_URL || "").trim();
+const SHARED = ["logoText","logoImg","infoText","infoAllergens","template","datePos"];
+let _defaultLogoDataUrl = null;
+function wordLogoSrc(src){
+  src = src || DEFAULT_LOGO_SRC;
+  if(src === DEFAULT_LOGO_SRC && _defaultLogoDataUrl) return _defaultLogoDataUrl;
+  return src;
+}
+function preloadDefaultLogo(){
+  if(_defaultLogoDataUrl) return;
+  fetch(DEFAULT_LOGO_SRC).then(r=>r.ok?r.blob():Promise.reject()).then(blob=>{
+    const r=new FileReader();
+    r.onload=()=>{ _defaultLogoDataUrl=r.result; };
+    r.readAsDataURL(blob);
+  }).catch(()=>{});
+}
+function absUrl(u){
+  u = (u || "").trim();
   if(!u) return "";
   if(!/^https?:\/\//i.test(u)) u = "https://" + u;
   return u;
+}
+function menuQrUrl(){ return absUrl(MENU_QR_URL); }
+function vedantaQrUrl(){ return absUrl(VEDANTA_QR_URL); }
+function effectiveLogoSrc(){
+  return state.logoImg || DEFAULT_LOGO_SRC;
+}
+function datePlacement(){
+  const p = data.datePos || "bottom";
+  return { top: p==="top"||p==="both", bottom: p==="bottom"||p==="both" };
+}
+function formattedMenuDate(){
+  const iso = (archiveCtx && archiveCtx.date) || todayISO();
+  const d = new Date(iso+"T12:00:00");
+  if(Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString("en-GB",{ weekday:"long", day:"numeric", month:"long", year:"numeric" });
 }
 function tplClass(){ return " tpl-"+(data.template||"classic"); }
 function current(){ return data.menus.find(m=>m.id===data.currentId) || data.menus[0]; }
@@ -1424,7 +1505,8 @@ async function refreshArchiveIndex(){
 function snapshotForArchive(){
   const m=current();
   return {
-    logoText:data.logoText||"", logoImg:data.logoImg||null,
+    logoText:data.logoText||"", logoImg:data.logoImg||DEFAULT_LOGO_SRC,
+    datePos:data.datePos||"bottom",
     infoText:data.infoText||"", infoAllergens:data.infoAllergens||"",
     template:data.template||"classic",
     title:m.title||"", sub:m.sub||"",
@@ -1432,7 +1514,8 @@ function snapshotForArchive(){
   };
 }
 function applyArchiveSnapshot(snap){
-  data.logoText=snap.logoText||""; data.logoImg=snap.logoImg||null;
+  data.logoText=snap.logoText||""; data.logoImg=snap.logoImg||DEFAULT_LOGO_SRC;
+  data.datePos=snap.datePos||data.datePos||"bottom";
   data.infoText=snap.infoText||DEFAULT_INFO; data.infoAllergens=snap.infoAllergens||"";
   data.template=snap.template||data.template||"classic"; buildTplGrid();
   const m=current();
@@ -1447,7 +1530,8 @@ function projectToSnapshot(proj){
     return n>(best.dishes||[]).length?m:best;
   }, proj.menus?.[0]||{});
   return {
-    logoText:proj.logoText||"", logoImg:proj.logoImg||null,
+    logoText:proj.logoText||"", logoImg:proj.logoImg||DEFAULT_LOGO_SRC,
+    datePos:proj.datePos||"bottom",
     infoText:proj.infoText||DEFAULT_INFO, infoAllergens:proj.infoAllergens||"",
     template:proj.template||"classic",
     title:pick.title||"DINNER MENU", sub:pick.sub||"",
@@ -1462,7 +1546,7 @@ function hasEditorContent(){
   const m=current();
   if((m.dishes||[]).length) return true;
   if((m.sub||"").trim()) return true;
-  if(data.logoImg) return true;
+  if(data.logoImg && data.logoImg !== DEFAULT_LOGO_SRC) return true;
   const t=(m.title||"").trim();
   return t && t!=="DINNER MENU" && t!=="LUNCH MENU";
 }
@@ -1792,7 +1876,9 @@ $("logoFile").onchange = e=>{
   r.onload=()=>{ state.logoImg=r.result; save(); render(); };
   r.readAsDataURL(f);
 };
-$("clearLogo").onclick = ()=>{ state.logoImg=null; state.logoText=""; $("logoText").value=""; $("logoFile").value=""; save(); render(); };
+$("clearLogo").onclick = ()=>{ state.logoImg=DEFAULT_LOGO_SRC; state.logoText=""; $("logoText").value=""; $("logoFile").value=""; save(); render(); };
+
+$("datePos").onchange = e=>{ state.datePos=e.target.value||"bottom"; save(); render(); };
 
 $("loadSample").onclick = ()=>{
   data.logoText=SAMPLE.logoText; data.logoImg=SAMPLE.logoImg;
@@ -2088,8 +2174,11 @@ function buildWordPage(m, snap, idx, tpl){
     .map(p=>`<p style="font-size:8.5pt;line-height:1.35;${s.body||'color:#3c463f;'}margin:0 0 4pt;">${esc(p).replace(/\n/g,"<br>")}</p>`).join("");
   const listHTML=items.length?`<p style="font-size:8.5pt;${s.body||'color:#3c463f;'}"><b>You can request more information on:</b> ${items.map(esc).join(" &bull; ")}</p>`:"";
   const logo=snap||data;
-  const logoHead=logo.logoImg?`<p style="text-align:center;margin:0 0 4pt;"><img src="${logo.logoImg}" alt="logo" style="display:block;margin:0 auto;max-height:78px;max-width:220px;"/></p>`
+  const logoSrc=wordLogoSrc(logo.logoImg||DEFAULT_LOGO_SRC);
+  const logoHead=logoSrc?`<p style="text-align:center;margin:0 0 4pt;"><img src="${logoSrc}" alt="The Vedanta" style="display:block;margin:0 auto;max-height:64px;max-width:260px;"/></p>`
     :(logo.logoText?`<p style="text-align:center;${s.logo}margin:0 0 4pt;">${esc(logo.logoText)}</p>`:"");
+  const datePos=logo.datePos||data.datePos||"bottom";
+  const dateLine=`<p style="text-align:center;font-size:9pt;letter-spacing:1.5pt;text-transform:uppercase;color:#6b7770;margin:4pt 0 0;">${esc(formattedMenuDate())}</p>`;
   const dishes=repairDishList(m.dishes||[]);
   const rom=["","I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV","XV","XVI","XVII","XVIII","XIX","XX"];
   const wordDish=(d,prefix)=>`
@@ -2112,12 +2201,14 @@ function buildWordPage(m, snap, idx, tpl){
       <h1 style="${s.title}padding-bottom:6pt;margin:0;">${esc(m.title||"DINNER MENU")}</h1>
       ${data.menus.length>1?`<p style="text-align:center;font-size:9pt;color:#6b7770;">${esc(m.label||"")}</p>`:""}
       ${m.sub?`<p style="text-align:center;font-size:9pt;color:#6b7770;">${esc(m.sub)}</p>`:""}
+      ${datePos==="top"||datePos==="both"?dateLine:""}
       ${dishesHTML}
       <div style="${s.rule}margin-top:14pt;padding-top:8pt;"></div>
       <h2 style="text-align:center;font-family:Georgia,serif;${s.info}font-size:13pt;margin:0 0 2pt;">Allergen Information</h2>
       <p style="text-align:center;color:#6b7770;font-size:8pt;margin:0 0 6pt;">Allergen &amp; Dietary Information</p>
       ${infoBody}${listHTML}
-      ${qrHTMLWord(menuQrUrl())}
+      ${qrHTMLWord()}
+      ${datePos==="bottom"||datePos==="both"?dateLine:""}
     </div></div>`;
 }
 
@@ -2141,25 +2232,33 @@ $("wordBtn").onclick = ()=>{
 
 /* ---------------- Render ---------------- */
 function logoHTML(){
-  if(state.logoImg) return `<img class="menu-logo" src="${state.logoImg}" alt="logo" decoding="sync" />`;
+  const src=effectiveLogoSrc();
+  if(src) return `<img class="menu-logo" src="${src}" alt="The Vedanta" decoding="sync" />`;
   if(state.logoText) return `<div class="menu-logo-text">${esc(state.logoText)}</div>`;
   return "";
 }
 function menuHeaderHTML(m){
   const dayTag = data.menus.length>1 ? `<div class="menu-sub" style="color:var(--accent);margin-top:4px;">${esc(m.label||"")}</div>` : "";
+  const pos = datePlacement();
   return `<div class="menu-head">
     <div class="menu-logo-slot" id="logoSlot">${logoHTML()}</div>
     <h1 class="menu-title">${esc(m.title||"DINNER MENU")}</h1>
     ${dayTag}
     ${m.sub?`<div class="menu-sub">${esc(m.sub)}</div>`:""}
+    ${pos.top?`<div class="menu-date">${esc(formattedMenuDate())}</div>`:""}
   </div>`;
+}
+function pageFootHTML(m){
+  const pos = datePlacement();
+  if(pos.bottom) return `<div class="page-foot menu-date">${esc(formattedMenuDate())}</div>`;
+  return `<div class="page-foot">${esc(data.logoText || m.title || "")}</div>`;
 }
 const QR_CELL_PX = 4;
 const QR_QUIET_MODULES = 4;
-let _qrImgCache = null;
+const _qrImgCache = Object.create(null);
 function qrData(url){
   const u=(url||"").trim(); if(!u) return null;
-  if(_qrImgCache && _qrImgCache.url===u) return _qrImgCache;
+  if(_qrImgCache[u]) return _qrImgCache[u];
   try{
     const qr=qrcode(0,"M");
     qr.addData(u,"Byte");
@@ -2168,17 +2267,37 @@ function qrData(url){
     const margin=QR_QUIET_MODULES*cell;
     const px=qr.getModuleCount()*cell+margin*2;
     const data={url:u, src:qr.createDataURL(cell,margin), px};
-    _qrImgCache=data;
+    _qrImgCache[u]=data;
     return data;
   }catch(e){ return null; }
 }
-function qrHTML(url){
+function qrItemHTML(url, label, caption, alt){
   const d=qrData(url); if(!d) return "";
-  return `<div class="menu-qr-wrap"><img src="${d.src}" width="${d.px}" height="${d.px}" alt="QR Code"><p class="menu-qr-caption">${esc(MENU_QR_CAPTION)}</p></div>`;
+  return `<div class="menu-qr-item">
+    <div class="menu-qr-label">${esc(label)}</div>
+    <img src="${d.src}" width="${d.px}" height="${d.px}" alt="${esc(alt||label)}">
+    <p class="menu-qr-caption">${esc(caption)}</p>
+  </div>`;
 }
-function qrHTMLWord(url){
+function qrHTML(){
+  const a=qrItemHTML(menuQrUrl(), MENU_QR_LABEL, MENU_QR_CAPTION, "Recipe QR Code");
+  const b=qrItemHTML(vedantaQrUrl(), VEDANTA_QR_LABEL, VEDANTA_QR_CAPTION, "The Vedanta QR Code");
+  if(!a && !b) return "";
+  return `<div class="menu-qr-wrap"><div class="menu-qr-row">${a}${b}</div></div>`;
+}
+function qrItemWord(url, label, caption){
   const d=qrData(url); if(!d) return "";
-  return `<div style="text-align:center;margin-top:10pt;"><img src="${d.src}" width="${d.px}" height="${d.px}" style="display:block;margin:0 auto;background:#fff;" alt="QR Code"/><p style="font-family:Georgia,'Times New Roman',serif;font-size:7.5pt;color:#6b7770;margin:5pt 0 0;font-style:italic;letter-spacing:.03em;line-height:1.4;">${esc(MENU_QR_CAPTION)}</p></div>`;
+  return `<td style="width:50%;text-align:center;vertical-align:top;padding:0 8pt;">
+    <p style="font-size:7.5pt;letter-spacing:1.2pt;text-transform:uppercase;font-weight:bold;margin:0 0 4pt;">${esc(label)}</p>
+    <img src="${d.src}" width="${d.px}" height="${d.px}" style="display:block;margin:0 auto;background:#fff;" alt="${esc(label)}"/>
+    <p style="font-family:Georgia,'Times New Roman',serif;font-size:7.5pt;color:#6b7770;margin:5pt 0 0;font-style:italic;letter-spacing:.03em;line-height:1.4;">${esc(caption)}</p>
+  </td>`;
+}
+function qrHTMLWord(){
+  const a=qrItemWord(menuQrUrl(), MENU_QR_LABEL, MENU_QR_CAPTION);
+  const b=qrItemWord(vedantaQrUrl(), VEDANTA_QR_LABEL, VEDANTA_QR_CAPTION);
+  if(!a && !b) return "";
+  return `<table style="width:100%;margin-top:10pt;border-collapse:collapse;"><tr>${a}${b}</tr></table>`;
 }
 function esc(s){ return (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 function isAllCapsText(s){
@@ -2360,7 +2479,7 @@ function pageHTML(m){
       <div class="info-sub">Allergen &amp; Dietary Information</div>
       <div class="info-body">${infoBody}</div>
       ${infoList}
-      ${qrHTML(menuQrUrl())}
+      ${qrHTML()}
     </div>`;
 }
 
@@ -2369,7 +2488,8 @@ function render(){
   renderTabs();
 
   // editor logo preview (shared)
-  $("logoPrev").innerHTML = data.logoImg ? `<img src="${data.logoImg}">` : (data.logoText? esc(data.logoText): "No logo");
+  const logoSrc = effectiveLogoSrc();
+  $("logoPrev").innerHTML = logoSrc ? `<img src="${logoSrc}" alt="The Vedanta">` : (data.logoText? esc(data.logoText): "No logo");
 
   // preview: one page per day
   const pages = $("pagesOut");
@@ -2377,7 +2497,7 @@ function render(){
     `<section class="page${tplClass()}${m.id===data.currentId?' current':''}" data-id="${m.id}">
        ${menuHeaderHTML(m)}
        <div class="page-inner">${pageHTML(m)}</div>
-       <div class="page-foot">${esc(data.logoText || m.title || "")}</div>
+       ${pageFootHTML(m)}
      </section>`
   ).join("");
   pages.querySelectorAll(".page").forEach(el=> el.onclick=()=>{ if(el.dataset.id!==data.currentId) switchDay(el.dataset.id); });
@@ -2408,6 +2528,7 @@ function syncInputs(){
   $("logoText").value=state.logoText||"";
   $("infoText").value=state.infoText||"";
   $("infoAllergens").value=state.infoAllergens||"";
+  if($("datePos")) $("datePos").value=data.datePos||"bottom";
 }
 function buildTplGrid(){
   const g=$("tplGrid"); if(!g) return;
@@ -2432,8 +2553,9 @@ function buildSlides(){
 }
 
 function ebCoverHTML(){
-  const logo = state.logoImg
-    ? `<img class="ec-logo" src="${state.logoImg}" alt="logo">`
+  const src = effectiveLogoSrc();
+  const logo = src
+    ? `<img class="ec-logo" src="${src}" alt="The Vedanta">`
     : (state.logoText? `<div class="ec-logo-text">${esc(state.logoText)}</div>` : "");
   const title = esc(current().title || "MENU");
   const sub = data.menus.length>1 ? (data.menus.length+" Daily Menus") : esc(current().sub||"");
@@ -2457,7 +2579,7 @@ function makePageEl(slide, anim){
     el.style.cursor="default";
     el.innerHTML=`${menuHeaderHTML(slide.m)}
                   <div class="page-inner">${pageHTML(slide.m)}</div>
-                  <div class="page-foot">${esc(data.logoText || slide.m.title || "")}</div>`;
+                  ${pageFootHTML(slide.m)}`;
   }
   if(anim) el.classList.add("enter");
   return el;
@@ -2688,6 +2810,7 @@ async function bootAppBuild(){
 buildChips();
 buildTplGrid();
 syncInputs();
+preloadDefaultLogo();
 render();
 detectArchiveStorage().then(()=>refreshArchiveIndex()).catch(()=>{
   updateArchiveStatus();

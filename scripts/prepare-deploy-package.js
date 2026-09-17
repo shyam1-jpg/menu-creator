@@ -34,6 +34,11 @@ const NETLIFY_DROP_TOML = `# Static PWA — no build step for Netlify Drop
   for = "/icons/*"
   [headers.values]
     Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
 `;
 
 function copyDir(src, dest) {

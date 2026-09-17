@@ -30,7 +30,7 @@ HOW TO OPEN THE APP
   Option 1 (recommended): Double-click "Start Menu Creator.bat"
       This starts the local server and opens http://127.0.0.1:4002/
       Use this for Print / Save PDF so you are not on an old cached copy.
-      Confirm the header shows "v9" (build stamp).
+      Confirm the header shows "v10" (build stamp).
   Option 2: In this folder run  npm start  then open http://127.0.0.1:4002/
   Option 3: Double-click "index.html" (file://) — works for editing, but
       Chrome may keep an old installed PWA / cache. Close any "Menu Creator"
@@ -85,19 +85,32 @@ Use "Open project" to load a saved project file.
 
 QR CODE ON THE MENU
 -------------------
-Each printed menu includes a QR code that links to:
+Each printed menu includes two QR codes:
 
-  https://pureprasadkitchen.com
+  Recipes — https://pureprasadkitchen.com
+    Caption: "Scan the QR code — Recipe by Shyam Prasad, Head Chef"
 
-Guests can scan it with a phone camera. The caption reads:
-"Scan the QR code — Recipe by Shyam Prasad, Head Chef"
+  The Vedanta — https://www.thevedanta.org/
+    Caption: "The Vedanta — thevedanta.org"
+
+Guests can scan either with a phone camera.
+
+The Vedanta wordmark is built into every template (assets/vedanta-logo.png).
+You can still upload a different logo; “Restore default logo” puts it back.
+
+Menus also print today’s date automatically in the bottom footer.
+Use “Menu date” in the editor to show it at the top, both places, or off.
+The date follows the library date picker (today if you have not changed it).
 
 
 OTHER FEATURES
 --------------
 - Multiple days (Mon–Sun week menus)
 - Several visual templates (Classic Gold, Modern Minimal, etc.)
-- Upload a logo image or type logo text
+- The Vedanta wordmark is the default logo on every template
+- Upload a logo image or type logo text to override; restore default anytime
+- Automatic menu date (bottom footer by default; top / both / off)
+- Two QR codes (recipes + The Vedanta)
 - Edit dishes, allergens, and dietary tags one by one
 - "Load sample" to see an example menu
 

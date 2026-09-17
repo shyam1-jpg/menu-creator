@@ -1,5 +1,5 @@
-const CACHE_NAME = "menu-creator-v9";
-const APP_BUILD = "v9";
+const CACHE_NAME = "menu-creator-v10";
+const APP_BUILD = "v10";
 const ASSETS = [
   "./index.html",
   "./vedanta-menu-creator.html",
@@ -9,7 +9,9 @@ const ASSETS = [
   "./icons/icon-512.png",
   "./icons/apple-touch-icon.png",
   "./icons/icon-192.svg",
-  "./icons/icon-512.svg"
+  "./icons/icon-512.svg",
+  "./assets/vedanta-logo.png",
+  "./assets/qr-thevedanta.png"
 ];
 const NAV_TIMEOUT_MS = 4000;
 
