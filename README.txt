@@ -30,7 +30,7 @@ HOW TO OPEN THE APP
   Option 1 (recommended): Double-click "Start Menu Creator.bat"
       This starts the local server and opens http://127.0.0.1:4002/
       Use this for Print / Save PDF so you are not on an old cached copy.
-      Confirm the header shows "v11" (build stamp).
+      Confirm the header shows "v12" (build stamp).
   Option 2: In this folder run  npm start  then open http://127.0.0.1:4002/
   Option 3: Double-click "index.html" (file://) — works for editing, but
       Chrome may keep an old installed PWA / cache. Close any "Menu Creator"
