@@ -1,5 +1,5 @@
-const CACHE_NAME = "menu-creator-v14";
-const APP_BUILD = "v14";
+const CACHE_NAME = "menu-creator-v15";
+const APP_BUILD = "v15";
 const ASSETS = [
   "./index.html",
   "./vedanta-menu-creator.html",
