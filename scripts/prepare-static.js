@@ -18,7 +18,7 @@ const FILES = [
   '_redirects',
 ];
 
-const DIRS = ['icons', 'assets', 'fonts'];
+const DIRS = ['icons', 'assets', 'fonts', 'vendor'];
 
 function copyFile(src, dest) {
   fs.mkdirSync(path.dirname(dest), { recursive: true });

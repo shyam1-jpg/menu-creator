@@ -14,6 +14,14 @@ Files:
   texgyrepagella-italic.woff2
   texgyrepagella-bold.woff2
   texgyrepagella-bolditalic.woff2
+  texgyrepagella-regular.ttf
+  texgyrepagella-italic.ttf
+  texgyrepagella-bold.ttf
+  texgyrepagella-bolditalic.ttf
+
+The .woff2 files are what the page and the print preview load.
+The .ttf files are the same outlines, kept so Download PDF can embed
+TeX Gyre Pagella in the file itself (pdf-lib does not read WOFF2).
 
 License: GUST Font License (LaTeX Project Public License 1.3c or later).
 See GUST-FONT-LICENSE.txt in this folder.

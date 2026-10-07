@@ -6,7 +6,7 @@
 <meta name="description" content="Menu Creator — design printable restaurant menus offline. Paste menus, save to library, print or export to Word." />
 <meta name="application-name" content="Menu Creator" />
 <meta name="theme-color" content="#2f6b4f" />
-<meta name="menu-creator-build" content="v18" />
+<meta name="menu-creator-build" content="v19" />
 <link rel="preload" as="image" href="assets/vedanta-logo.png" />
 <link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-regular.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-bold.woff2" crossorigin />
@@ -161,6 +161,14 @@
   }
   .dish-card h4{margin:0 0 4px;font-size:14px;}
   .dish-card .meta{font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.4;}
+  .desc-warn{
+    margin-top:8px;padding:8px 10px;border-radius:10px;
+    background:#fbf6ea;border:1px solid #e4d3a8;color:#6b5424;
+    font-size:12px;line-height:1.45;font-weight:600;
+  }
+  .desc-warn ul{margin:0;padding-left:18px;font-weight:500;}
+  .desc-warn li{margin:3px 0;}
+  .dish-card .desc-warn{margin:0 0 10px;}
   .dish-actions{display:flex;gap:8px;flex-wrap:wrap;}
 
   .allergen-pick{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;}
@@ -873,6 +881,16 @@
      serializes text-transform into extracted characters and can leak uppercase
      from titles onto descriptions and Contains lines. Casing is baked into the
      text nodes instead. */
+  /* Visual cap only — the typed description is never rewritten. 2lh follows each template's line-height in preview and Chrome print. */
+  .page .dish-desc{
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    line-clamp:2;
+    overflow:hidden;
+    max-height:2lh;
+  }
+
   .dish-desc, .dish-contains, .dish-diet,
   .page .dish-desc, .page .dish-contains, .page .dish-diet,
   .page.tpl-classic .dish-desc, .page.tpl-classic .dish-contains, .page.tpl-classic .dish-diet,
@@ -1102,7 +1120,15 @@
       text-transform:none !important;
       font-variant:normal !important;
     }
-    .dish-desc{font-weight:400 !important;}
+    .page .dish-desc{
+      font-weight:400 !important;
+      display:-webkit-box !important;
+      -webkit-box-orient:vertical !important;
+      -webkit-line-clamp:2 !important;
+      line-clamp:2 !important;
+      overflow:hidden !important;
+      max-height:2lh !important;
+    }
     .dish-contains,.dish-diet{font-weight:700 !important;}
     .page,
     .page h1, .page h2, .page h3,
@@ -1121,7 +1147,7 @@
 </head>
 <body>
 <div class="update-banner" id="updateBanner">
-  <span id="updateBannerText"><strong>Menu Creator was updated (build v18).</strong> Menus now print in one embedded book serif on every device. If this banner does not say v18, or the menu type still does not match the Vedānta wordmark, this window is an old cached copy — click Refresh &amp; clear cache.</span>
+  <span id="updateBannerText"><strong>Menu Creator was updated (build v19).</strong> Dish descriptions now stay within two lines on the page and in Print / PDF. If this banner does not say v19, this window is an old cached copy — click Refresh &amp; clear cache.</span>
   <button type="button" class="btn" id="forceRefreshBtn">Refresh &amp; clear cache</button>
 </div>
 <div class="file-warn" id="fileWarn">
@@ -1138,7 +1164,7 @@
 <div class="app">
   <!-- ===================== EDITOR ===================== -->
   <aside class="editor">
-    <div class="brand"><span class="dot"></span> Menu Creator <small class="build-stamp" id="buildStamp">v18</small></div>
+    <div class="brand"><span class="dot"></span> Menu Creator <small class="build-stamp" id="buildStamp">v19</small></div>
     <p class="sub">Add dishes, set allergens, then print or save as PDF. For Vedanta layouts, open the <a href="vedanta-menu-creator.html">Vedanta Menu Creator</a>.</p>
 
     <div class="group archive-box">
@@ -1184,6 +1210,7 @@
     <div class="group" style="background:var(--accent-soft);padding:14px;border-radius:12px;">
       <label>⚡ Paste full menu — auto generate</label>
       <textarea id="bulkText" style="min-height:130px" placeholder="Paste your whole menu here, e.g.&#10;&#10;DINNER MENU&#10;&#10;HIGH PROTEIN LASAGNE&#10;Layered pasta with tomato ragu...&#10;Contains: Gluten, Dairy and Celery&#10;&#10;TUSCANY SALAD&#10;Mixed greens, cherry tomatoes...&#10;Contains: None"></textarea>
+      <div id="bulkWarn" class="desc-warn" hidden></div>
       <div class="row" style="margin-top:8px">
         <button class="btn btn-primary" id="genBtn">Generate menu</button>
         <button class="btn btn-line" id="appendBtn">Add to existing</button>
@@ -1233,6 +1260,7 @@
       <label>Add / edit a dish</label>
       <input type="text" id="dName" placeholder="Dish name" />
       <textarea id="dDesc" placeholder="Description" style="margin-top:8px"></textarea>
+      <div id="dDescWarn" class="desc-warn" hidden></div>
 
       <div class="hint">Allergens (tap to toggle, or type custom below):</div>
       <div class="allergen-pick" id="allergenPick"></div>
@@ -1336,7 +1364,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 /* ---------------- Data ---------------- */
 const ALLERGENS = ["Gluten","Dairy","Celery","Soy","Nuts","Peanuts","Sesame","Eggs","Fish","Crustaceans","Molluscs","Mustard","Lupin","Sulphur Dioxide","None"];
 const DIETS = ["Vegan","Vegetarian","Gluten-Free","Dairy-Free","Halal","Nut-Free"];
-const APP_BUILD = "v18";
+const APP_BUILD = "v19";
 
 const DEFAULT_LOGO_SRC = "assets/vedanta-logo.png";
 const MENU_QR_URL = "https://pureprasadkitchen.com";
@@ -1963,6 +1991,7 @@ function editDish(i){
   $("saveDish").textContent="Update dish";
   $("cancelEdit").style.display="block";
   buildChips();
+  refreshDescFieldWarn();
   $("dName").scrollIntoView({behavior:"smooth"});
 }
 function delDish(i){ state.dishes.splice(i,1); save(); render(); if(editIndex===i) resetForm(); }
@@ -2237,6 +2266,8 @@ function applyParsed(r, replace){
   save(); resetForm(); syncInputs(); render();
   saveToArchive(true).catch(()=>{});
 }
+$("dDesc").addEventListener("input", refreshDescFieldWarn);
+$("bulkText").addEventListener("input", refreshBulkWarn);
 $("genBtn").onclick = ()=>{
   const txt=$("bulkText").value; if(!txt.trim()) return;
   const r=parseBulk(txt);
@@ -2604,6 +2635,55 @@ function dietLine(d){
   return "suitable for "+items.slice(0,-1).join(", ")+" and "+items[items.length-1];
 }
 
+function descriptionExceedsTwoLines(text){
+  const raw = String(text||"").replace(/\s+/g," ").trim();
+  if(!raw) return false;
+  const host = document.createElement("section");
+  host.className = "page" + tplClass();
+  host.style.cssText = "position:absolute;left:-12000px;top:0;visibility:hidden;height:auto;overflow:visible;transform:none";
+  const probe = document.createElement("div");
+  probe.className = "dish-desc";
+  probe.textContent = raw;
+  probe.style.setProperty("display","block","important");
+  probe.style.setProperty("-webkit-line-clamp","unset","important");
+  probe.style.setProperty("line-clamp","unset","important");
+  probe.style.setProperty("-webkit-box-orient","unset","important");
+  probe.style.setProperty("max-height","none","important");
+  probe.style.setProperty("overflow","visible","important");
+  host.appendChild(probe);
+  document.body.appendChild(host);
+  const cs = getComputedStyle(probe);
+  const live = document.querySelector("#pagesOut .dish-desc");
+  let width = live && live.clientWidth>40 ? live.clientWidth : parseFloat(cs.maxWidth);
+  if(!(width>40) || width>5000){
+    const pcs = getComputedStyle(host);
+    width = host.clientWidth - parseFloat(pcs.paddingLeft) - parseFloat(pcs.paddingRight);
+  }
+  probe.style.width = width + "px";
+  const lh = parseFloat(getComputedStyle(probe).lineHeight) || 18;
+  const lines = probe.scrollHeight / lh;
+  host.remove();
+  return lines > 2.15;
+}
+function refreshDescFieldWarn(){
+  const box = $("dDescWarn");
+  if(!box) return;
+  const printed = toSentenceCase($("dDesc").value.trim());
+  const long = descriptionExceedsTwoLines(printed);
+  box.hidden = !long;
+  box.textContent = long ? "Description too long, will be cut to 2 lines" : "";
+}
+function refreshBulkWarn(){
+  const box = $("bulkWarn");
+  if(!box) return;
+  const text = $("bulkText").value;
+  if(!text.trim()){ box.hidden = true; box.innerHTML = ""; return; }
+  const parsed = parseBulk(text);
+  const long = (parsed.dishes||[]).filter(d => descriptionExceedsTwoLines(d.desc));
+  if(!long.length){ box.hidden = true; box.innerHTML = ""; return; }
+  box.hidden = false;
+  box.innerHTML = "<ul>"+long.map(d=>`<li><strong>${esc(d.name)}</strong> — Description too long, will be cut to 2 lines</li>`).join("")+"</ul>";
+}
 function fitPages(){
   const PAGE_H = 1123; // A4 @96dpi
   document.querySelectorAll("#pagesOut .page").forEach(pg=>{
@@ -2763,6 +2843,8 @@ function render(){
   if(shouldUrgeCacheRefresh()) showUpdateBanner(true);
   fitPages();
   pages.querySelectorAll("img").forEach(img=>{ img.onload=fitPages; });
+  refreshBulkWarn();
+  refreshDescFieldWarn();
 
   // dish list editor (current day)
   const m = current();
@@ -2771,6 +2853,7 @@ function render(){
   list.innerHTML = m.dishes.length? m.dishes.map((d,i)=>`
       <div class="dish-card">
         <h4>${esc(d.name)}</h4>
+        ${descriptionExceedsTwoLines(d.desc)?`<div class="desc-warn">Description too long, will be cut to 2 lines</div>`:""}
         <div class="meta">${esc(containsLine(d.allergens)||"No allergens set")}${d.diet&&d.diet.length?" · "+esc(dietLine(d.diet)):""}</div>
         <div class="dish-actions">
           <button class="btn btn-ghost btn-sm" onclick="editDish(${i})">Edit</button>
@@ -3013,7 +3096,7 @@ window.addEventListener("appinstalled", () => {
   installBtn.classList.add("hidden");
 });
 
-window.addEventListener("load", () => { ensureMenuFonts(); bootAppBuild(); });
+window.addEventListener("load", () => { Promise.resolve(ensureMenuFonts()).then(()=>render()); bootAppBuild(); });
 ensureMenuFonts();
 
 async function clearAppCaches(){
