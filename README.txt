@@ -30,7 +30,7 @@ HOW TO OPEN THE APP
   Option 1 (recommended): Double-click "Start Menu Creator.bat"
       This starts the local server and opens http://127.0.0.1:4002/
       Use this for Print / Save PDF so you are not on an old cached copy.
-      Confirm the header shows "v14" (build stamp).
+      Confirm the header shows "v18" (build stamp).
   Option 2: In this folder run  npm start  then open http://127.0.0.1:4002/
   Option 3: Double-click "index.html" (file://) — works for editing, but
       Chrome may keep an old installed PWA / cache. Close any "Menu Creator"
@@ -75,6 +75,22 @@ EXPORT TO WORD
 Click "Word (all days)" to download a Word document with every menu day.
 
 From the Menu Library browser you can also export a whole month or year.
+
+Word cannot embed the menu's web font. The .doc asks for Palatino Linotype
+(installed with Windows and Microsoft 365), then Palatino (Mac), Book
+Antiqua, Georgia, and Times New Roman. It matches Print / Save PDF when
+Word has Palatino Linotype or Palatino. Otherwise Word substitutes one of
+the later names, so the .doc can look slightly different from the PDF.
+
+
+FONTS
+-----
+Printed menus and the on-screen preview use one embedded book serif,
+TeX Gyre Pagella (a Palatino-style face, close to The Vedānta wordmark).
+The same file is used on Windows, Mac, iPhone, and Android, and it is
+embedded in Print / Save PDF. The editor controls stay in the system
+sans-serif. The font files live in the fonts folder and are cached by
+the app for offline use.
 
 
 SAVE / OPEN PROJECT FILES

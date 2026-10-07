@@ -1,5 +1,5 @@
-const CACHE_NAME = "menu-creator-v16";
-const APP_BUILD = "v16";
+const CACHE_NAME = "menu-creator-v18";
+const APP_BUILD = "v18";
 const ASSETS = [
   "./index.html",
   "./vedanta-menu-creator.html",
@@ -11,7 +11,11 @@ const ASSETS = [
   "./icons/icon-192.svg",
   "./icons/icon-512.svg",
   "./assets/vedanta-logo.png",
-  "./assets/qr-thevedanta.png"
+  "./assets/qr-thevedanta.png",
+  "./fonts/texgyrepagella-regular.woff2",
+  "./fonts/texgyrepagella-italic.woff2",
+  "./fonts/texgyrepagella-bold.woff2",
+  "./fonts/texgyrepagella-bolditalic.woff2"
 ];
 const NAV_TIMEOUT_MS = 4000;
 

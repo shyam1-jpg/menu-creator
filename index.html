@@ -6,8 +6,12 @@
 <meta name="description" content="Menu Creator — design printable restaurant menus offline. Paste menus, save to library, print or export to Word." />
 <meta name="application-name" content="Menu Creator" />
 <meta name="theme-color" content="#2f6b4f" />
-<meta name="menu-creator-build" content="v16" />
+<meta name="menu-creator-build" content="v18" />
 <link rel="preload" as="image" href="assets/vedanta-logo.png" />
+<link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-regular.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-bold.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-italic.woff2" crossorigin />
+<link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-bolditalic.woff2" crossorigin />
 <meta http-equiv="Cache-Control" content="no-store" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -18,6 +22,36 @@
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png" />
 <title>Menu Creator</title>
 <style>
+  /* Self-hosted TeX Gyre Pagella (Palatino metrics, GUST Font License).
+     A local-only stack printed a different face on each device. */
+  @font-face{
+    font-family:"TeX Gyre Pagella";
+    font-style:normal;
+    font-weight:400;
+    font-display:swap;
+    src:url("fonts/texgyrepagella-regular.woff2") format("woff2");
+  }
+  @font-face{
+    font-family:"TeX Gyre Pagella";
+    font-style:italic;
+    font-weight:400;
+    font-display:swap;
+    src:url("fonts/texgyrepagella-italic.woff2") format("woff2");
+  }
+  @font-face{
+    font-family:"TeX Gyre Pagella";
+    font-style:normal;
+    font-weight:700;
+    font-display:swap;
+    src:url("fonts/texgyrepagella-bold.woff2") format("woff2");
+  }
+  @font-face{
+    font-family:"TeX Gyre Pagella";
+    font-style:italic;
+    font-weight:700;
+    font-display:swap;
+    src:url("fonts/texgyrepagella-bolditalic.woff2") format("woff2");
+  }
   :root{
     --bg:#f4f1ea;
     --panel:#ffffff;
@@ -30,8 +64,9 @@
     --danger:#c0492f;
     --radius:14px;
     --shadow:0 10px 30px rgba(31,42,36,.08);
-    /* Classic book serif matched to The Vedānta wordmark (assets/vedanta-logo.png). */
-    --serif:"Palatino Linotype",Palatino,"Iowan Old Style","Book Antiqua","TeX Gyre Pagella",Georgia,"Liberation Serif","Times New Roman",serif;
+    /* Classic book serif matched to The Vedānta wordmark (assets/vedanta-logo.png).
+       TeX Gyre Pagella is the embedded face. The rest are only used if that file fails to load. */
+    --serif:"TeX Gyre Pagella","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Liberation Serif","Times New Roman",serif;
     --sans:"Segoe UI",system-ui,-apple-system,sans-serif;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -814,10 +849,10 @@
     .lib-overlay{align-items:flex-end;padding:0;}
   }
 
-  /* HARD LOCK: printed menus always use The Vedānta wordmark book serif
-     (Palatino Linotype / Palatino / Iowan / Book Antiqua / Pagella / Georgia).
-     Templates must not switch titles, dishes, descriptions, or contains/diet
-     to Arial or any other UI face. Editor / UI chrome stays sans. */
+  /* HARD LOCK: printed menus always use the embedded TeX Gyre Pagella face
+     (Palatino metrics, matched to The Vedānta wordmark). Templates must not
+     switch titles, dishes, descriptions, or contains/diet to Arial or any
+     other UI face. Editor / UI chrome stays sans. */
   .page,
   .page h1, .page h2, .page h3,
   .page .menu-title, .page .menu-sub, .page .menu-logo-text, .page .menu-date,
@@ -1086,7 +1121,7 @@
 </head>
 <body>
 <div class="update-banner" id="updateBanner">
-  <span id="updateBannerText"><strong>Menu Creator was updated (build v16).</strong> If the footer QR codes still look large, menu type looks like Arial instead of the Vedānta book serif, or this banner does not say v16, this window is an old cached copy — click Refresh &amp; clear cache.</span>
+  <span id="updateBannerText"><strong>Menu Creator was updated (build v18).</strong> Menus now print in one embedded book serif on every device. If this banner does not say v18, or the menu type still does not match the Vedānta wordmark, this window is an old cached copy — click Refresh &amp; clear cache.</span>
   <button type="button" class="btn" id="forceRefreshBtn">Refresh &amp; clear cache</button>
 </div>
 <div class="file-warn" id="fileWarn">
@@ -1103,7 +1138,7 @@
 <div class="app">
   <!-- ===================== EDITOR ===================== -->
   <aside class="editor">
-    <div class="brand"><span class="dot"></span> Menu Creator <small class="build-stamp" id="buildStamp">v16</small></div>
+    <div class="brand"><span class="dot"></span> Menu Creator <small class="build-stamp" id="buildStamp">v18</small></div>
     <p class="sub">Add dishes, set allergens, then print or save as PDF. For Vedanta layouts, open the <a href="vedanta-menu-creator.html">Vedanta Menu Creator</a>.</p>
 
     <div class="group archive-box">
@@ -1301,7 +1336,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 /* ---------------- Data ---------------- */
 const ALLERGENS = ["Gluten","Dairy","Celery","Soy","Nuts","Peanuts","Sesame","Eggs","Fish","Crustaceans","Molluscs","Mustard","Lupin","Sulphur Dioxide","None"];
 const DIETS = ["Vegan","Vegetarian","Gluten-Free","Dairy-Free","Halal","Nut-Free"];
-const APP_BUILD = "v16";
+const APP_BUILD = "v18";
 
 const DEFAULT_LOGO_SRC = "assets/vedanta-logo.png";
 const MENU_QR_URL = "https://pureprasadkitchen.com";
@@ -1966,7 +2001,7 @@ $("resetAll").onclick = ()=>{
   data = makeDefault(); data.currentId=data.menus[0].id;
   save(); resetForm(); syncInputs(); render();
 };
-$("printBtn").onclick = ()=>{ preparePrint(); window.print(); };
+$("printBtn").onclick = ()=>{ printMenu(); };
 
 /* ---------------- Archive controls ---------------- */
 $("archiveDate").value=archiveCtx.date;
@@ -2216,14 +2251,18 @@ $("appendBtn").onclick = ()=>{
 };
 
 /* ---------------- Word export styles per template ---------------- */
-const BRAND_SERIF_WORD = "'Palatino Linotype',Palatino,'Iowan Old Style','Book Antiqua','TeX Gyre Pagella',Georgia,'Liberation Serif','Times New Roman',serif";
+/* Word opens this .doc as HTML and will not embed the woff2 files.
+   Palatino Linotype ships with Windows and Microsoft 365; Palatino ships on
+   Mac. Later names are only a fallback when those are missing, so a .doc is
+   not guaranteed to match the Print / Save PDF (TeX Gyre Pagella) page. */
+const BRAND_SERIF_WORD = "'Palatino Linotype',Palatino,'Book Antiqua',Georgia,'Times New Roman',serif";
 function wordBrandFont(style){
   return String(style||"").replace(/font-family\s*:\s*[^;]+;?/gi,"") + "font-family:"+BRAND_SERIF_WORD+";";
 }
 function wordTpl(tpl){
   const t=tpl||data.template||"classic";
-  /* Layout-only. Do not put Arial/Georgia/etc here — wordBrandFont() always
-     applies BRAND_SERIF_WORD (same stack as The Vedānta wordmark). */
+  /* Layout-only. Do not put Arial here — wordBrandFont() always applies
+     BRAND_SERIF_WORD (Palatino Linotype, the face Word is likely to have). */
   const map={
     classic:{wrap:"border:3px double #b08a3e;padding:20pt 18pt;",bg:"",title:"text-align:center;font-size:20pt;letter-spacing:3px;text-transform:uppercase;border-bottom:2px solid #b08a3e;color:#1f2a24;",logo:"font-size:15pt;color:#2f6b4f;",dish:"text-align:center;font-size:12pt;font-weight:bold;text-transform:uppercase;",desc:"text-align:center;font-style:italic;font-size:9.5pt;color:#3c463f;text-transform:none;",allg:"text-align:center;font-size:8pt;color:#b08a3e;text-transform:none;font-weight:bold;",diet:"text-align:center;font-size:8pt;color:#2f6b4f;text-transform:none;font-weight:bold;",info:"color:#2f6b4f;",rule:"border-top:2px solid #b08a3e;"},
     modern:{wrap:"border-left:4px solid #111;padding:24pt 22pt;background:#fafafa;",bg:"",title:"font-size:22pt;letter-spacing:6px;text-transform:uppercase;border-bottom:1px solid #111;color:#111;",logo:"font-size:14pt;color:#111;font-weight:bold;",dish:"font-size:11pt;font-weight:bold;text-transform:uppercase;border-left:3px solid #111;padding-left:8pt;",desc:"font-size:9.5pt;color:#444;padding-left:11pt;text-transform:none;",allg:"font-size:8pt;color:#111;text-transform:none;font-weight:bold;padding-left:11pt;",diet:"font-size:8pt;color:#555;text-transform:none;font-weight:bold;padding-left:11pt;",info:"color:#111;",rule:"border-top:1px solid #111;"},
@@ -2297,6 +2336,7 @@ $("wordBtn").onclick = ()=>{
 
   const html = `<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
   <head><meta charset="utf-8"><title>Menu</title>
+  <!-- Word cannot embed Menu Creator's web font (TeX Gyre Pagella). This file asks for Palatino Linotype, then Palatino, Book Antiqua, Georgia, and Times New Roman. Print / Save PDF uses the embedded Pagella face on every device. This .doc matches that look only when Word has Palatino Linotype or Palatino installed. -->
   <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View></w:WordDocument></xml><![endif]-->
   <style>
     @page{size:A4;margin:1.4cm;}
@@ -2590,6 +2630,25 @@ function fitPages(){
   });
 }
 
+function ensureMenuFonts(){
+  try{
+    if(!document.fonts || !document.fonts.load) return Promise.resolve();
+    const family = '"TeX Gyre Pagella"';
+    return Promise.all([
+      document.fonts.load("400 16px "+family),
+      document.fonts.load("italic 400 16px "+family),
+      document.fonts.load("700 16px "+family),
+      document.fonts.load("italic 700 16px "+family)
+    ]).then(function(){ return document.fonts.ready; }).catch(function(){});
+  }catch(e){
+    return Promise.resolve();
+  }
+}
+async function printMenu(){
+  preparePrint();
+  await ensureMenuFonts();
+  window.print();
+}
 function preparePrint(){
   persistRepairedDishes();
   render();
@@ -2851,7 +2910,7 @@ $("ebookBtn").onclick=openEbook;
 $("ebookClose").onclick=closeEbook;
 $("ebookPrev").onclick=()=>turnPage(-1);
 $("ebookNext").onclick=()=>turnPage(1);
-$("ebookPrint").onclick=()=>{ preparePrint(); window.print(); };
+$("ebookPrint").onclick=()=>{ printMenu(); };
 ebStage.onclick=(e)=>{
   if(ebAnimating) return;
   const r=ebStage.getBoundingClientRect();
@@ -2954,7 +3013,8 @@ window.addEventListener("appinstalled", () => {
   installBtn.classList.add("hidden");
 });
 
-window.addEventListener("load", () => { bootAppBuild(); });
+window.addEventListener("load", () => { ensureMenuFonts(); bootAppBuild(); });
+ensureMenuFonts();
 
 async function clearAppCaches(){
   /* Unregister workers first so they cannot recache while we delete. */
