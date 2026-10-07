@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Vedanta Menu Creator</title>
-<meta name="menu-creator-build" content="v18" />
+<meta name="menu-creator-build" content="v19" />
 <meta http-equiv="Cache-Control" content="no-store" />
 <link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-regular.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-bold.woff2" crossorigin />
@@ -15,122 +15,326 @@
 @font-face{font-family:"TeX Gyre Pagella";font-style:italic;font-weight:400;font-display:swap;src:url("fonts/texgyrepagella-italic.woff2") format("woff2")}
 @font-face{font-family:"TeX Gyre Pagella";font-style:normal;font-weight:700;font-display:swap;src:url("fonts/texgyrepagella-bold.woff2") format("woff2")}
 @font-face{font-family:"TeX Gyre Pagella";font-style:italic;font-weight:700;font-display:swap;src:url("fonts/texgyrepagella-bolditalic.woff2") format("woff2")}
-</style>
-<style>
-:root{--green:#254f3b;--green2:#567861;--gold:#b08a3e;--cream:#f7f2e7;--ink:#202722;--muted:#69756d;--line:#ded7c7;--panel:#fff;--bg:#f0eee8;--serif:"TeX Gyre Pagella","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Liberation Serif","Times New Roman",serif;--sans:'Segoe UI',system-ui,sans-serif}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans)}
-.app{display:grid;grid-template-columns:minmax(340px,440px) 1fr;min-height:100vh}.editor{background:#fff;border-right:1px solid var(--line);padding:22px;height:100vh;overflow:auto}.preview{padding:28px;height:100vh;overflow:auto;display:flex;flex-direction:column;align-items:center;gap:28px}
-.brand{font-family:var(--sans);font-size:24px;font-weight:700;color:var(--green);margin-bottom:4px}.sub{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.45}.group{margin-bottom:18px}.group label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--muted);margin-bottom:7px}input,textarea,select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 11px;background:#fbfaf7;font:14px var(--sans);color:var(--ink)}textarea{min-height:150px;resize:vertical;line-height:1.45}.row{display:flex;gap:9px}.row>*{flex:1}.btn{border:0;border-radius:10px;padding:10px 13px;font-weight:700;cursor:pointer}.primary{background:var(--green);color:#fff}.secondary{background:#e7eee9;color:var(--green)}.line{background:#fff;border:1px solid var(--line);color:var(--ink)}.hint{font-size:11px;color:var(--muted);line-height:1.45;margin-top:6px}
-.page{width:794px;height:1123px;background:#fff;position:relative;overflow:hidden;box-shadow:0 14px 36px rgba(0,0,0,.1);padding:50px 58px 58px;font-family:var(--serif)}.inner{position:relative;z-index:2;height:100%;display:flex;flex-direction:column}.head{text-align:center;margin-bottom:26px}.brand-logo{max-height:64px;max-width:280px;display:block;margin:0 auto 10px;object-fit:contain;-webkit-print-color-adjust:exact;print-color-adjust:exact}.venue{font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:.06em}.title{font-family:var(--serif);font-size:31px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-top:6px}.date{font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-top:6px;color:var(--muted)}.rule{width:90px;height:2px;margin:14px auto;background:var(--gold)}.menu{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px}.dish{text-align:center;text-transform:none}.dish-name{font-family:var(--serif);font-size:17px;font-weight:700;letter-spacing:.07em;text-transform:none;margin-bottom:4px}.dish-desc{font-family:var(--serif);font-size:12.5px;line-height:1.5;color:#414b44;max-width:570px;margin:0 auto;text-transform:none;font-weight:400;font-variant:normal;letter-spacing:normal}.contains{font-size:11px;font-weight:700;margin-top:3px;color:#111;text-transform:none;font-variant:normal}.sep{width:34px;height:1px;background:var(--gold);margin:10px auto 0;opacity:.7}.foot{text-align:center;font-size:10.5px;color:var(--muted);padding-top:12px}#pvFootDate{display:block;letter-spacing:.12em;text-transform:uppercase;margin:0 0 8px}.qr-block{margin-top:6px;text-align:center}.qr-block img{width:64px;height:64px;background:#fff;display:block;margin:0 auto}.qr-block p{font-size:7px;letter-spacing:.08em;text-transform:uppercase;margin:3px 0 0;font-weight:700;color:var(--ink);line-height:1.2}.badge{display:inline-block;border:1px solid currentColor;border-radius:999px;padding:2px 7px;margin:0 3px;font-size:9px;letter-spacing:.04em;text-transform:none;font-weight:700}
-.tpl-signature{background:#fffdf8}.tpl-signature:before{content:'';position:absolute;inset:18px;border:2px solid var(--gold);box-shadow:inset 0 0 0 5px #fffdf8,inset 0 0 0 6px #d9c58d}.tpl-signature .venue,.tpl-signature .title,.tpl-signature .dish-name{color:var(--green)}.tpl-signature .contains{color:#111;text-transform:none}.tpl-signature .foot{color:#68756e}
-.tpl-ashram{background:#f8f5ec}.tpl-ashram:before,.tpl-ashram:after{content:'';position:absolute;left:0;right:0;height:12px;background:linear-gradient(90deg,var(--green) 0 68%,var(--gold) 68%)}.tpl-ashram:before{top:0}.tpl-ashram:after{bottom:0}.tpl-ashram .title{color:var(--green);font-size:29px}.tpl-ashram .dish-name{color:#294b39}.tpl-ashram .dish-desc{font-style:italic;text-transform:none}.tpl-ashram .rule{background:linear-gradient(90deg,var(--green),var(--gold))}
-.tpl-botanical{background:#f5f8f2}.tpl-botanical:before{content:'❧';position:absolute;right:34px;top:25px;font-size:72px;color:#6f8d73;opacity:.13}.tpl-botanical:after{content:'';position:absolute;inset:20px;border:1.5px solid #6f8d73}.tpl-botanical .venue,.tpl-botanical .title,.tpl-botanical .dish-name{color:#3f6447}.tpl-botanical .rule,.tpl-botanical .sep{background:#6f8d73}.tpl-botanical .contains{color:#111;text-transform:none}
-.tpl-heritage{background:#fffaf0}.tpl-heritage:before{content:'';position:absolute;inset:15px;border:5px double #a78338}.tpl-heritage .title{font-size:33px;color:#493b22}.tpl-heritage .venue{color:#98752f}.tpl-heritage .dish-name{color:#493b22}.tpl-heritage .dish-desc{font-family:var(--serif);text-transform:none}.tpl-heritage .contains{color:#111;text-transform:none}
-.tpl-modern{background:#fff;padding:56px 68px}.tpl-modern .head{text-align:left;border-bottom:3px solid var(--green);padding-bottom:14px}.tpl-modern .venue{font-family:var(--serif);text-transform:uppercase;font-size:13px;letter-spacing:.17em;color:var(--green)}.tpl-modern .title{font-family:var(--serif);font-weight:400;letter-spacing:.18em;font-size:30px}.tpl-modern .date{text-align:left}.tpl-modern .rule{display:none}.tpl-modern .menu{justify-content:flex-start;padding-top:12px;gap:17px}.tpl-modern .dish{text-align:left;border-left:3px solid var(--gold);padding-left:14px}.tpl-modern .dish-name{font-family:var(--serif);color:var(--green);font-size:15px}.tpl-modern .dish-desc{margin:0;max-width:none;text-transform:none}.tpl-modern .sep{display:none}.tpl-modern .foot{text-align:left;border-top:1px solid var(--line)}
-.tpl-retreat{background:#fcfcfa}.tpl-retreat .head{margin-bottom:35px}.tpl-retreat .venue{font-size:18px;color:#4b5b50}.tpl-retreat .title{font-size:28px;color:#25342b}.tpl-retreat .rule{width:48px;background:#819687}.tpl-retreat .menu{gap:18px}.tpl-retreat .dish-name{font-size:16px;color:#25342b}.tpl-retreat .dish-desc{font-style:normal;color:#5b625d;text-transform:none}.tpl-retreat .sep{background:#b9c3bc;width:22px}.tpl-retreat .contains{color:#111;text-transform:none}
-.tpl-signature .dish-desc,.tpl-signature .contains,.tpl-signature .badge,.tpl-ashram .dish-desc,.tpl-ashram .contains,.tpl-ashram .badge,.tpl-botanical .dish-desc,.tpl-botanical .contains,.tpl-botanical .badge,.tpl-heritage .dish-desc,.tpl-heritage .contains,.tpl-heritage .badge,.tpl-modern .dish-desc,.tpl-modern .contains,.tpl-modern .badge,.tpl-retreat .dish-desc,.tpl-retreat .contains,.tpl-retreat .badge{text-transform:none!important;font-variant:normal!important}
-.page,.page .venue,.page .title,.page .date,.page .dish-name,.page .dish-desc,.page .contains,.page .badge,.page .foot,.page .qr-block p,.tpl-modern .venue,.tpl-modern .title,.tpl-modern .dish-name,.tpl-modern .dish-desc,.tpl-modern .contains,.tpl-modern .badge,.tpl-modern .foot{font-family:var(--serif)!important}
-.dish{break-inside:avoid;page-break-inside:avoid}
-.page[data-fit="1"] .head{margin-bottom:14px}.page[data-fit="1"] .menu{gap:8px}.page[data-fit="1"] .dish-name{font-size:15.5px;margin-bottom:2px}.page[data-fit="1"] .dish-desc{font-size:11.5px;line-height:1.4}.page[data-fit="1"] .sep{margin-top:6px}.page[data-fit="1"] .rule{margin:10px auto}
-.page[data-fit="2"]{padding:42px 50px 46px}.page[data-fit="2"] .head{margin-bottom:8px}.page[data-fit="2"] .brand-logo{max-height:48px}.page[data-fit="2"] .venue{font-size:18px}.page[data-fit="2"] .title{font-size:26px}.page[data-fit="2"] .menu{gap:5px}.page[data-fit="2"] .dish-name{font-size:14px;margin-bottom:1px}.page[data-fit="2"] .dish-desc{font-size:10.75px;line-height:1.35}.page[data-fit="2"] .contains{font-size:10px}.page[data-fit="2"] .sep{margin-top:3px}.page[data-fit="2"] .rule{margin:8px auto}.page[data-fit="2"] .foot{padding-top:6px}.page[data-fit="2"] .qr-block img{width:52px;height:52px}
-.page.page-flow{height:auto;min-height:1123px;overflow:visible}
-.preview>.page{flex-shrink:0;min-height:1123px}
-@media(max-width:900px){.app{display:block}.editor,.preview{height:auto}.preview{padding:12px;overflow:auto}.page{transform-origin:top center;transform:scale(.72);margin-bottom:-300px}}
-@media print{body{background:#fff}.editor{display:none}.app{display:block}.preview{padding:0;height:auto;overflow:visible;display:block;gap:0!important}.page{box-shadow:none;margin:0;width:210mm;height:297mm;min-height:0;transform:none!important;font-family:var(--serif)!important;overflow:hidden;break-after:page;page-break-after:always}.page:last-child{break-after:auto;page-break-after:auto}.page.page-flow{height:auto!important;min-height:297mm;overflow:visible!important}.brand-logo,.qr-block img{-webkit-print-color-adjust:exact;print-color-adjust:exact}.dish,.dish-name,.dish-desc,.contains,.badge,.page .venue,.page .title,.page .date,.page .foot{font-family:var(--serif)!important}.dish,.dish-name,.dish-desc,.contains,.badge,.tpl-signature .dish-desc,.tpl-signature .contains,.tpl-ashram .dish-desc,.tpl-botanical .dish-desc,.tpl-heritage .dish-desc,.tpl-modern .dish-desc,.tpl-retreat .dish-desc{text-transform:none!important;font-variant:normal!important}.dish-desc{font-weight:400!important}.contains,.badge{font-weight:700!important}@page{size:A4;margin:0}}
+:root{
+  --green:#254f3b;--green2:#567861;--gold:#b08a3e;--cream:#f7f2e7;--ink:#202722;
+  --muted:#69756d;--line:#ded7c7;--bg:#f0eee8;
+  --serif:"TeX Gyre Pagella","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+  --sans:"Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans)}
+.app{display:grid;grid-template-columns:minmax(340px,440px) 1fr;min-height:100vh}
+.editor{background:#fff;border-right:1px solid var(--line);padding:22px;height:100vh;overflow:auto}
+.preview{padding:28px;height:100vh;overflow:auto;display:flex;flex-direction:column;align-items:center}
+.brand{font-family:var(--sans);font-size:24px;font-weight:700;color:var(--green);margin-bottom:4px}
+.sub{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.45}
+.group{margin-bottom:18px}
+.group label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--muted);margin-bottom:7px}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 11px;background:#fbfaf7;font:14px var(--sans);color:var(--ink)}
+textarea{min-height:150px;resize:vertical;line-height:1.45}
+.row{display:flex;gap:9px;flex-wrap:wrap}
+.row>*{flex:1}
+.btn{border:0;border-radius:10px;padding:10px 13px;font-weight:700;cursor:pointer;font-family:var(--sans)}
+.primary{background:var(--green);color:#fff}
+.secondary{background:#e7eee9;color:var(--green)}
+.line{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.hint{font-size:11px;color:var(--muted);line-height:1.45;margin-top:6px}
+.status{font-size:12px;color:var(--green);margin-top:10px;line-height:1.4;min-height:1.2em}
+.desc-warn{margin-top:8px;padding:8px 10px;border-radius:10px;background:#fbf6ea;border:1px solid #e4d3a8;color:#6b5424;font-size:12px;line-height:1.45}
+.desc-warn ul{margin:0;padding-left:18px}
+.desc-warn li{margin:3px 0}
+.sheets{display:flex;flex-direction:column;align-items:center;gap:28px;transform-origin:top center}
+
+/* Signature page — same sizes, colours and frame as before. */
+.page{
+  width:794px;height:1123px;background:#fff;position:relative;overflow:hidden;
+  box-shadow:0 14px 36px rgba(0,0,0,.1);padding:50px 58px 58px;font-family:var(--serif);
+  flex-shrink:0;
+}
+.inner{position:relative;z-index:2;height:100%;min-height:0;display:flex;flex-direction:column}
+.head{text-align:center;margin-bottom:26px;flex-shrink:0}
+.brand-logo{max-height:64px;max-width:280px;display:block;margin:0 auto 10px;object-fit:contain;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.venue{font-size:22px;font-weight:700;letter-spacing:.06em}
+.title{font-size:31px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-top:6px}
+.date{font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-top:6px;color:var(--muted)}
+.rule{width:90px;height:2px;margin:14px auto;background:var(--gold)}
+.menu{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:14px;overflow:hidden}
+.dish{text-align:center;flex-shrink:0}
+.dish-name{font-size:17px;font-weight:700;letter-spacing:.07em;margin-bottom:4px}
+.dish-desc{
+  font-size:12.5px;line-height:1.5;color:#414b44;max-width:570px;margin:0 auto;
+  font-weight:400;font-variant:normal;letter-spacing:normal;
+}
+.page .dish>.dish-desc{
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;
+  overflow:hidden;max-height:calc(1.5em * 2);max-height:2lh;
+}
+.contains{font-size:11px;font-weight:700;margin-top:3px;color:#111;font-variant:normal}
+.diet{margin-top:3px}
+.sep{width:34px;height:1px;background:var(--gold);margin:10px auto 0;opacity:.7}
+.badge{display:inline-block;border:1px solid currentColor;border-radius:999px;padding:2px 7px;margin:0 3px;font-size:9px;letter-spacing:.04em;font-weight:700}
+.foot{text-align:center;font-size:10.5px;color:var(--muted);padding-top:12px;flex-shrink:0}
+.foot-date{display:block;letter-spacing:.12em;text-transform:uppercase;margin:0 0 8px}
+.way-line{line-height:1.35}
+.qr-block{margin-top:6px;text-align:center}
+.qr-block img{width:64px;height:64px;background:#fff;display:block;margin:0 auto}
+.qr-cap{font-size:7px;letter-spacing:.08em;text-transform:uppercase;margin:3px 0 0;font-weight:700;color:var(--ink);line-height:1.2}
+.placeholder{text-align:center;color:#8a918c;font-size:12.5px;line-height:1.5}
+
+.tpl-signature{background:#fffdf8}
+.tpl-signature:before{content:"";position:absolute;inset:18px;border:2px solid var(--gold);box-shadow:inset 0 0 0 5px #fffdf8,inset 0 0 0 6px #d9c58d;pointer-events:none}
+.tpl-signature .venue,.tpl-signature .title,.tpl-signature .dish-name{color:var(--green)}
+.tpl-signature .contains{color:#111}
+.tpl-signature .foot{color:#68756e}
+
+.tpl-ashram{background:#f8f5ec}
+.tpl-ashram:before,.tpl-ashram:after{content:"";position:absolute;left:0;right:0;height:12px;background:linear-gradient(90deg,var(--green) 0 68%,var(--gold) 68%)}
+.tpl-ashram:before{top:0}.tpl-ashram:after{bottom:0}
+.tpl-ashram .title{color:var(--green);font-size:29px}
+.tpl-ashram .dish-name{color:#294b39}
+.tpl-ashram .dish-desc{font-style:italic}
+.tpl-ashram .rule{background:linear-gradient(90deg,var(--green),var(--gold))}
+
+.tpl-botanical{background:#f5f8f2}
+.tpl-botanical:before{content:"❧";position:absolute;right:34px;top:25px;font-size:72px;color:#6f8d73;opacity:.13}
+.tpl-botanical:after{content:"";position:absolute;inset:20px;border:1.5px solid #6f8d73;pointer-events:none}
+.tpl-botanical .venue,.tpl-botanical .title,.tpl-botanical .dish-name{color:#3f6447}
+.tpl-botanical .rule,.tpl-botanical .sep{background:#6f8d73}
+.tpl-botanical .contains{color:#111}
+
+.tpl-heritage{background:#fffaf0}
+.tpl-heritage:before{content:"";position:absolute;inset:15px;border:5px double #a78338;pointer-events:none}
+.tpl-heritage .title{font-size:33px;color:#493b22}
+.tpl-heritage .venue{color:#98752f}
+.tpl-heritage .dish-name{color:#493b22}
+.tpl-heritage .contains{color:#111}
+
+.tpl-modern{background:#fff;padding:56px 68px}
+.tpl-modern .head{text-align:left;border-bottom:3px solid var(--green);padding-bottom:14px}
+.tpl-modern .venue{text-transform:uppercase;font-size:13px;letter-spacing:.17em;color:var(--green)}
+.tpl-modern .title{font-weight:400;letter-spacing:.18em;font-size:30px}
+.tpl-modern .date{text-align:left}
+.tpl-modern .rule{display:none}
+.tpl-modern .menu{justify-content:flex-start;padding-top:12px;gap:17px}
+.tpl-modern .dish{text-align:left;border-left:3px solid var(--gold);padding-left:14px}
+.tpl-modern .dish-name{color:var(--green);font-size:15px}
+.tpl-modern .dish-desc{margin:0;max-width:none}
+.tpl-modern .sep{display:none}
+.tpl-modern .foot{text-align:left;border-top:1px solid var(--line)}
+
+.tpl-retreat{background:#fcfcfa}
+.tpl-retreat .head{margin-bottom:35px}
+.tpl-retreat .venue{font-size:18px;color:#4b5b50}
+.tpl-retreat .title{font-size:28px;color:#25342b}
+.tpl-retreat .rule{width:48px;background:#819687}
+.tpl-retreat .menu{gap:18px}
+.tpl-retreat .dish-name{font-size:16px;color:#25342b}
+.tpl-retreat .dish-desc{font-style:normal;color:#5b625d}
+.tpl-retreat .sep{background:#b9c3bc;width:22px}
+.tpl-retreat .contains{color:#111}
+
+.page,.page .venue,.page .title,.page .date,.page .dish-name,.page .dish-desc,.page .contains,.page .badge,.page .foot,.page .way-line,.page .qr-cap,.page .placeholder{
+  font-family:var(--serif)!important;
+}
+.dish-desc,.contains,.badge{text-transform:none!important;font-variant:normal!important}
+.dish-desc{font-weight:400!important}
+.contains,.badge{font-weight:700!important}
+
+@media (max-width:860px){
+  .app{display:block;min-height:100dvh}
+  .editor{height:auto;border-right:0;border-bottom:1px solid var(--line)}
+  .preview{height:auto;min-height:70vh;padding:12px 8px 32px}
+  input,textarea,select{font-size:16px}
+  .btn{min-height:44px}
+}
+@media print{
+  @page{size:A4;margin:0}
+  html,body{margin:0;background:#fff}
+  .editor{display:none!important}
+  .app{display:block}
+  .preview{padding:0;height:auto;overflow:visible;display:block}
+  .sheets{transform:none!important;margin:0!important;gap:0!important;display:block}
+  .page{
+    box-shadow:none;margin:0;width:794px;height:1123px;
+    break-after:page;page-break-after:always;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact;
+  }
+  .page:last-child{break-after:auto;page-break-after:auto}
+  .brand-logo,.qr-block img{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
 </style>
 </head>
 <body>
 <div class="app">
-<section class="editor"><div class="brand">Vedanta Menu Creator <small style="font-size:11px;color:var(--muted);font-weight:600">v18</small></div><div class="sub">Professional A4 menu creator for The Vedanta Retreat Centre. Dish names are set in capitals. Descriptions keep the capitals you type. A menu that does not fit on one page continues on the next, with the header and footer repeated.</div>
-<div class="group"><label>Menu template</label><select id="template"><option value="signature">Vedanta Signature</option><option value="ashram">Ashram Elegant</option><option value="botanical">Sacred Botanical</option><option value="heritage">Heritage Gold</option><option value="modern">Modern Vedanta</option><option value="retreat">Retreat Minimal</option></select></div>
-<div class="group"><label>Venue / brand</label><input id="venue" value="THE VEDANTA RETREAT CENTRE"></div><div class="row"><div class="group"><label>Menu title</label><input id="title" value="DINNER MENU"></div><div class="group"><label>Date</label><input id="date" type="date"></div></div>
-<div class="group"><label>Paste menu</label><textarea id="paste" placeholder="Example:\nVEGETABLE LASAGNE\nRoasted vegetables, green lentils and Beyond mince layered with tomato sauce and béchamel.\nContains: Gluten and Dairy"></textarea><div class="hint">Use a blank line between dishes. Lines beginning with “Contains:” stay allergen lines and keep the capitals you type. Dish names are converted to capitals automatically.</div></div>
-<div class="row"><button class="btn primary" id="generate">Generate menu</button><button class="btn secondary" id="sample">Load Vedanta sample</button></div><div class="row" style="margin-top:9px"><button class="btn line" id="print">Print / Save PDF</button><button class="btn line" id="clear">Clear</button></div></section>
-<main class="preview" id="preview"><section class="page tpl-signature" id="page"><div class="inner"><header class="head"><img class="brand-logo" src="assets/vedanta-logo.png" alt="The Vedanta"><div class="venue" id="pvVenue"></div><div class="title" id="pvTitle"></div><div class="date" id="pvDate"></div><div class="rule"></div></header><div class="menu" id="menu"></div><footer class="foot"><div id="pvFootDate"></div>The Vedanta Way • Vegetarian cuisine prepared without onion, garlic, leeks, spring onions or chives<div class="qr-block"><img src="assets/qr-thevedanta.png" alt="QR to The Vedanta"><p>The Vedanta — thevedanta.org</p></div></footer></div></section></main></div>
+<section class="editor">
+  <div class="brand">Vedanta Menu Creator <small style="font-size:11px;color:var(--muted);font-weight:600">v19</small></div>
+  <div class="sub">Professional A4 menu creator for The Vedanta Retreat Centre. Dish names are set in capitals. Descriptions keep the capitals you type and show on two lines. A longer menu continues on the next page, with the header and footer repeated. Download PDF builds the file in this browser.</div>
+  <div class="group"><label>Menu template</label>
+    <select id="template">
+      <option value="signature">Vedanta Signature</option>
+      <option value="ashram">Ashram Elegant</option>
+      <option value="botanical">Sacred Botanical</option>
+      <option value="heritage">Heritage Gold</option>
+      <option value="modern">Modern Vedanta</option>
+      <option value="retreat">Retreat Minimal</option>
+    </select>
+  </div>
+  <div class="group"><label>Venue / brand</label><input id="venue" value="THE VEDANTA RETREAT CENTRE"></div>
+  <div class="row">
+    <div class="group"><label>Menu title</label><input id="title" value="DINNER MENU"></div>
+    <div class="group"><label>Date</label><input id="date" type="date"></div>
+  </div>
+  <div class="group">
+    <label>Paste menu</label>
+    <textarea id="paste" placeholder="Example:&#10;VEGETABLE LASAGNE&#10;Roasted vegetables, green lentils and Beyond mince layered with tomato sauce and béchamel.&#10;Contains: Gluten and Dairy"></textarea>
+    <div class="hint">Use a blank line between dishes. A line on its own is a section heading. Lines beginning with “Contains:” stay allergen lines and keep the capitals you type. Dish names are shown in capitals. Descriptions longer than two lines are marked below and cut only on the page.</div>
+    <div id="descWarn" class="desc-warn" hidden></div>
+  </div>
+  <div class="row">
+    <button class="btn primary" id="generate" type="button">Generate menu</button>
+    <button class="btn secondary" id="sample" type="button">Load Vedanta sample</button>
+  </div>
+  <div class="row" style="margin-top:9px">
+    <button class="btn primary" id="download" type="button">Download PDF</button>
+    <button class="btn line" id="print" type="button">Print</button>
+    <button class="btn line" id="clear" type="button">Clear</button>
+  </div>
+  <div class="status" id="status"></div>
+</section>
+<main class="preview" id="preview"><div class="sheets" id="sheets"></div></main>
+</div>
+<script src="vendor/fontkit.umd.min.js"></script>
+<script src="vendor/pdf-lib.min.js"></script>
 <script>
-const $=id=>document.getElementById(id),state={dishes:[]};
-const NO_TT='text-transform:none;font-variant:normal';
-const cleanSpace=s=>(s||'').replace(/\s+/g,' ').trim();
-function letterStats(s){let letters=0,upper=0,lower=0;for(const ch of String(s||'')){if(!/\p{L}/u.test(ch))continue;letters++;if(ch!==ch.toLowerCase()&&ch===ch.toUpperCase())upper++;else if(ch!==ch.toUpperCase()&&ch===ch.toLowerCase())lower++}return{letters,upper,lower}}
-function isAllCapsText(s){const t=cleanSpace(s);if(!t)return false;const{letters,upper,lower}=letterStats(t);if(letters<2||upper===0)return false;if(lower===0)return true;if(t===t.toUpperCase()&&t!==t.toLowerCase())return true;return upper/letters>=0.6}
-function toSentenceCase(s){
-  s=cleanSpace(s);if(!s)return'';
-  /* All-cap descriptions become a sentence. Mixed case keeps the capitals the user typed. */
-  if(isAllCapsText(s)) s=s.toLowerCase();
-  try{return s.replace(/(^|[.!?]\s+)(\p{L})/gu,(m,p,c)=>p+c.toUpperCase())}
-  catch(e){return s.replace(/(^|[.!?]\s+)([a-z])/g,(m,p,c)=>p+c.toUpperCase())}
+const $ = id => document.getElementById(id);
+const PAGE_W = 595.28;
+const PAGE_H = 841.89;
+const SAMPLE = `CREAM OF CAULIFLOWER & BROCCOLI SOUP
+A smooth cauliflower and broccoli soup finished with gentle seasoning.
+Contains: Dairy
+
+VEGETABLE BIRYANI RICE
+Fragrant basmati rice cooked with seasonal vegetables, aromatic spices and fresh herbs.
+Contains: None
+
+ASSORTED GREEN LEAVES & FRESH HERBS
+Fresh mixed leaves and herbs served with dressing on the side.
+Contains: Sulphur Dioxide
+
+NAAN BREADS
+Warm naan breads served for the table.
+Contains: Gluten and Dairy
+
+CHEESES & FRESH FRUIT
+A selection of cheeses accompanied by fresh seasonal fruit.
+Contains: Dairy`;
+
+let items = [];
+let fontBytesPromise = null;
+let renderToken = 0;
+
+function esc(s){
+  return String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
-function sentenceCase(s){return toSentenceCase(s)}
-function preserveContains(s){
-  const raw=cleanSpace(s);if(!raw)return'';
-  return raw.replace(/^(contains\s*:)\s*/i,(m,pref)=>pref.replace(/\s+/g,'')+' ');
+function clean(s){ return String(s ?? "").replace(/\s+/g, " ").trim(); }
+function isHeading(item){
+  return !clean(item.desc) && !clean(item.contains) && !(item.diet && item.diet.length);
 }
-function displayName(s){return cleanSpace(s).toUpperCase()}
-function prettyAllergens(s){return preserveContains(s)}
-function looksContains(s){return /^contains\s*:/i.test(cleanSpace(s))}
-function looksDiet(s){return /^(vegan|vegetarian|jain|ekadashi|gluten[- ]free|dairy[- ]free)$/i.test(cleanSpace(s))}
-function parse(text){
-  const blocks=text.replace(/\r/g,'').split(/\n\s*\n+/).map(b=>b.trim()).filter(Boolean),out=[];
+function parseMenu(text){
+  const blocks = String(text || "").replace(/\r/g, "").split(/\n\s*\n+/).map(b => b.trim()).filter(Boolean);
+  const out = [];
   for(const block of blocks){
-    const lines=block.split('\n').map(cleanSpace).filter(Boolean);
-    if(!lines.length)continue;
-    let name=lines.shift(),desc=[],contains='',diet=[];
-    for(const l of lines){
-      if(looksContains(l)) contains=preserveContains(l);
-      else if(looksDiet(l)) diet.push(cleanSpace(l));
-      else desc.push(l);
+    const lines = block.split("\n").map(clean).filter(Boolean);
+    if(!lines.length) continue;
+    const name = lines.shift();
+    const desc = [];
+    let contains = "";
+    const diet = [];
+    for(const line of lines){
+      if(/^contains\s*:/i.test(line)) contains = line;
+      else if(/^(vegan|vegetarian|jain|ekadashi|gluten[- ]free|dairy[- ]free)$/i.test(line)) diet.push(line);
+      else desc.push(line);
     }
-    out.push({name:displayName(name),desc:toSentenceCase(desc.join(' ')),contains,diet});
+    out.push({ name, desc: desc.join(" "), contains, diet });
   }
   return out;
 }
-function fmtDate(v){if(!v)return'';const d=new Date(v+'T12:00:00');return d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
-function esc(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
-function isHeading(d){return !cleanSpace(d.desc)&&!cleanSpace(d.contains)&&!(d.diet&&d.diet.length)}
-function dishHTML(d,showSep){
-  const diet=d.diet&&d.diet.length?`<div>${d.diet.map(x=>`<span class="badge" style="${NO_TT}">${esc(String(x).toLowerCase())}</span>`).join('')}</div>`:'';
-  return `<article class="dish" style="${NO_TT}"><div class="dish-name" style="${NO_TT}">${esc(displayName(d.name))}</div>${d.desc?`<div class="dish-desc" style="${NO_TT}">${esc(d.desc)}</div>`:''}${d.contains?`<div class="contains" style="${NO_TT}">${esc(d.contains)}</div>`:''}${diet}${showSep?'<div class="sep"></div>':''}</article>`;
+function fmtDate(value){
+  if(!value) return "";
+  const d = new Date(value + "T12:00:00");
+  if(Number.isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("en-GB", { weekday:"long", day:"numeric", month:"long", year:"numeric" });
 }
-function normalizeDishes(){
-  state.dishes=(state.dishes||[]).map(d=>({
-    name:displayName(d.name),
-    desc:toSentenceCase(d.desc),
-    contains:preserveContains(d.contains),
-    diet:(d.diet||[]).map(v=>String(v).toLowerCase())
-  }));
+function templateName(){ return $("template").value || "signature"; }
+
+async function ensureFonts(){
+  const family = '"TeX Gyre Pagella"';
+  if(!document.fonts || !document.fonts.load) throw new Error("This browser cannot load the menu font.");
+  await Promise.all([
+    document.fonts.load("400 16px " + family),
+    document.fonts.load("italic 400 16px " + family),
+    document.fonts.load("700 16px " + family),
+    document.fonts.load("italic 700 16px " + family)
+  ]);
+  await document.fonts.ready;
+  const loaded = [...document.fonts].some(face => /pagella/i.test(face.family) && face.status === "loaded");
+  if(!loaded) throw new Error("The menu font did not load, so nothing was sent to print or PDF.");
 }
-function saveState(){
-  try{localStorage.setItem('vedantaMenuCreator',JSON.stringify({template:$('template').value,venue:$('venue').value,title:$('title').value,date:$('date').value,paste:$('paste').value,dishes:state.dishes}))}catch(e){}
+
+function itemHTML(item, showSep){
+  const name = esc(clean(item.name).toUpperCase());
+  const desc = clean(item.desc) ? `<div class="dish-desc">${esc(item.desc)}</div>` : "";
+  const contains = clean(item.contains) ? `<div class="contains">${esc(item.contains)}</div>` : "";
+  const badges = (item.diet || []).map(d => `<span class="badge">${esc(d)}</span>`).join("");
+  const diet = badges ? `<div class="diet">${badges}</div>` : "";
+  const sep = showSep ? `<div class="sep"></div>` : "";
+  return `<article class="dish${isHeading(item) ? " is-heading" : ""}"><div class="dish-name">${name}</div>${desc}${contains}${diet}${sep}</article>`;
 }
-function makePage(level){
-  const page=document.createElement('section');
-  page.className='page tpl-'+($('template').value||'signature');
-  page.dataset.fit=String(level||0);
-  page.innerHTML=`<div class="inner"><header class="head"><img class="brand-logo" src="assets/vedanta-logo.png" alt="The Vedanta"><div class="venue"></div><div class="title"></div><div class="date"></div><div class="rule"></div></header><div class="menu"></div><footer class="foot"><div class="foot-date"></div>The Vedanta Way • Vegetarian cuisine prepared without onion, garlic, leeks, spring onions or chives<div class="qr-block"><img src="assets/qr-thevedanta.png" alt="QR to The Vedanta"><p>The Vedanta — thevedanta.org</p></div></footer></div></div>`;
-  const date=fmtDate($('date').value);
-  page.querySelector('.venue').textContent=$('venue').value||'THE VEDANTA RETREAT CENTRE';
-  page.querySelector('.title').textContent=displayName($('title').value||'MENU');
-  page.querySelector('.date').textContent=date;
-  page.querySelector('.foot-date').textContent=date;
+function makePage(){
+  const page = document.createElement("section");
+  page.className = "page tpl-" + templateName();
+  const date = fmtDate($("date").value);
+  page.innerHTML = `<div class="inner">
+    <header class="head">
+      <img class="brand-logo" src="assets/vedanta-logo.png" alt="The Vedanta">
+      <div class="venue"></div>
+      <div class="title"></div>
+      <div class="date"></div>
+      <div class="rule"></div>
+    </header>
+    <div class="menu"></div>
+    <footer class="foot">
+      <div class="foot-date"></div>
+      <div class="way-line">The Vedanta Way • Vegetarian cuisine prepared without onion, garlic, leeks, spring onions or chives</div>
+      <div class="qr-block"><img src="assets/qr-thevedanta.png" alt="QR to The Vedanta"><p class="qr-cap">The Vedanta — thevedanta.org</p></div>
+    </footer>
+  </div>`;
+  page.querySelector(".venue").textContent = $("venue").value || "THE VEDANTA RETREAT CENTRE";
+  page.querySelector(".title").textContent = clean($("title").value || "MENU");
+  page.querySelector(".date").textContent = date;
+  page.querySelector(".foot-date").textContent = date;
   return page;
 }
 function overflows(page){
-  if(page.scrollHeight>page.clientHeight+1) return true;
-  const foot=page.querySelector('.foot');
-  const last=page.querySelector('.menu')&&page.querySelector('.menu').lastElementChild;
-  if(!foot||!last) return false;
-  return last.getBoundingClientRect().bottom>foot.getBoundingClientRect().top-4;
+  const menu = page.querySelector(".menu");
+  const last = menu && menu.lastElementChild;
+  if(!last) return false;
+  const lastBottom = last.getBoundingClientRect().bottom;
+  const menuBottom = menu.getBoundingClientRect().bottom;
+  if(lastBottom > menuBottom + 1) return true;
+  const foot = page.querySelector(".foot");
+  return !!(foot && lastBottom > foot.getBoundingClientRect().top - 3);
 }
 function trimSep(menu){
-  const sep=menu.querySelector('.dish:last-child .sep');
+  const sep = menu.querySelector(".dish:last-child .sep");
   if(sep) sep.remove();
 }
-function fill(page, items){
-  const menu=page.querySelector('.menu');
-  menu.innerHTML='';
-  let n=0;
-  for(let i=0;i<items.length;i++){
-    menu.insertAdjacentHTML('beforeend', dishHTML(items[i], i<items.length-1));
+function fill(page, list){
+  const menu = page.querySelector(".menu");
+  menu.innerHTML = "";
+  let n = 0;
+  for(let i = 0; i < list.length; i++){
+    menu.insertAdjacentHTML("beforeend", itemHTML(list[i], i < list.length - 1));
     if(overflows(page)){
       menu.lastElementChild.remove();
       trimSep(menu);
@@ -138,89 +342,399 @@ function fill(page, items){
     }
     n++;
   }
-  if(n>1 && n<items.length && isHeading(items[n-1])){
-    const last=menu.querySelector('.dish:last-child');
-    if(last) last.remove();
+  if(n > 1 && n < list.length && isHeading(list[n - 1])){
+    menu.lastElementChild.remove();
     n--;
+    trimSep(menu);
   }
   trimSep(menu);
+  if(n < 1 && list.length){
+    menu.insertAdjacentHTML("beforeend", itemHTML(list[0], false));
+    page.classList.add("page-tall");
+    page.style.height = "auto";
+    page.style.minHeight = "1123px";
+    page.style.overflow = "visible";
+    menu.style.overflow = "visible";
+    n = 1;
+  }
+  page.dataset.dishes = String([...menu.querySelectorAll(".dish")].length);
   return n;
 }
-function layoutAt(level){
-  const host=$('preview');
-  host.innerHTML='';
-  const items=state.dishes||[];
+function layoutPages(){
+  const host = $("sheets");
+  host.style.transform = "none";
+  host.style.marginBottom = "0px";
+  host.innerHTML = "";
   if(!items.length){
-    const page=makePage(0);
+    const page = makePage();
     host.appendChild(page);
-    page.querySelector('.menu').innerHTML='<div class="dish-desc" style="text-align:center;color:#8a918c;text-transform:none">Paste a menu on the left and select “Generate menu”.</div>';
-    return 1;
+    page.querySelector(".menu").innerHTML = `<div class="placeholder">Paste a menu on the left and select “Generate menu”.</div>`;
+    page.dataset.dishes = "0";
+    return;
   }
-  let rest=items.slice(), pages=0, guard=0;
-  while(rest.length && guard++<40){
-    const page=makePage(level);
+  let rest = items.slice();
+  let guard = 0;
+  while(rest.length && guard++ < 60){
+    const page = makePage();
     host.appendChild(page);
-    pages++;
-    let n=fill(page, rest);
-    if(n<1){
-      page.querySelector('.menu').innerHTML=dishHTML(rest[0], false);
-      if(overflows(page)) page.classList.add('page-flow');
-      n=1;
-    }
-    rest=rest.slice(n);
+    const n = fill(page, rest);
+    rest = rest.slice(Math.max(1, n));
+    if(n < 1) break;
   }
-  return pages;
 }
-function applyDomCasing(){
-  const lock=el=>{if(!el)return;el.style.setProperty('text-transform','none','important');el.style.setProperty('font-variant','normal','important')};
-  document.querySelectorAll('#preview .dish-name').forEach(el=>{lock(el);el.textContent=displayName(el.textContent)});
-  document.querySelectorAll('#preview .dish-desc').forEach(el=>{lock(el);el.textContent=toSentenceCase(el.textContent)});
-  document.querySelectorAll('#preview .contains,#preview .badge').forEach(lock);
-}
-function renderPages(){
-  let bestLevel=0, bestCount=layoutAt(0);
-  for(const level of [1,2]){
-    const count=layoutAt(level);
-    if(count<bestCount){bestCount=count;bestLevel=level}
+function descriptionLineCount(text){
+  const raw = clean(text);
+  if(!raw) return 0;
+  const host = document.createElement("section");
+  host.className = "page tpl-" + templateName();
+  host.style.cssText = "position:absolute;left:-20000px;top:0;visibility:hidden;height:auto;overflow:visible";
+  const probe = document.createElement("div");
+  probe.className = "dish-desc";
+  probe.textContent = raw;
+  probe.style.setProperty("display", "block", "important");
+  probe.style.setProperty("-webkit-line-clamp", "unset", "important");
+  probe.style.setProperty("line-clamp", "unset", "important");
+  probe.style.setProperty("max-height", "none", "important");
+  probe.style.setProperty("overflow", "visible", "important");
+  host.appendChild(probe);
+  document.body.appendChild(host);
+  const cs = getComputedStyle(probe);
+  let width = parseFloat(cs.maxWidth);
+  if(!(width > 40) || width > 5000){
+    const pcs = getComputedStyle(host);
+    width = host.clientWidth - parseFloat(pcs.paddingLeft) - parseFloat(pcs.paddingRight);
   }
-  if(bestLevel!==2) layoutAt(bestLevel);
-  applyDomCasing();
-  saveState();
+  probe.style.width = width + "px";
+  const lh = parseFloat(getComputedStyle(probe).lineHeight) || 18;
+  const lines = probe.scrollHeight / lh;
+  host.remove();
+  return lines;
 }
-let renderToken=0;
+function showWarnings(){
+  const box = $("descWarn");
+  const typed = clean($("paste").value);
+  const list = (typed ? parseMenu($("paste").value) : items).filter(item => clean(item.desc) && descriptionLineCount(item.desc) > 2.15);
+  if(!list.length){ box.hidden = true; box.innerHTML = ""; return; }
+  box.hidden = false;
+  box.innerHTML = "<ul>" + list.map(item => `<li><strong>${esc(clean(item.name).toUpperCase())}</strong> — Description too long, will be cut to 2 lines</li>`).join("") + "</ul>";
+}
+function fitPreview(){
+  const sheets = $("sheets");
+  const preview = $("preview");
+  const page = sheets.querySelector(".page");
+  if(!page || !preview) return;
+  sheets.style.transform = "none";
+  sheets.style.marginBottom = "0px";
+  const scale = Math.min(1, (preview.clientWidth - 8) / page.offsetWidth);
+  if(scale < 0.995){
+    sheets.style.transform = `scale(${scale})`;
+    sheets.style.transformOrigin = "top center";
+    const layoutH = sheets.offsetHeight;
+    sheets.style.marginBottom = ((layoutH * scale) - layoutH) + "px";
+  }
+}
+function updateStatus(message){
+  const pages = $("sheets").querySelectorAll(".page").length;
+  const dishes = items.filter(item => !isHeading(item)).length;
+  const sections = items.filter(isHeading).length;
+  const base = items.length
+    ? `${dishes} dish${dishes === 1 ? "" : "es"}${sections ? ` · ${sections} section${sections === 1 ? "" : "s"}` : ""} · ${pages} page${pages === 1 ? "" : "s"}`
+    : "Paste a menu to begin.";
+  $("status").textContent = message ? `${base} ${message}` : base;
+}
 function render(){
-  normalizeDishes();
-  const token=++renderToken;
-  renderPages();
-  const imgs=[...document.querySelectorAll('#preview img')];
-  const imgWait=Promise.all(imgs.map(img=>img.complete?Promise.resolve():new Promise(res=>{img.onload=img.onerror=res})));
-  Promise.all([imgWait, ensureMenuFonts()]).then(()=>{if(token===renderToken) renderPages()});
+  const token = ++renderToken;
+  items = parseMenu($("paste").value);
+  return ensureFonts().then(() => {
+    if(token !== renderToken) return;
+    layoutPages();
+    showWarnings();
+    fitPreview();
+    updateStatus("");
+    saveState();
+  }).catch(err => {
+    $("status").textContent = err && err.message ? err.message : "The menu font did not load.";
+  });
 }
-function loadSaved(){
+function saveState(){
   try{
-    const x=JSON.parse(localStorage.getItem('vedantaMenuCreator')||'null');
-    if(!x)return;
-    $('template').value=x.template||'signature';
-    $('venue').value=x.venue||'THE VEDANTA RETREAT CENTRE';
-    $('title').value=x.title||'DINNER MENU';
-    $('date').value=x.date||'';
-    $('paste').value=x.paste||'';
-    state.dishes=x.dishes||[];
+    localStorage.setItem("vedantaMenuCreator", JSON.stringify({
+      template: $("template").value,
+      venue: $("venue").value,
+      title: $("title").value,
+      date: $("date").value,
+      paste: $("paste").value
+    }));
   }catch(e){}
 }
-function ensureMenuFonts(){try{if(!document.fonts||!document.fonts.load)return Promise.resolve();const family='"TeX Gyre Pagella"';return Promise.all([document.fonts.load('400 16px '+family),document.fonts.load('italic 400 16px '+family),document.fonts.load('700 16px '+family),document.fonts.load('italic 700 16px '+family)]).then(()=>document.fonts.ready).catch(()=>{})}catch(e){return Promise.resolve()}}
-async function printMenu(){normalizeDishes();await ensureMenuFonts();renderPages();window.print()}
-$('generate').onclick=()=>{state.dishes=parse($('paste').value);render()};
-$('sample').onclick=()=>{
-  $('paste').value=`CREAM OF CAULIFLOWER & BROCCOLI SOUP\nA smooth cauliflower and broccoli soup finished with gentle seasoning.\nContains: Dairy\n\nVEGETABLE BIRYANI RICE\nFragrant basmati rice cooked with seasonal vegetables, aromatic spices and fresh herbs.\nContains: None\n\nASSORTED GREEN LEAVES & FRESH HERBS\nFresh mixed leaves and herbs served with dressing on the side.\nContains: Sulphur Dioxide\n\nNAAN BREADS\nWarm naan breads served for the table.\nContains: Gluten and Dairy\n\nCHEESES & FRESH FRUIT\nA selection of cheeses accompanied by fresh seasonal fruit.\nContains: Dairy`;
-  state.dishes=parse($('paste').value);render();
+function loadState(){
+  try{
+    const saved = JSON.parse(localStorage.getItem("vedantaMenuCreator") || "null");
+    if(!saved) return;
+    if(saved.template) $("template").value = saved.template;
+    if(saved.venue) $("venue").value = saved.venue;
+    if(saved.title) $("title").value = saved.title;
+    if(saved.date) $("date").value = saved.date;
+    if(typeof saved.paste === "string") $("paste").value = saved.paste;
+  }catch(e){}
+}
+
+function cssRgb(value){
+  const match = String(value || "").match(/rgba?\(([^)]+)\)/);
+  if(!match) return null;
+  const parts = match[1].split(",").map(part => parseFloat(part));
+  if(parts.length > 3 && parts[3] === 0) return null;
+  return PDFLib.rgb((parts[0] || 0) / 255, (parts[1] || 0) / 255, (parts[2] || 0) / 255);
+}
+function pickFont(fonts, style){
+  const bold = parseInt(style.fontWeight, 10) >= 600 || style.fontWeight === "bold";
+  const italic = style.fontStyle === "italic";
+  if(bold && italic) return fonts.bolditalic;
+  if(bold) return fonts.bold;
+  if(italic) return fonts.italic;
+  return fonts.regular;
+}
+function shownText(el){
+  const text = el.textContent || "";
+  const transform = getComputedStyle(el).textTransform;
+  if(transform === "uppercase") return text.toUpperCase();
+  if(transform === "lowercase") return text.toLowerCase();
+  return text;
+}
+function visualLines(el){
+  const text = shownText(el);
+  const node = el.firstChild;
+  if(!node || node.nodeType !== Node.TEXT_NODE || !text.trim()) return [];
+  const box = el.getBoundingClientRect();
+  const range = document.createRange();
+  const lines = [];
+  let start = 0;
+  let top = null;
+  let bottom = null;
+  const push = end => {
+    const slice = text.slice(start, end).replace(/\s+/g, " ").trim();
+    if(slice && top != null && top < box.bottom - 0.5 && bottom > box.top + 0.5){
+      lines.push({ text: slice, top, bottom });
+    }
+  };
+  for(let i = 0; i <= node.textContent.length; i++){
+    if(i === node.textContent.length){ push(i); break; }
+    range.setStart(node, i);
+    range.setEnd(node, i + 1);
+    const rect = range.getClientRects()[0];
+    if(!rect || (rect.width === 0 && node.textContent[i] === " ")) continue;
+    if(top == null){ top = rect.top; bottom = rect.bottom; continue; }
+    if(rect.top > top + 1){
+      push(i);
+      start = i;
+      top = rect.top;
+      bottom = rect.bottom;
+    } else bottom = Math.max(bottom, rect.bottom);
+  }
+  return lines;
+}
+function loadFontBytes(){
+  if(!fontBytesPromise){
+    fontBytesPromise = (async () => {
+      const out = {};
+      for(const name of ["regular", "bold", "italic", "bolditalic"]){
+        const res = await fetch("fonts/texgyrepagella-" + name + ".ttf");
+        if(!res.ok) throw new Error("The menu font file is missing, so the PDF was not created.");
+        out[name] = new Uint8Array(await res.arrayBuffer());
+      }
+      return out;
+    })().catch(err => { fontBytesPromise = null; throw err; });
+  }
+  return fontBytesPromise;
+}
+function strokeRect(pdfPage, x, y, w, h, color, width){
+  pdfPage.drawRectangle({ x, y, width: w, height: h, borderColor: color, borderWidth: width });
+}
+async function paintPage(doc, pageEl, fonts, images){
+  const box = pageEl.getBoundingClientRect();
+  const S = PAGE_H / box.height;
+  const drawnW = box.width * S;
+  const xOff = (PAGE_W - drawnW) / 2;
+  const mapX = px => xOff + (px - box.left) * S;
+  const mapY = px => PAGE_H - (px - box.top) * S;
+  const pdfPage = doc.addPage([PAGE_W, PAGE_H]);
+  const bg = cssRgb(getComputedStyle(pageEl).backgroundColor) || PDFLib.rgb(1, 1, 1);
+  pdfPage.drawRectangle({ x: 0, y: 0, width: PAGE_W, height: PAGE_H, color: bg });
+
+  if(pageEl.classList.contains("tpl-signature")){
+    const gold = PDFLib.rgb(176 / 255, 138 / 255, 62 / 255);
+    const hair = PDFLib.rgb(217 / 255, 197 / 255, 141 / 255);
+    const outer = { x: mapX(box.left + 18), y: mapY(box.top + (box.height - 18)), w: (box.width - 36) * S, h: (box.height - 36) * S };
+    strokeRect(pdfPage, outer.x, outer.y, outer.w, outer.h, gold, 1.4);
+    const inner = { x: mapX(box.left + 24), y: mapY(box.top + (box.height - 24)), w: (box.width - 48) * S, h: (box.height - 48) * S };
+    strokeRect(pdfPage, inner.x, inner.y, inner.w, inner.h, hair, 0.7);
+  }
+
+  for(const el of pageEl.querySelectorAll(".rule, .sep")){
+    const rect = el.getBoundingClientRect();
+    if(rect.width < 0.5 || rect.height < 0.5 || getComputedStyle(el).display === "none") continue;
+    const color = cssRgb(getComputedStyle(el).backgroundColor);
+    if(!color) continue;
+    pdfPage.drawRectangle({
+      x: mapX(rect.left),
+      y: mapY(rect.bottom),
+      width: rect.width * S,
+      height: Math.max(0.4, rect.height * S),
+      color,
+      opacity: parseFloat(getComputedStyle(el).opacity) || 1
+    });
+  }
+
+  for(const img of pageEl.querySelectorAll("img")){
+    const rect = img.getBoundingClientRect();
+    if(rect.width < 2 || rect.height < 2) continue;
+    try{
+      if(!images.has(img.src)){
+        const res = await fetch(img.src);
+        const bytes = new Uint8Array(await res.arrayBuffer());
+        images.set(img.src, await doc.embedPng(bytes));
+      }
+      pdfPage.drawImage(images.get(img.src), {
+        x: mapX(rect.left),
+        y: mapY(rect.bottom),
+        width: rect.width * S,
+        height: rect.height * S
+      });
+    }catch(e){}
+  }
+
+  const textEls = pageEl.querySelectorAll(".venue,.title,.date,.dish-name,.dish-desc,.contains,.badge,.foot-date,.way-line,.qr-cap");
+  for(const el of textEls){
+    if(getComputedStyle(el).display === "none") continue;
+    const lines = visualLines(el);
+    if(!lines.length) continue;
+    const style = getComputedStyle(el);
+    const font = pickFont(fonts, style);
+    const size = parseFloat(style.fontSize) * S;
+    const color = cssRgb(style.color) || PDFLib.rgb(0, 0, 0);
+    const spacingPx = parseFloat(style.letterSpacing);
+    const charSpacing = Number.isFinite(spacingPx) ? spacingPx * S : 0;
+    const align = style.textAlign;
+    const metrics = document.createElement("canvas").getContext("2d");
+    metrics.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+    const measured = metrics.measureText("Hg");
+    const ascent = measured.fontBoundingBoxAscent || parseFloat(style.fontSize) * 0.8;
+    const descent = measured.fontBoundingBoxDescent || parseFloat(style.fontSize) * 0.2;
+    for(const line of lines){
+      const width = font.widthOfTextAtSize(line.text, size) + charSpacing * Math.max(0, line.text.length - 1);
+      const lh = Math.max(1, line.bottom - line.top);
+      const leading = Math.max(0, lh - (ascent + descent));
+      const baseline = line.top + leading / 2 + ascent;
+      let x;
+      if(align === "left" || align === "start") x = mapX(el.getBoundingClientRect().left);
+      else x = mapX(el.getBoundingClientRect().left + el.getBoundingClientRect().width / 2) - width / 2;
+      pdfPage.drawText(line.text, {
+        x, y: mapY(baseline), size, font, color,
+        charSpacing: charSpacing || undefined
+      });
+    }
+  }
+  return pdfPage;
+}
+async function buildPdf(){
+  if(!window.PDFLib) throw new Error("PDF tools did not load.");
+  await ensureFonts();
+  layoutPages();
+  const sheets = $("sheets");
+  sheets.style.transform = "none";
+  sheets.style.marginBottom = "0px";
+  await Promise.all([...sheets.querySelectorAll("img")].map(img => img.decode ? img.decode().catch(() => {}) : Promise.resolve()));
+  const bytes = await loadFontBytes();
+  const doc = await PDFLib.PDFDocument.create();
+  doc.registerFontkit(fontkit);
+  doc.setTitle(clean($("title").value || "Menu") + " — The Vedanta");
+  doc.setAuthor("Vedanta Menu Creator");
+  const fonts = {
+    regular: await doc.embedFont(bytes.regular, { subset: false }),
+    bold: await doc.embedFont(bytes.bold, { subset: false }),
+    italic: await doc.embedFont(bytes.italic, { subset: false }),
+    bolditalic: await doc.embedFont(bytes.bolditalic, { subset: false })
+  };
+  const images = new Map();
+  const pages = [...sheets.querySelectorAll(".page")];
+  for(const pageEl of pages) await paintPage(doc, pageEl, fonts, images);
+  const out = await doc.save();
+  fitPreview();
+  window.__lastPdf = out;
+  return out;
+}
+function saveBlob(bytes, filename){
+  const blob = new Blob([bytes], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+async function downloadPdf(){
+  $("status").textContent = "Building the PDF…";
+  try{
+    const bytes = await buildPdf();
+    const day = $("date").value || "menu";
+    saveBlob(bytes, "Vedanta-Menu-" + day + ".pdf");
+    updateStatus("PDF downloaded. The menu font is embedded in the file.");
+  }catch(err){
+    $("status").textContent = err && err.message ? err.message : "The PDF could not be created.";
+  }
+}
+async function printMenu(){
+  try{
+    await ensureFonts();
+    layoutPages();
+    showWarnings();
+    const sheets = $("sheets");
+    sheets.style.transform = "none";
+    sheets.style.marginBottom = "0px";
+    window.print();
+  }catch(err){
+    $("status").textContent = err && err.message ? err.message : "The menu font did not load, so nothing was printed.";
+  }
+}
+
+let pasteTimer = 0;
+$("generate").onclick = () => { render(); };
+$("sample").onclick = () => { $("paste").value = SAMPLE; render(); };
+$("download").onclick = () => { downloadPdf(); };
+$("print").onclick = () => { printMenu(); };
+$("clear").onclick = () => {
+  if(!confirm("Clear this menu?")) return;
+  $("paste").value = "";
+  render();
 };
-$('print').onclick=()=>{printMenu()};
-window.addEventListener('beforeprint',()=>{renderPages()});
-ensureMenuFonts();
-$('clear').onclick=()=>{if(confirm('Clear this menu?')){$('paste').value='';state.dishes=[];render()}};
-['template','venue','title','date'].forEach(id=>$(id).addEventListener('input',()=>{render()}));
-loadSaved();
-if(!$('date').value) $('date').value=new Date().toISOString().slice(0,10);
+$("paste").addEventListener("input", () => {
+  clearTimeout(pasteTimer);
+  pasteTimer = setTimeout(() => { render(); }, 250);
+});
+["template", "venue", "title", "date"].forEach(id => $(id).addEventListener("input", () => { render(); }));
+window.addEventListener("beforeprint", () => {
+  $("sheets").style.transform = "none";
+  $("sheets").style.marginBottom = "0px";
+});
+window.addEventListener("afterprint", fitPreview);
+window.addEventListener("resize", fitPreview);
+
+loadState();
+if(!$("date").value) $("date").value = new Date().toISOString().slice(0, 10);
 render();
-</script></body></html>
+
+if("serviceWorker" in navigator && location.protocol.startsWith("http")){
+  let hadController = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if(!hadController){ hadController = true; return; }
+    if(sessionStorage.getItem("vedantaSwReload") === "v19") return;
+    sessionStorage.setItem("vedantaSwReload", "v19");
+    location.reload();
+  });
+  navigator.serviceWorker.register("service-worker.js", { updateViaCache: "none" }).catch(() => {});
+}
+</script>
+</body>
+</html>

@@ -1,5 +1,5 @@
-const CACHE_NAME = "menu-creator-v18";
-const APP_BUILD = "v18";
+const CACHE_NAME = "menu-creator-v19";
+const APP_BUILD = "v19";
 const ASSETS = [
   "./index.html",
   "./vedanta-menu-creator.html",
@@ -15,7 +15,13 @@ const ASSETS = [
   "./fonts/texgyrepagella-regular.woff2",
   "./fonts/texgyrepagella-italic.woff2",
   "./fonts/texgyrepagella-bold.woff2",
-  "./fonts/texgyrepagella-bolditalic.woff2"
+  "./fonts/texgyrepagella-bolditalic.woff2",
+  "./fonts/texgyrepagella-regular.ttf",
+  "./fonts/texgyrepagella-italic.ttf",
+  "./fonts/texgyrepagella-bold.ttf",
+  "./fonts/texgyrepagella-bolditalic.ttf",
+  "./vendor/pdf-lib.min.js",
+  "./vendor/fontkit.umd.min.js"
 ];
 const NAV_TIMEOUT_MS = 4000;
 
@@ -43,6 +49,11 @@ self.addEventListener("message", (event) => {
 
 function isNavigation(request) {
   return request.mode === "navigate" || request.destination === "document";
+}
+
+function isHtmlPath(url) {
+  const path = url.pathname;
+  return path.endsWith(".html") || path.endsWith("/");
 }
 
 function isServiceWorkerScript(url) {
@@ -78,7 +89,10 @@ self.addEventListener("fetch", (event) => {
 });
 
 async function handleFetch(request, url) {
-  if (isNavigation(request)) {
+  // HTML is always network-first so a phone or PC does not keep an old page
+  // after this build. skipWaiting (install) and clients.claim (activate)
+  // make the new worker take over immediately.
+  if (isNavigation(request) || isHtmlPath(url)) {
     try {
       // Fetch by URL (not the navigation Request) so a reload cannot deadlock
       // against precache/install of the same document.

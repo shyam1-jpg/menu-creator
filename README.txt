@@ -30,7 +30,7 @@ HOW TO OPEN THE APP
   Option 1 (recommended): Double-click "Start Menu Creator.bat"
       This starts the local server and opens http://127.0.0.1:4002/
       Use this for Print / Save PDF so you are not on an old cached copy.
-      Confirm the header shows "v18" (build stamp).
+      Confirm the header shows "v19" (build stamp).
   Option 2: In this folder run  npm start  then open http://127.0.0.1:4002/
   Option 3: Double-click "index.html" (file://) — works for editing, but
       Chrome may keep an old installed PWA / cache. Close any "Menu Creator"
@@ -68,6 +68,12 @@ In the print dialog, choose your printer or "Save as PDF".
 
 You can also click "View as Ebook" for a flipbook-style preview, then
 use Save PDF from there.
+
+Vedanta Menu Creator (vedanta-menu-creator.html) has a "Download PDF"
+button. That file is built in the browser with the menu font embedded,
+so it does not use the print dialog. Print is still there. Dish
+descriptions show at most two lines; a note under the paste box names
+any description that will be cut. The words you typed are not changed.
 
 
 EXPORT TO WORD
