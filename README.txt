@@ -30,7 +30,7 @@ HOW TO OPEN THE APP
   Option 1 (recommended): Double-click "Start Menu Creator.bat"
       This starts the local server and opens http://127.0.0.1:4002/
       Use this for Print / Save PDF so you are not on an old cached copy.
-      Confirm the header shows "v19" (build stamp).
+      Confirm the header shows "v21" (build stamp).
   Option 2: In this folder run  npm start  then open http://127.0.0.1:4002/
   Option 3: Double-click "index.html" (file://) — works for editing, but
       Chrome may keep an old installed PWA / cache. Close any "Menu Creator"
@@ -74,6 +74,11 @@ button. That file is built in the browser with the menu font embedded,
 so it does not use the print dialog. Print is still there. Dish
 descriptions show at most two lines; a note under the paste box names
 any description that will be cut. The words you typed are not changed.
+The footer of every page shows both QR codes: Recipes
+(pureprasadkitchen.com) and The Vedanta (thevedanta.org).
+A dish name on its own line starts a new dish, even when the paste has
+no blank line. Dishes begin under the header. An older saved menu
+(including its date) still opens.
 
 
 EXPORT TO WORD
@@ -115,7 +120,8 @@ Each printed menu includes two QR codes:
   The Vedanta — https://www.thevedanta.org/
     Caption: "The Vedanta — thevedanta.org"
 
-Guests can scan either with a phone camera.
+Guests can scan either with a phone camera. The Vedanta Menu Creator
+footer uses the same two codes, labels, and captions.
 
 The Vedānta wordmark (eggplant serif on white) is built into every template
 (assets/vedanta-logo.png).

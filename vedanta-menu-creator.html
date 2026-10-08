@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Vedanta Menu Creator</title>
-<meta name="menu-creator-build" content="v19" />
+<meta name="menu-creator-build" content="v21" />
 <meta http-equiv="Cache-Control" content="no-store" />
 <link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-regular.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-bold.woff2" crossorigin />
@@ -53,12 +53,12 @@ textarea{min-height:150px;resize:vertical;line-height:1.45}
 }
 .inner{position:relative;z-index:2;height:100%;min-height:0;display:flex;flex-direction:column}
 .head{text-align:center;margin-bottom:26px;flex-shrink:0}
-.brand-logo{max-height:64px;max-width:280px;display:block;margin:0 auto 10px;object-fit:contain;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.brand-logo{height:64px;max-height:64px;max-width:280px;width:auto;display:block;margin:0 auto 10px;object-fit:contain;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .venue{font-size:22px;font-weight:700;letter-spacing:.06em}
 .title{font-size:31px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-top:6px}
 .date{font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-top:6px;color:var(--muted)}
 .rule{width:90px;height:2px;margin:14px auto;background:var(--gold)}
-.menu{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:14px;overflow:hidden}
+.menu{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:flex-start;gap:14px;overflow:hidden}
 .dish{text-align:center;flex-shrink:0}
 .dish-name{font-size:17px;font-weight:700;letter-spacing:.07em;margin-bottom:4px}
 .dish-desc{
@@ -76,9 +76,11 @@ textarea{min-height:150px;resize:vertical;line-height:1.45}
 .foot{text-align:center;font-size:10.5px;color:var(--muted);padding-top:12px;flex-shrink:0}
 .foot-date{display:block;letter-spacing:.12em;text-transform:uppercase;margin:0 0 8px}
 .way-line{line-height:1.35}
-.qr-block{margin-top:6px;text-align:center}
-.qr-block img{width:64px;height:64px;background:#fff;display:block;margin:0 auto}
-.qr-cap{font-size:7px;letter-spacing:.08em;text-transform:uppercase;margin:3px 0 0;font-weight:700;color:var(--ink);line-height:1.2}
+.qr-row{display:flex;justify-content:center;align-items:flex-start;gap:16px;margin-top:6px}
+.qr-item{text-align:center;max-width:148px}
+.qr-label,.foot .qr-label{font-size:7px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin:0 0 2px;color:var(--ink);line-height:1.2}
+.qr-item img{width:74px;height:74px;background:#fff;display:block;margin:0 auto}
+.qr-cap{font-size:7.5px;letter-spacing:.03em;text-transform:none;font-style:italic;font-weight:400;margin:2px 0 0;color:var(--muted);line-height:1.25}
 .placeholder{text-align:center;color:#8a918c;font-size:12.5px;line-height:1.5}
 
 .tpl-signature{background:#fffdf8}
@@ -133,7 +135,7 @@ textarea{min-height:150px;resize:vertical;line-height:1.45}
 .tpl-retreat .sep{background:#b9c3bc;width:22px}
 .tpl-retreat .contains{color:#111}
 
-.page,.page .venue,.page .title,.page .date,.page .dish-name,.page .dish-desc,.page .contains,.page .badge,.page .foot,.page .way-line,.page .qr-cap,.page .placeholder{
+.page,.page .venue,.page .title,.page .date,.page .dish-name,.page .dish-desc,.page .contains,.page .badge,.page .foot,.page .way-line,.page .qr-label,.page .qr-cap,.page .placeholder{
   font-family:var(--serif)!important;
 }
 .dish-desc,.contains,.badge{text-transform:none!important;font-variant:normal!important}
@@ -160,14 +162,14 @@ textarea{min-height:150px;resize:vertical;line-height:1.45}
     -webkit-print-color-adjust:exact;print-color-adjust:exact;
   }
   .page:last-child{break-after:auto;page-break-after:auto}
-  .brand-logo,.qr-block img{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .brand-logo,.qr-item img{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
 </head>
 <body>
 <div class="app">
 <section class="editor">
-  <div class="brand">Vedanta Menu Creator <small style="font-size:11px;color:var(--muted);font-weight:600">v19</small></div>
+  <div class="brand">Vedanta Menu Creator <small style="font-size:11px;color:var(--muted);font-weight:600">v21</small></div>
   <div class="sub">Professional A4 menu creator for The Vedanta Retreat Centre. Dish names are set in capitals. Descriptions keep the capitals you type and show on two lines. A longer menu continues on the next page, with the header and footer repeated. Download PDF builds the file in this browser.</div>
   <div class="group"><label>Menu template</label>
     <select id="template">
@@ -187,7 +189,7 @@ textarea{min-height:150px;resize:vertical;line-height:1.45}
   <div class="group">
     <label>Paste menu</label>
     <textarea id="paste" placeholder="Example:&#10;VEGETABLE LASAGNE&#10;Roasted vegetables, green lentils and Beyond mince layered with tomato sauce and béchamel.&#10;Contains: Gluten and Dairy"></textarea>
-    <div class="hint">Use a blank line between dishes. A line on its own is a section heading. Lines beginning with “Contains:” stay allergen lines and keep the capitals you type. Dish names are shown in capitals. Descriptions longer than two lines are marked below and cut only on the page.</div>
+    <div class="hint">A blank line between dishes is clearest. A dish name on the next line also starts a new dish, including Title Case names and names with &amp; or -. Lines beginning with “Contains:” stay allergen lines and keep the capitals you type. Dish names are shown in capitals. Descriptions longer than two lines are marked below and cut only on the page.</div>
     <div id="descWarn" class="desc-warn" hidden></div>
   </div>
   <div class="row">
@@ -203,10 +205,12 @@ textarea{min-height:150px;resize:vertical;line-height:1.45}
 </section>
 <main class="preview" id="preview"><div class="sheets" id="sheets"></div></main>
 </div>
+<script src="vedanta-parse.js"></script>
 <script src="vendor/fontkit.umd.min.js"></script>
 <script src="vendor/pdf-lib.min.js"></script>
 <script>
 const $ = id => document.getElementById(id);
+const parseMenu = VedantaParse.parseMenu;
 const PAGE_W = 595.28;
 const PAGE_H = 841.89;
 const SAMPLE = `CREAM OF CAULIFLOWER & BROCCOLI SOUP
@@ -239,25 +243,6 @@ function esc(s){
 function clean(s){ return String(s ?? "").replace(/\s+/g, " ").trim(); }
 function isHeading(item){
   return !clean(item.desc) && !clean(item.contains) && !(item.diet && item.diet.length);
-}
-function parseMenu(text){
-  const blocks = String(text || "").replace(/\r/g, "").split(/\n\s*\n+/).map(b => b.trim()).filter(Boolean);
-  const out = [];
-  for(const block of blocks){
-    const lines = block.split("\n").map(clean).filter(Boolean);
-    if(!lines.length) continue;
-    const name = lines.shift();
-    const desc = [];
-    let contains = "";
-    const diet = [];
-    for(const line of lines){
-      if(/^contains\s*:/i.test(line)) contains = line;
-      else if(/^(vegan|vegetarian|jain|ekadashi|gluten[- ]free|dairy[- ]free)$/i.test(line)) diet.push(line);
-      else desc.push(line);
-    }
-    out.push({ name, desc: desc.join(" "), contains, diet });
-  }
-  return out;
 }
 function fmtDate(value){
   if(!value) return "";
@@ -306,7 +291,18 @@ function makePage(){
     <footer class="foot">
       <div class="foot-date"></div>
       <div class="way-line">The Vedanta Way • Vegetarian cuisine prepared without onion, garlic, leeks, spring onions or chives</div>
-      <div class="qr-block"><img src="assets/qr-thevedanta.png" alt="QR to The Vedanta"><p class="qr-cap">The Vedanta — thevedanta.org</p></div>
+      <div class="qr-row">
+        <div class="qr-item">
+          <div class="qr-label">Recipes</div>
+          <img src="assets/qr-recipes.png" width="74" height="74" alt="Recipe QR Code">
+          <p class="qr-cap">Scan the QR code — Recipe by Shyam Prasad, Head Chef</p>
+        </div>
+        <div class="qr-item">
+          <div class="qr-label">The Vedanta</div>
+          <img src="assets/qr-thevedanta.png" width="74" height="74" alt="The Vedanta QR Code">
+          <p class="qr-cap">The Vedanta — thevedanta.org</p>
+        </div>
+      </div>
     </footer>
   </div>`;
   page.querySelector(".venue").textContent = $("venue").value || "THE VEDANTA RETREAT CENTRE";
@@ -321,9 +317,9 @@ function overflows(page){
   if(!last) return false;
   const lastBottom = last.getBoundingClientRect().bottom;
   const menuBottom = menu.getBoundingClientRect().bottom;
-  if(lastBottom > menuBottom + 1) return true;
+  if(lastBottom > menuBottom - 2) return true;
   const foot = page.querySelector(".foot");
-  return !!(foot && lastBottom > foot.getBoundingClientRect().top - 3);
+  return !!(foot && lastBottom > foot.getBoundingClientRect().top - 10);
 }
 function trimSep(menu){
   const sep = menu.querySelector(".dish:last-child .sep");
@@ -358,7 +354,25 @@ function fill(page, list){
     n = 1;
   }
   page.dataset.dishes = String([...menu.querySelectorAll(".dish")].length);
+  alignMenu(page);
   return n;
+}
+function alignMenu(page){
+  const menu = page.querySelector(".menu");
+  if(!menu || page.classList.contains("page-tall")) return;
+  const dishes = [...menu.querySelectorAll(":scope > .dish")];
+  menu.style.justifyContent = "flex-start";
+  if(dishes.length < 3) return;
+  const gap = parseFloat(getComputedStyle(menu).rowGap) || 0;
+  const used = dishes.reduce((sum, el) => sum + el.offsetHeight, 0) + gap * (dishes.length - 1);
+  const room = menu.clientHeight;
+  if(!(room > 0) || used / room < 0.72) return;
+  menu.style.justifyContent = "space-evenly";
+  const foot = page.querySelector(".foot");
+  const last = dishes[dishes.length - 1];
+  if(foot && last.getBoundingClientRect().bottom > foot.getBoundingClientRect().top - 12){
+    menu.style.justifyContent = "flex-start";
+  }
 }
 function layoutPages(){
   const host = $("sheets");
@@ -470,12 +484,13 @@ function saveState(){
 function loadState(){
   try{
     const saved = JSON.parse(localStorage.getItem("vedantaMenuCreator") || "null");
-    if(!saved) return;
-    if(saved.template) $("template").value = saved.template;
-    if(saved.venue) $("venue").value = saved.venue;
-    if(saved.title) $("title").value = saved.title;
-    if(saved.date) $("date").value = saved.date;
-    if(typeof saved.paste === "string") $("paste").value = saved.paste;
+    const next = VedantaParse.migrateSaved(saved);
+    if(!next) return;
+    if(next.template) $("template").value = next.template;
+    if(next.venue) $("venue").value = next.venue;
+    if(next.title) $("title").value = next.title;
+    if(next.date) $("date").value = next.date;
+    if(typeof next.paste === "string") $("paste").value = next.paste;
   }catch(e){}
 }
 
@@ -603,7 +618,7 @@ async function paintPage(doc, pageEl, fonts, images){
     }catch(e){}
   }
 
-  const textEls = pageEl.querySelectorAll(".venue,.title,.date,.dish-name,.dish-desc,.contains,.badge,.foot-date,.way-line,.qr-cap");
+  const textEls = pageEl.querySelectorAll(".venue,.title,.date,.dish-name,.dish-desc,.contains,.badge,.foot-date,.way-line,.qr-label,.qr-cap");
   for(const el of textEls){
     if(getComputedStyle(el).display === "none") continue;
     const lines = visualLines(el);
@@ -713,7 +728,10 @@ $("paste").addEventListener("input", () => {
   clearTimeout(pasteTimer);
   pasteTimer = setTimeout(() => { render(); }, 250);
 });
-["template", "venue", "title", "date"].forEach(id => $(id).addEventListener("input", () => { render(); }));
+["template", "venue", "title", "date"].forEach(id => {
+  $(id).addEventListener("input", () => { render(); });
+  $(id).addEventListener("change", () => { render(); });
+});
 window.addEventListener("beforeprint", () => {
   $("sheets").style.transform = "none";
   $("sheets").style.marginBottom = "0px";
@@ -729,8 +747,8 @@ if("serviceWorker" in navigator && location.protocol.startsWith("http")){
   let hadController = !!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener("controllerchange", () => {
     if(!hadController){ hadController = true; return; }
-    if(sessionStorage.getItem("vedantaSwReload") === "v19") return;
-    sessionStorage.setItem("vedantaSwReload", "v19");
+    if(sessionStorage.getItem("vedantaSwReload") === "v21") return;
+    sessionStorage.setItem("vedantaSwReload", "v21");
     location.reload();
   });
   navigator.serviceWorker.register("service-worker.js", { updateViaCache: "none" }).catch(() => {});
