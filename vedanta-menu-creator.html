@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Vedanta Menu Creator</title>
-<meta name="menu-creator-build" content="v19" />
+<meta name="menu-creator-build" content="v20" />
 <meta http-equiv="Cache-Control" content="no-store" />
 <link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-regular.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-bold.woff2" crossorigin />
@@ -76,9 +76,11 @@ textarea{min-height:150px;resize:vertical;line-height:1.45}
 .foot{text-align:center;font-size:10.5px;color:var(--muted);padding-top:12px;flex-shrink:0}
 .foot-date{display:block;letter-spacing:.12em;text-transform:uppercase;margin:0 0 8px}
 .way-line{line-height:1.35}
-.qr-block{margin-top:6px;text-align:center}
-.qr-block img{width:64px;height:64px;background:#fff;display:block;margin:0 auto}
-.qr-cap{font-size:7px;letter-spacing:.08em;text-transform:uppercase;margin:3px 0 0;font-weight:700;color:var(--ink);line-height:1.2}
+.qr-row{display:flex;justify-content:center;align-items:flex-start;gap:16px;margin-top:6px}
+.qr-item{text-align:center;max-width:148px}
+.qr-label,.foot .qr-label{font-size:7px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;margin:0 0 2px;color:var(--ink);line-height:1.2}
+.qr-item img{width:74px;height:74px;background:#fff;display:block;margin:0 auto}
+.qr-cap{font-size:7.5px;letter-spacing:.03em;text-transform:none;font-style:italic;font-weight:400;margin:2px 0 0;color:var(--muted);line-height:1.25}
 .placeholder{text-align:center;color:#8a918c;font-size:12.5px;line-height:1.5}
 
 .tpl-signature{background:#fffdf8}
@@ -133,7 +135,7 @@ textarea{min-height:150px;resize:vertical;line-height:1.45}
 .tpl-retreat .sep{background:#b9c3bc;width:22px}
 .tpl-retreat .contains{color:#111}
 
-.page,.page .venue,.page .title,.page .date,.page .dish-name,.page .dish-desc,.page .contains,.page .badge,.page .foot,.page .way-line,.page .qr-cap,.page .placeholder{
+.page,.page .venue,.page .title,.page .date,.page .dish-name,.page .dish-desc,.page .contains,.page .badge,.page .foot,.page .way-line,.page .qr-label,.page .qr-cap,.page .placeholder{
   font-family:var(--serif)!important;
 }
 .dish-desc,.contains,.badge{text-transform:none!important;font-variant:normal!important}
@@ -160,14 +162,14 @@ textarea{min-height:150px;resize:vertical;line-height:1.45}
     -webkit-print-color-adjust:exact;print-color-adjust:exact;
   }
   .page:last-child{break-after:auto;page-break-after:auto}
-  .brand-logo,.qr-block img{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .brand-logo,.qr-item img{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
 </head>
 <body>
 <div class="app">
 <section class="editor">
-  <div class="brand">Vedanta Menu Creator <small style="font-size:11px;color:var(--muted);font-weight:600">v19</small></div>
+  <div class="brand">Vedanta Menu Creator <small style="font-size:11px;color:var(--muted);font-weight:600">v20</small></div>
   <div class="sub">Professional A4 menu creator for The Vedanta Retreat Centre. Dish names are set in capitals. Descriptions keep the capitals you type and show on two lines. A longer menu continues on the next page, with the header and footer repeated. Download PDF builds the file in this browser.</div>
   <div class="group"><label>Menu template</label>
     <select id="template">
@@ -306,7 +308,18 @@ function makePage(){
     <footer class="foot">
       <div class="foot-date"></div>
       <div class="way-line">The Vedanta Way • Vegetarian cuisine prepared without onion, garlic, leeks, spring onions or chives</div>
-      <div class="qr-block"><img src="assets/qr-thevedanta.png" alt="QR to The Vedanta"><p class="qr-cap">The Vedanta — thevedanta.org</p></div>
+      <div class="qr-row">
+        <div class="qr-item">
+          <div class="qr-label">Recipes</div>
+          <img src="assets/qr-recipes.png" width="74" height="74" alt="Recipe QR Code">
+          <p class="qr-cap">Scan the QR code — Recipe by Shyam Prasad, Head Chef</p>
+        </div>
+        <div class="qr-item">
+          <div class="qr-label">The Vedanta</div>
+          <img src="assets/qr-thevedanta.png" width="74" height="74" alt="The Vedanta QR Code">
+          <p class="qr-cap">The Vedanta — thevedanta.org</p>
+        </div>
+      </div>
     </footer>
   </div>`;
   page.querySelector(".venue").textContent = $("venue").value || "THE VEDANTA RETREAT CENTRE";
@@ -603,7 +616,7 @@ async function paintPage(doc, pageEl, fonts, images){
     }catch(e){}
   }
 
-  const textEls = pageEl.querySelectorAll(".venue,.title,.date,.dish-name,.dish-desc,.contains,.badge,.foot-date,.way-line,.qr-cap");
+  const textEls = pageEl.querySelectorAll(".venue,.title,.date,.dish-name,.dish-desc,.contains,.badge,.foot-date,.way-line,.qr-label,.qr-cap");
   for(const el of textEls){
     if(getComputedStyle(el).display === "none") continue;
     const lines = visualLines(el);
@@ -729,8 +742,8 @@ if("serviceWorker" in navigator && location.protocol.startsWith("http")){
   let hadController = !!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener("controllerchange", () => {
     if(!hadController){ hadController = true; return; }
-    if(sessionStorage.getItem("vedantaSwReload") === "v19") return;
-    sessionStorage.setItem("vedantaSwReload", "v19");
+    if(sessionStorage.getItem("vedantaSwReload") === "v20") return;
+    sessionStorage.setItem("vedantaSwReload", "v20");
     location.reload();
   });
   navigator.serviceWorker.register("service-worker.js", { updateViaCache: "none" }).catch(() => {});

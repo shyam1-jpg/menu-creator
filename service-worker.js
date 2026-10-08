@@ -1,5 +1,5 @@
-const CACHE_NAME = "menu-creator-v19";
-const APP_BUILD = "v19";
+const CACHE_NAME = "menu-creator-v20";
+const APP_BUILD = "v20";
 const ASSETS = [
   "./index.html",
   "./vedanta-menu-creator.html",
@@ -12,6 +12,7 @@ const ASSETS = [
   "./icons/icon-512.svg",
   "./assets/vedanta-logo.png",
   "./assets/qr-thevedanta.png",
+  "./assets/qr-recipes.png",
   "./fonts/texgyrepagella-regular.woff2",
   "./fonts/texgyrepagella-italic.woff2",
   "./fonts/texgyrepagella-bold.woff2",
