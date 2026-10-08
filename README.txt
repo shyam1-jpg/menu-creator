@@ -30,7 +30,7 @@ HOW TO OPEN THE APP
   Option 1 (recommended): Double-click "Start Menu Creator.bat"
       This starts the local server and opens http://127.0.0.1:4002/
       Use this for Print / Save PDF so you are not on an old cached copy.
-      Confirm the header shows "v20" (build stamp).
+      Confirm the header shows "v21" (build stamp).
   Option 2: In this folder run  npm start  then open http://127.0.0.1:4002/
   Option 3: Double-click "index.html" (file://) — works for editing, but
       Chrome may keep an old installed PWA / cache. Close any "Menu Creator"
@@ -76,6 +76,9 @@ descriptions show at most two lines; a note under the paste box names
 any description that will be cut. The words you typed are not changed.
 The footer of every page shows both QR codes: Recipes
 (pureprasadkitchen.com) and The Vedanta (thevedanta.org).
+A dish name on its own line starts a new dish, even when the paste has
+no blank line. Dishes begin under the header. An older saved menu
+(including its date) still opens.
 
 
 EXPORT TO WORD

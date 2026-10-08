@@ -12,6 +12,7 @@ const OUT = path.join(ROOT, '_site');
 const FILES = [
   'index.html',
   'vedanta-menu-creator.html',
+  'vedanta-parse.js',
   'install.html',
   'manifest.json',
   'service-worker.js',
