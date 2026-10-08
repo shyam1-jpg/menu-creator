@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Vedanta Menu Creator</title>
-<meta name="menu-creator-build" content="v21" />
+<meta name="menu-creator-build" content="v22" />
 <meta http-equiv="Cache-Control" content="no-store" />
 <link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-regular.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-bold.woff2" crossorigin />
@@ -169,7 +169,7 @@ textarea{min-height:150px;resize:vertical;line-height:1.45}
 <body>
 <div class="app">
 <section class="editor">
-  <div class="brand">Vedanta Menu Creator <small style="font-size:11px;color:var(--muted);font-weight:600">v21</small></div>
+  <div class="brand">Vedanta Menu Creator <small style="font-size:11px;color:var(--muted);font-weight:600">v22</small></div>
   <div class="sub">Professional A4 menu creator for The Vedanta Retreat Centre. Dish names are set in capitals. Descriptions keep the capitals you type and show on two lines. A longer menu continues on the next page, with the header and footer repeated. Download PDF builds the file in this browser.</div>
   <div class="group"><label>Menu template</label>
     <select id="template">
@@ -747,8 +747,8 @@ if("serviceWorker" in navigator && location.protocol.startsWith("http")){
   let hadController = !!navigator.serviceWorker.controller;
   navigator.serviceWorker.addEventListener("controllerchange", () => {
     if(!hadController){ hadController = true; return; }
-    if(sessionStorage.getItem("vedantaSwReload") === "v21") return;
-    sessionStorage.setItem("vedantaSwReload", "v21");
+    if(sessionStorage.getItem("vedantaSwReload") === "v22") return;
+    sessionStorage.setItem("vedantaSwReload", "v22");
     location.reload();
   });
   navigator.serviceWorker.register("service-worker.js", { updateViaCache: "none" }).catch(() => {});
