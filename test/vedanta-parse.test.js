@@ -7,6 +7,8 @@ const { parseMenu, migrateSaved } = require("../vedanta-parse.js");
 
 const pastePath = path.join(__dirname, "fixtures", "paste.txt");
 const PASTE = fs.readFileSync(pastePath, "utf8");
+const realPath = path.join(__dirname, "fixtures", "paste-2026-10-08.txt");
+const REAL = fs.readFileSync(realPath, "utf8");
 
 function clean(s) {
   return String(s || "").replace(/\s+/g, " ").trim();
@@ -33,6 +35,15 @@ function parseV18(text) {
 
 function names(items) {
   return items.map(item => item.name.toUpperCase());
+}
+function isSection(item) {
+  return !clean(item.desc) && !clean(item.contains) && !(item.diet && item.diet.length);
+}
+function tally(label, items) {
+  const sections = items.filter(isSection);
+  const dishes = items.length - sections.length;
+  console.log(label + ": " + dishes + " dishes, " + sections.length + " sections");
+  return { dishes, sections: sections.length };
 }
 
 const soup = [
@@ -161,4 +172,34 @@ const soup = [
   assert.strictEqual(migrateSaved({ date: "2026-10-08", paste: soup }).paste, soup);
 }
 
-console.log("vedanta-parse regression tests passed", names(parseMenu(PASTE)).length, "paste items");
+{
+  const items = parseMenu(REAL);
+  const counts = tally("real paste 2026-10-08", items);
+  assert.strictEqual(counts.dishes, 22);
+  assert.strictEqual(counts.sections, 1);
+  assert.deepStrictEqual(items.filter(isSection).map(item => item.name), ["Friday – Indian Dinner"]);
+  const byName = Object.fromEntries(items.map(item => [item.name, item]));
+  assert.strictEqual(byName["Dal Makhani"].contains, "Contains: dairy.");
+  assert.ok(!byName["Dal Makhani"].desc.toLowerCase().includes("zafrani"));
+  assert.strictEqual(byName["Zafrani polau"].contains, "Contains: nuts and dairy if finished with ghee.");
+  assert.ok(byName["Zafrani polau"].desc.startsWith("Fragrant basmati rice"));
+  const jasmine = byName["Fragrant Jasmine Rice"];
+  assert.ok(jasmine.desc.startsWith("Light, fluffy jasmine rice"));
+  assert.ok(!jasmine.desc.includes("Coconut Chia"));
+  const chia = byName["Coconut Chia Pudding with Fruit Compote, Fresh Strawberries and Roasted Coconut Chips"];
+  assert.ok(chia.desc.startsWith("Silky coconut chia pudding"));
+  assert.strictEqual(byName["Friday – Indian Dinner"].desc, "");
+  assert.ok(byName["Vegetable Pakora with Mint Chutney"].desc.startsWith("Crisp golden fritters"));
+  const again = parseMenu(REAL.replace(/\n/g, "\r\n").replace("Zafrani polau ", "Zafrani polau\u00a0"));
+  assert.strictEqual(tally("real paste crlf and nbsp", again).dishes, 22);
+  assert.strictEqual(again.filter(isSection).length, 1);
+  assert.ok(again.some(item => item.name === "Zafrani polau" && item.contains === "Contains: nuts and dairy if finished with ghee."));
+}
+
+tally("blank-line paste.txt", parseMenu(PASTE));
+tally("soup and aubergine", parseMenu(soup));
+tally("contains before description", parseMenu(
+  "Sweetcorn & Lemongrass Soup\nContains: dairy\nA delicate, velvety sweetcorn soup infused with fragrant lemongrass.\nMiso-Maple Glazed Aubergine\nContains: soya and nuts.\nTender roasted aubergine glazed with savoury miso."
+));
+
+console.log("vedanta-parse regression tests passed");
