@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Kitchen Hub — run your kitchen from one simple file</title>
+<style>
+:root{--g:#1f5f3a;--acc:#ffc94a;--ink:#17211b}*{box-sizing:border-box}body{margin:0;font-family:Segoe UI,Helvetica,Arial,sans-serif;color:var(--ink);line-height:1.55}
+.w{max-width:1100px;margin:0 auto;padding:0 24px}.ph{background:#fff3c4;border:1px dashed #c99a00;padding:0 6px;border-radius:4px;color:#7a5c00;font-weight:600}
+header{background:linear-gradient(135deg,#123d26,#2f8a52);color:#fff;padding:22px 0 80px}nav{display:flex;justify-content:space-between;align-items:center}nav b{font-size:21px}nav a{color:#fff;opacity:.9;margin-left:18px;text-decoration:none}
+.hero{display:grid;grid-template-columns:1.15fr 1fr;gap:44px;align-items:center;margin-top:54px}h1{font-size:46px;line-height:1.08;margin:0 0 16px}.hero p{font-size:19px}
+.btn{display:inline-block;background:var(--acc);color:#17211b;padding:15px 26px;border-radius:10px;font-weight:800;text-decoration:none;margin:10px 10px 0 0}.btn.o{background:none;border:2px solid #fff;color:#fff}
+.small{font-size:14px;opacity:.85}.mock{background:#fff;color:var(--ink);border-radius:14px;box-shadow:0 24px 60px #0005;overflow:hidden}.mock .bar{background:#1d6f42;color:#fff;padding:9px 14px;font-size:13px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px}.tile{border-radius:10px;padding:14px;font-weight:700;font-size:14px}.tile span{display:block;font-size:26px}
+section{padding:64px 0}h2{font-size:32px;margin:0 0 10px;text-align:center}.sub{text-align:center;color:#55625a;margin-bottom:36px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.card{border:1px solid #e3ebe5;border-radius:14px;padding:22px;background:#fff}.card h3{margin:6px 0}.ic{font-size:30px}
+.alt{background:#f3f8f4}.seg{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}.seg div{background:#fff;border-radius:12px;padding:16px;text-align:center;font-weight:700;border:1px solid #dfe9e2}.seg i{display:block;font-style:normal;font-size:28px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:s}.steps div{padding:22px;border-radius:14px;background:#fff;border:1px solid #e3ebe5}.steps div:before{counter-increment:s;content:counter(s);display:inline-block;background:var(--g);color:#fff;border-radius:50%;width:34px;height:34px;text-align:center;line-height:34px;font-weight:800;margin-bottom:8px}
+.price{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.price .card{text-align:center}.price .best{border:3px solid var(--g)}.amt{font-size:34px;font-weight:800;margin:8px 0}
+.cta{background:var(--g);color:#fff;text-align:center;border-radius:20px;padding:46px}.faq details{border-bottom:1px solid #e3ebe5;padding:14px 0}.faq summary{font-weight:700;cursor:pointer}
+footer{background:#0f2a1a;color:#cfe0d4;padding:30px 0;font-size:14px}
+@media(max-width:800px){.hero,.grid3,.steps,.price{grid-template-columns:1fr}.seg{grid-template-columns:repeat(2,1fr)}h1{font-size:34px}}
+</style></head><body>
+<header><div class="w"><nav><b>🍃 The Kitchen Hub</b><div><a href="#features">Features</a><a href="#new">Labels & diet</a><a href="#who">Who it's for</a><a href="#pricing">Pricing</a><a href="#trial">Free trial</a></div></nav>
+<div class="hero"><div><h1>Run your whole kitchen from one simple file.</h1>
+<p>Natasha's Law labels, dietary rules checks, stock, deliveries, supplier prices, recipes, menus and the staff rota — together in one Excel workbook, with a built-in AI helper. Made by a working UK kitchen manager.</p>
+<a class="btn" href="#trial">Start your free 14-day trial</a><a class="btn o" href="#features">See what it does</a>
+<p class="small">No card needed for the trial · Works in Microsoft Excel on Windows · Your data stays on your PC</p></div>
+<div class="mock"><div class="bar">The Kitchen Hub — Home</div><div class="tiles">
+<div class="tile" style="background:#e7f5ec">Stock<span>✓ 3 low</span></div><div class="tile" style="background:#fff4d6">Price changes<span>2 this week</span></div>
+<div class="tile" style="background:#e8efff">Natasha's Law label<span>PPDS PDF ✓</span></div><div class="tile" style="background:#fde8ec">Rota<span>Week 42 ready</span></div>
+<div class="tile" style="background:#f0e9ff">Dietary rules check<span>Jain ✓ Halal ✓</span></div><div class="tile" style="background:#e6f7f6">Ask AI<span>"What do I order?"</span></div></div>
+<div style="padding:0 16px 16px;font-size:13px;color:#55625a">Sample dishes: Chana Masala · Paneer Tikka · Vegetable Pulao · Saffron Kheer</div></div></div></div></header>
+
+<section id="features"><div class="w"><h2>Everything a busy kitchen needs. Nothing it doesn't.</h2><p class="sub">Built around how a real kitchen works — not how accountants think it works.</p>
+<div class="grid3">
+<div class="card"><div class="ic">📦</div><h3>Stock & deliveries</h3>Log deliveries in seconds, see what's running low, and get a ready-to-check order list.</div>
+<div class="card"><div class="ic">💷</div><h3>Supplier price watch</h3>Every price change is flagged in a simple "what changed" report, so cost creep is spotted early.</div>
+<div class="card"><div class="ic">🏷️</div><h3>Allergen labels</h3>Recipes carry their 14-allergen info, so labels and allergen matrices print in one click.</div>
+<div class="card"><div class="ic">📖</div><h3>Recipes & menus</h3>Store recipes once, build weekly menus, export print-ready PDFs and QR menus.</div>
+<div class="card"><div class="ic">🗓️</div><h3>Staff rota</h3>Colour-coded weekly rota that highlights gaps and keeps a clean printable staff pack.</div>
+<div class="card"><div class="ic">🤖</div><h3>AI helper</h3>Ask plain-English questions about your stock, menus and orders. Optional, and it never sees passwords.</div>
+</div></div></section>
+
+<section class="alt" id="new"><div class="w"><h2>New: food-law labels and diet checks, built in</h2><p class="sub">The two jobs other kitchen tools leave to a Word document and a guess.</p>
+<div class="grid3" style="grid-template-columns:repeat(2,1fr)">
+<div class="card best" style="border:3px solid var(--g)"><div class="ic">🏷️</div><h3>Natasha's Law label in one click</h3>Pick a recipe and get a print-ready PPDS label PDF: the food name, full ingredients in weight order with the <b>14 allergens in bold</b>, use-by date, storage advice and your business name and address. Comes as a 50×80&nbsp;mm label or an A4 sheet of 12, made from the recipe, so nothing is copied out by hand.</div>
+<div class="card best" style="border:3px solid var(--g)"><div class="ic">✅</div><h3>Dietary rules check</h3>Check a dish or a whole menu against <b>Vegetarian, Vegan, No onion/garlic, Jain, Halal and Egg-free</b>. You get a pass or fail for each one, with the ingredients that broke the rule: onion family, root vegetables for Jain, or gelatine and alcohol for Halal. It even notes when asafoetida (hing) may contain wheat.</div>
+</div><p class="sub" style="margin:22px 0 0;font-size:14px">You remain responsible for checking supplier ingredient information. The Hub makes the check fast and consistent.</p></div></section>
+<section id="who"><div class="w"><h2>Made for every kind of kitchen</h2><p class="sub">Same core system, set up for the way you cook.</p>
+<div class="seg"><div><i>🍽️</i>Restaurants & cafés</div><div><i>🏡</i>Care homes</div><div><i>🎒</i>Schools & nurseries</div><div><i>🕉️</i>Retreats & temples</div><div><i>🚚</i>Caterers</div><div><i>📦</i>Cloud kitchens</div></div></div></section>
+
+<section><div class="w"><h2>Up and running in an afternoon</h2><p class="sub">No servers, no logins to forget, no monthly IT bill.</p>
+<div class="steps"><div><h3>Download</h3>Get the trial workbook and open it in Excel.</div><div><h3>Add your basics</h3>Suppliers, a few recipes and your team — or start from the sample data.</div><div><h3>Run service</h3>Print labels, check stock and publish the rota from the Home screen.</div></div></div></section>
+
+<section class="alt" id="pricing"><div class="w"><h2>Simple pricing</h2><p class="sub">Start with a free 14-day trial. No card needed.</p>
+<div class="price" style="grid-template-columns:repeat(2,1fr);max-width:760px;margin:0 auto"><div class="card"><h3>Monthly</h3><div class="amt">£15<span style="font-size:18px">/month</span></div>All features · cancel any time · email support</div>
+<div class="card best"><h3>Buy once</h3><div class="amt">£149</div>One-off payment · all features · yours to keep</div></div></div></section>
+
+<section id="trial"><div class="w"><div class="cta"><h2 style="color:#fff">Try it free for 14 days</h2><p>Full features, sample data included, no card needed. If it doesn't save you time, just stop using it.</p>
+<a class="btn" href="mailto:shyam_one@parslia.app?subject=Kitchen%20Hub%20free%20trial">Get my free trial</a><p class="small">Questions? <a href="mailto:shyam_one@parslia.app">shyam_one@parslia.app</a></p></div></div></section>
+
+<section class="faq"><div class="w"><h2>Questions</h2>
+<details><summary>Do I need special software?</summary>Microsoft Excel for Windows (desktop). Macros must be enabled.</details>
+<details><summary>Where is my data stored?</summary>In the workbook on your own computer. Nothing is uploaded unless you choose to use the AI helper.</details>
+<details><summary>Does it meet Natasha's Law (PPDS labelling)?</summary>Yes, the Natasha's Law Label button prints labels with the name, full ingredients with the 14 allergens in bold, use-by date, storage advice, and your business name and address. You still need to check that your supplier ingredient information is right.</details>
+<details><summary>Can it check Jain, Halal or no onion/garlic menus?</summary>Yes, the Dietary Rules Check tests any recipe or the whole menu against Vegetarian, Vegan, No onion/garlic, Jain, Halal and Egg-free, and lists the ingredients that fail. You can edit the word lists yourself.</details>
+<details><summary>Does it handle the 14 UK allergens?</summary>Yes — every recipe tracks the 14 allergens and labels show them clearly. You remain responsible for checking information is correct.</details>
+<details><summary>What happens after the trial?</summary>Choose £15/month or a one-off £149. If you don't, simply stop using it.</details>
+<details><summary>Can you set it up for my kitchen?</summary>Yes, ask about setup help when you start your trial.</details></div></section>
+<footer><div class="w">© The Kitchen Hub · Made by a chef for real kitchens · Screens show sample data only.</div></footer>
+</body></html>
