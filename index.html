@@ -6,7 +6,7 @@
 <meta name="description" content="Menu Creator — design printable restaurant menus offline. Paste menus, save to library, print or export to Word." />
 <meta name="application-name" content="Menu Creator" />
 <meta name="theme-color" content="#2f6b4f" />
-<meta name="menu-creator-build" content="v21" />
+<meta name="menu-creator-build" content="v23" />
 <link rel="preload" as="image" href="assets/vedanta-logo.png" />
 <link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-regular.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-bold.woff2" crossorigin />
@@ -881,15 +881,14 @@
      serializes text-transform into extracted characters and can leak uppercase
      from titles onto descriptions and Contains lines. Casing is baked into the
      text nodes instead. */
-  /* Visual cap only — the typed description is never rewritten. 2lh follows each template's line-height in preview and Chrome print. */
+  /* Two complete description lines; fit their font instead of clipping text. */
   .page .dish-desc{
-    display:-webkit-box;
-    -webkit-box-orient:vertical;
-    -webkit-line-clamp:2;
-    line-clamp:2;
-    overflow:hidden;
-    max-height:2lh;
+    display:block;
+    white-space:pre;
+    overflow:visible;
+    max-height:none;
   }
+
 
   .dish-desc, .dish-contains, .dish-diet,
   .page .dish-desc, .page .dish-contains, .page .dish-diet,
@@ -1122,12 +1121,10 @@
     }
     .page .dish-desc{
       font-weight:400 !important;
-      display:-webkit-box !important;
-      -webkit-box-orient:vertical !important;
-      -webkit-line-clamp:2 !important;
-      line-clamp:2 !important;
-      overflow:hidden !important;
-      max-height:2lh !important;
+      display:block !important;
+      white-space:pre !important;
+      overflow:visible !important;
+      max-height:none !important;
     }
     .dish-contains,.dish-diet{font-weight:700 !important;}
     .page,
@@ -1147,7 +1144,7 @@
 </head>
 <body>
 <div class="update-banner" id="updateBanner">
-  <span id="updateBannerText"><strong>Menu Creator was updated (build v21).</strong> Vedanta dishes stay separate, and they start under the header. Both QR codes stay in the footer. If this banner does not say v21, this window is an old cached copy — click Refresh &amp; clear cache.</span>
+  <span id="updateBannerText"><strong>Menu Creator was updated (build v23).</strong> Vedanta dishes stay separate, and they start under the header. Both QR codes stay in the footer. If this banner does not say v23, this window is an old cached copy — click Refresh &amp; clear cache.</span>
   <button type="button" class="btn" id="forceRefreshBtn">Refresh &amp; clear cache</button>
 </div>
 <div class="file-warn" id="fileWarn">
@@ -1164,7 +1161,7 @@
 <div class="app">
   <!-- ===================== EDITOR ===================== -->
   <aside class="editor">
-    <div class="brand"><span class="dot"></span> Menu Creator <small class="build-stamp" id="buildStamp">v21</small></div>
+    <div class="brand"><span class="dot"></span> Menu Creator <small class="build-stamp" id="buildStamp">v23</small></div>
     <p class="sub">Add dishes, set allergens, then print or save as PDF. For Vedanta layouts, open the <a href="vedanta-menu-creator.html">Vedanta Menu Creator</a>.</p>
 
     <div class="group archive-box">
@@ -1365,7 +1362,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 /* ---------------- Data ---------------- */
 const ALLERGENS = ["Gluten","Dairy","Celery","Soy","Nuts","Peanuts","Sesame","Eggs","Fish","Crustaceans","Molluscs","Mustard","Lupin","Sulphur Dioxide","None"];
 const DIETS = ["Vegan","Vegetarian","Gluten-Free","Dairy-Free","Halal","Nut-Free"];
-const APP_BUILD = "v21";
+const APP_BUILD = "v23";
 
 const DEFAULT_LOGO_SRC = "assets/vedanta-logo.png";
 const MENU_QR_URL = "https://pureprasadkitchen.com";
@@ -2334,7 +2331,7 @@ function buildWordPage(m, snap, idx, tpl){
   const noTt="text-transform:none;font-variant:normal;";
   const wordDish=(d,prefix)=>`
     <p class="w-dish" style="${wordRoleStyle(s.dish)}margin:9pt 0 2pt;">${esc(displayDishName(prefix?prefix+"  "+d.name:d.name))}</p>
-    ${d.desc?`<p class="w-desc" style="${wordRoleStyle(s.desc)}${noTt}margin:0 0 2pt;">${esc(toSentenceCase(d.desc))}</p>`:""}
+    ${d.desc?`<p class="w-desc" style="${wordRoleStyle(s.desc)}${noTt}margin:0 0 2pt;">${descriptionLines(d.desc).map(esc).join("<br>")}</p>`:""}
     ${d.allergens?.length?`<p class="w-allg" style="${wordRoleStyle(s.allg)}${noTt}margin:0;font-weight:bold;">${esc(containsLine(d.allergens))}</p>`:""}
     ${d.diet?.length?`<p class="w-diet" style="${wordRoleStyle(s.diet)}${noTt}margin:0;font-weight:bold;">${esc(dietLine(d.diet))}</p>`:""}
   `;
@@ -2662,6 +2659,7 @@ function descriptionExceedsTwoLines(text){
     const pcs = getComputedStyle(host);
     width = host.clientWidth - parseFloat(pcs.paddingLeft) - parseFloat(pcs.paddingRight);
   }
+  probe.style.setProperty("white-space", "normal", "important");
   probe.style.width = width + "px";
   const lh = parseFloat(getComputedStyle(probe).lineHeight) || 18;
   const lines = probe.scrollHeight / lh;
@@ -2674,7 +2672,7 @@ function refreshDescFieldWarn(){
   const printed = toSentenceCase($("dDesc").value.trim());
   const long = descriptionExceedsTwoLines(printed);
   box.hidden = !long;
-  box.textContent = long ? "Description too long, will be cut to 2 lines" : "";
+  box.textContent = long ? "Long description: font will reduce to fit two lines" : "";
 }
 function refreshBulkWarn(){
   const box = $("bulkWarn");
@@ -2685,9 +2683,40 @@ function refreshBulkWarn(){
   const long = (parsed.dishes||[]).filter(d => descriptionExceedsTwoLines(d.desc));
   if(!long.length){ box.hidden = true; box.innerHTML = ""; return; }
   box.hidden = false;
-  box.innerHTML = "<ul>"+long.map(d=>`<li><strong>${esc(d.name)}</strong> — Description too long, will be cut to 2 lines</li>`).join("")+"</ul>";
+  box.innerHTML = "<ul>"+long.map(d=>`<li><strong>${esc(d.name)}</strong> — Long description: font will reduce to fit two lines</li>`).join("")+"</ul>";
+}
+function descriptionLines(text){
+  const words = toSentenceCase(text).split(/\s+/).filter(Boolean);
+  if(words.length < 2) return words;
+  const total = words.join(" ").length;
+  let split = 1, best = Infinity;
+  for(let i=1; i<words.length; i++){
+    const left = words.slice(0,i).join(" ").length;
+    const right = total-left-1;
+    const score = Math.abs(left-right);
+    if(score < best){ best=score; split=i; }
+  }
+  return [words.slice(0,split).join(" "), words.slice(split).join(" ")];
+}
+function fitDescriptions(root){
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  if(!ctx) return;
+  root.querySelectorAll(".dish-desc").forEach(el=>{
+    el.style.removeProperty("font-size");
+    const lines = descriptionLines(el.textContent);
+    el.textContent = lines.join("\n");
+    const style = getComputedStyle(el);
+    const size = parseFloat(style.fontSize);
+    ctx.font = `${style.fontStyle} ${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
+    const spacing = parseFloat(style.letterSpacing) || 0;
+    const widest = Math.max(0,...lines.map(line=>ctx.measureText(line).width + Math.max(0,line.length-1)*spacing));
+    const width = el.clientWidth - parseFloat(style.paddingLeft || 0) - parseFloat(style.paddingRight || 0);
+    if(width > 0 && widest > width) el.style.fontSize = (size * width / widest * 0.98) + "px";
+  });
 }
 function fitPages(){
+  fitDescriptions($("pagesOut"));
   const PAGE_H = 1123; // A4 @96dpi
   document.querySelectorAll("#pagesOut .page").forEach(pg=>{
     const inner = pg.querySelector(".page-inner");
@@ -2730,6 +2759,7 @@ function ensureMenuFonts(){
 async function printMenu(){
   preparePrint();
   await ensureMenuFonts();
+  fitPages();
   window.print();
 }
 function preparePrint(){
@@ -2856,7 +2886,7 @@ function render(){
   list.innerHTML = m.dishes.length? m.dishes.map((d,i)=>`
       <div class="dish-card">
         <h4>${esc(d.name)}</h4>
-        ${descriptionExceedsTwoLines(d.desc)?`<div class="desc-warn">Description too long, will be cut to 2 lines</div>`:""}
+        ${descriptionExceedsTwoLines(d.desc)?`<div class="desc-warn">Long description: font will reduce to fit two lines</div>`:""}
         <div class="meta">${esc(containsLine(d.allergens)||"No allergens set")}${d.diet&&d.diet.length?" · "+esc(dietLine(d.diet)):""}</div>
         <div class="dish-actions">
           <button class="btn btn-ghost btn-sm" onclick="editDish(${i})">Edit</button>
@@ -2931,6 +2961,7 @@ function makePageEl(slide, anim){
 }
 
 function fitEbookInner(el){
+  fitDescriptions(el);
   const inner=el.querySelector(".page-inner"); if(!inner) return;
   const header=el.querySelector(".menu-head");
   inner.style.transform="none"; inner.style.zoom=""; inner.style.height="auto"; inner.classList.remove("fill");
@@ -3013,7 +3044,7 @@ document.addEventListener("keydown",(e)=>{
   else if(e.key==="ArrowLeft") turnPage(-1);
   else if(e.key==="Escape") closeEbook();
 });
-window.addEventListener("resize",()=>{ if(ebOverlay.classList.contains("open")) fitBook(); });
+window.addEventListener("resize",()=>{ fitPages(); if(ebOverlay.classList.contains("open")){ ebBook.querySelectorAll(".page").forEach(fitEbookInner); fitBook(); } });
 
 /* ---------------- PWA: install + service worker ---------------- */
 let deferredInstallPrompt = null;
