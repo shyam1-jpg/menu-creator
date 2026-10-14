@@ -6,7 +6,7 @@
 <meta name="description" content="Menu Creator — design printable restaurant menus offline. Paste menus, save to library, print or export to Word." />
 <meta name="application-name" content="Menu Creator" />
 <meta name="theme-color" content="#2f6b4f" />
-<meta name="menu-creator-build" content="v21" />
+<meta name="menu-creator-build" content="v25" />
 <link rel="preload" as="image" href="assets/vedanta-logo.png" />
 <link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-regular.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="fonts/texgyrepagella-bold.woff2" crossorigin />
@@ -1143,11 +1143,19 @@
       font-family:var(--serif) !important;
     }
   }
+
+/* v25: natural A4 layout; never scale printed content */
+.page.desc-2 .dish-desc{white-space:pre-line;line-height:18px;min-height:36px;max-height:none!important;display:block!important;-webkit-line-clamp:unset!important;overflow:visible!important}
+.page.desc-1 .dish-desc{white-space:nowrap;line-height:18px;min-height:18px;overflow:hidden;text-overflow:ellipsis;max-height:none!important;display:block!important}
+.page:not(.tpl-brunch):not(.tpl-banquet) .page-inner.fill .dishes-wrap{display:flex;flex-direction:column;flex:1;justify-content:space-between;min-height:0}
+.page:not(.tpl-brunch):not(.tpl-banquet) .page-inner.fill .menu-section{display:flex;flex-direction:column;flex:1;justify-content:space-around;break-inside:avoid}
+.page:not(.tpl-brunch):not(.tpl-banquet) .page-inner.fill .info-block{margin-top:8px}
+.page .dish{break-inside:avoid}
 </style>
 </head>
 <body>
 <div class="update-banner" id="updateBanner">
-  <span id="updateBannerText"><strong>Menu Creator was updated (build v21).</strong> Vedanta dishes stay separate, and they start under the header. Both QR codes stay in the footer. If this banner does not say v21, this window is an old cached copy — click Refresh &amp; clear cache.</span>
+  <span id="updateBannerText"><strong>Menu Creator was updated (build v25).</strong> Vedanta dishes stay separate, and they start under the header. Both QR codes stay in the footer. If this banner does not say v25, this window is an old cached copy — click Refresh &amp; clear cache.</span>
   <button type="button" class="btn" id="forceRefreshBtn">Refresh &amp; clear cache</button>
 </div>
 <div class="file-warn" id="fileWarn">
@@ -1164,7 +1172,7 @@
 <div class="app">
   <!-- ===================== EDITOR ===================== -->
   <aside class="editor">
-    <div class="brand"><span class="dot"></span> Menu Creator <small class="build-stamp" id="buildStamp">v21</small></div>
+    <div class="brand"><span class="dot"></span> Menu Creator <small class="build-stamp" id="buildStamp">v25</small></div>
     <p class="sub">Add dishes, set allergens, then print or save as PDF. For Vedanta layouts, open the <a href="vedanta-menu-creator.html">Vedanta Menu Creator</a>.</p>
 
     <div class="group archive-box">
@@ -1365,7 +1373,7 @@ var qrcode=function(){var t=function(t,r){var e=t,n=g[r],o=null,i=0,a=null,u=[],
 /* ---------------- Data ---------------- */
 const ALLERGENS = ["Gluten","Dairy","Celery","Soy","Nuts","Peanuts","Sesame","Eggs","Fish","Crustaceans","Molluscs","Mustard","Lupin","Sulphur Dioxide","None"];
 const DIETS = ["Vegan","Vegetarian","Gluten-Free","Dairy-Free","Halal","Nut-Free"];
-const APP_BUILD = "v21";
+const APP_BUILD = "v25";
 
 const DEFAULT_LOGO_SRC = "assets/vedanta-logo.png";
 const MENU_QR_URL = "https://pureprasadkitchen.com";
@@ -2687,29 +2695,93 @@ function refreshBulkWarn(){
   box.hidden = false;
   box.innerHTML = "<ul>"+long.map(d=>`<li><strong>${esc(d.name)}</strong> — Description too long, will be cut to 2 lines</li>`).join("")+"</ul>";
 }
+function splitDescriptionEven(text){
+  const words=String(text||"").replace(/\s+/g," ").trim().split(" ").filter(Boolean);
+  if(words.length<2) return words.join(" ");
+  let best=1,delta=Infinity;
+  for(let i=1;i<words.length;i++){
+    const d=Math.abs(words.slice(0,i).join(" ").length-words.slice(i).join(" ").length);
+    if(d<delta){delta=d;best=i;}
+  }
+  return words.slice(0,best).join(" ")+"\n"+words.slice(best).join(" ");
+}
 function fitPages(){
-  const PAGE_H = 1123; // A4 @96dpi
-  document.querySelectorAll("#pagesOut .page").forEach(pg=>{
-    const inner = pg.querySelector(".page-inner");
-    const header = pg.querySelector(".menu-head");
-    if(!inner) return;
-    // reset before measuring
-    inner.style.transform = "none";
-    inner.style.zoom = "";
-    inner.style.height = "auto";
+  const out=document.getElementById("pagesOut");
+  if(!out)return;
+  const PAGE_H=1123;
+  const originals=[...out.querySelectorAll(".page")].filter(p=>!p.dataset.continuation);
+  originals.forEach(pg=>{
+    const inner=pg.querySelector(".page-inner"),wrap=inner&&inner.querySelector(".dishes-wrap");
+    if(!inner||!wrap)return;
+    inner.style.transform="none";inner.style.zoom="";inner.style.height="auto";
     inner.classList.remove("fill");
-    const cs = getComputedStyle(pg);
-    const headerH = header ? header.offsetHeight : 0;
-    const avail = PAGE_H - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom) - 18 - headerH; // footer + header
-    const natural = inner.scrollHeight;
-    if(natural > avail){
-      const ratio = avail / natural;
-      /* scale dishes/info only — logo in .menu-head stays full size for print */
-      inner.style.transform = `scale(${ratio})`;
-    } else {
-      inner.style.height = avail + "px";                    // fill the page
-      inner.classList.add("fill");                          // pin allergen info to bottom
+    const old=out.querySelectorAll('.page[data-continuation="'+pg.dataset.id+'"]');
+    old.forEach(p=>p.remove());
+    const menu=data.menus.find(m=>String(m.id)===pg.dataset.id);
+    if(!menu)return;
+    const count=(menu.dishes||[]).filter(d=>!isSectionHeading(d)).length;
+    const mode=count<=6?"desc-2":"desc-1";
+    pg.classList.remove("desc-1","desc-2");pg.classList.add(mode);
+    const groups=groupMenuDishes(menu.dishes||[]);
+    const sections=groups.map(g=>({title:g.title,items:g.items.slice()}));
+    const info=inner.querySelector(".info-block");
+    const infoHTML=info?info.outerHTML:"";
+    const isMulti=pg.classList.contains("tpl-brunch")||pg.classList.contains("tpl-banquet");
+    const renderSections=(list)=>list.map(g=>'<section class="menu-section">'+(g.title?'<h3 class="section-title">'+esc(g.title)+'</h3>':"")+g.items.map((d,i)=>dishCardHTML(d,i<g.items.length-1)).join("")+'</section>').join("");
+    const setContent=(page,list,last)=>{
+      const target=page.querySelector(".page-inner");
+      target.innerHTML='<div class="dishes-wrap'+(groups.some(g=>g.title)?' has-sections':'')+'">'+renderSections(list)+'</div>'+(last?infoHTML:"");
+      target.querySelectorAll(".dish-desc").forEach(el=>{
+        const txt=el.textContent.replace(/\s+/g," ").trim();
+        el.textContent=mode==="desc-2"?splitDescriptionEven(txt):txt;
+      });
+    };
+    setContent(pg,sections,true);
+    const available=page=>{
+      const cs=getComputedStyle(page),head=page.querySelector(".menu-head");
+      return PAGE_H-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom)-18-(head?head.offsetHeight:0);
+    };
+    const fits=page=>page.querySelector(".page-inner").scrollHeight<=available(page)+1;
+    if(!fits(pg)){
+      const pages=[pg],batches=[[]];
+      const addPage=()=>{
+        const clone=pg.cloneNode(true);
+        clone.dataset.continuation=pg.dataset.id;
+        clone.classList.remove("current");
+        pg.parentNode.insertBefore(clone,pages[pages.length-1].nextSibling);
+        pages.push(clone);batches.push([]);
+      };
+      for(const group of sections){
+        let pending={title:group.title,items:[]};
+        for(const dish of group.items){
+          pending.items.push(dish);
+          const trial=[...batches[batches.length-1],pending];
+          setContent(pages[pages.length-1],trial,true);
+          if(!fits(pages[pages.length-1])&&(batches[batches.length-1].length||pending.items.length>1)){
+            pending.items.pop();
+            if(pending.items.length)batches[batches.length-1].push(pending);
+            addPage();
+            pending={title:group.title,items:[dish]};
+          }
+        }
+        if(pending.items.length||pending.title)batches[batches.length-1].push(pending);
+      }
+      pages.forEach((p,i)=>setContent(p,batches[i],i===pages.length-1));
+      // The allergen panel belongs only on the last page.
+      while(pages.length>1&&!fits(pages[pages.length-1])){
+        const last=pages.length-1,groupsLast=batches[last],g=groupsLast[groupsLast.length-1];
+        if(!g||g.items.length<2)break;
+        const moved=g.items.shift();
+        const previous=batches[last-1],same=previous[previous.length-1];
+        if(same&&same.title===g.title)same.items.push(moved);
+        else previous.push({title:g.title,items:[moved]});
+        pages.forEach((p,i)=>setContent(p,batches[i],i===pages.length-1));
+      }
+      pages.forEach(p=>{const n=p.querySelector(".page-inner");n.style.height=available(p)+"px";n.classList.add("fill");});
+    }else{
+      inner.style.height=available(pg)+"px";inner.classList.add("fill");
     }
+    if(isMulti)pg.querySelectorAll(".menu-section").forEach(el=>el.style.flex="");
   });
 }
 
