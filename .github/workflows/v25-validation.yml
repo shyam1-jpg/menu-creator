@@ -1,0 +1,17 @@
+name: v25 validation
+on:
+  push:
+    branches: [cursor/menu-page-layout-6873]
+  pull_request:
+    branches: [main]
+jobs:
+  parse-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check test/bulk-parse.test.js
+      - run: node test/bulk-parse.test.js
+      - run: node test/vedanta-parse.test.js
