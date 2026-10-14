@@ -2703,7 +2703,7 @@ function splitDescriptionEven(text){
     const d=Math.abs(words.slice(0,i).join(" ").length-words.slice(i).join(" ").length);
     if(d<delta){delta=d;best=i;}
   }
-  return words.slice(0,best).join(" ")+"\\n"+words.slice(best).join(" ");
+  return words.slice(0,best).join(" ")+"\n"+words.slice(best).join(" ");
 }
 function fitPages(){
   const out=document.getElementById("pagesOut");
